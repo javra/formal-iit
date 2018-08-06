@@ -215,7 +215,7 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \newcommand{\mm}{\mathsf{m}}
 \newcommand{\con}{\mathsf{con}}
 \newcommand{\elim}{\mathsf{elim}}
-\newcommand{\flatten}{\mathsf{flatten}}
+\newcommand{\flatten}[1]{\blm{\mathsf{flatten}(\grm{#1})}}
 \newcommand{\app}{\mathrel{@}}
 
 \renewcommand{\backrefalt}[4]{
@@ -558,33 +558,33 @@ lie in.
 The flattening construction is defined like this:
 
 \begin{defn}[Flattening]
-Let \grm{\Gamma} be a context. We inductively define an operation $\flatten$ on
+Let \grm{\Gamma} be a context. We inductively define an operation $\flatten{}$ on
 contexts, types and terms, returning contexts, types on flattened contexts, and
 terms of flattened types, respectively:
 \begin{align*}
-\flatten(\grm{\cdot})			&:\equiv \grm{\cdot} \\
-\flatten(\grm{\Gamma, x : A})		&:\equiv \grm{(\flatten(\Gamma), \bar{x} : \flatten(A))} \\ %TODO bar or overline?
-\flatten(\grm{\UU})			&:\equiv \grm{\UU} \\
-\flatten(\grm{\underline{a}})		&:\equiv \grm{\underline{\blm{\flatten({\grm{a}})}}} \\
-\flatten(\grm{(x : a) \to B})		&:\equiv
+\flatten{\cdot}			&:\equiv \grm{\cdot} \\
+\flatten{\Gamma, x : A}		&:\equiv \grm{(\flatten{\Gamma}, \bar{x} : \flatten{A})} \\ %TODO bar or overline?
+\flatten{\UU}			&:\equiv \grm{\UU} \\
+\flatten{\underline{a}}		&:\equiv \grm{\underline{\flatten{\grm{a}}}} \\
+\flatten{(x : a) \to B}		&:\equiv
 	\begin{cases}
-	\flatten(\grm{B}) & \text{for \grm{B :: \Sc},} \\
-	\grm{(\bar{x} : \blm{\flatten(\grm{a})}) \to \blm{\flatten(\grm{B})}} & \text{for \grm{B :: \Pc}}
+	\flatten{B} & \text{for \grm{B :: \Sc},} \\
+	\grm{(\bar{x} : \flatten{a}) \to \flatten{B}} & \text{for \grm{B :: \Pc}}
 	\end{cases} \\
-\flatten(\grm{(\blm{x : A}) \to B})	&:\equiv \grm{(\blm{x : A}) \to \blm{\flatten(\grm{B})}} \\
-\flatten(\grm{x})				&:\equiv \grm{\bar{x}} \qquad \text{for variables \grm{x}} \\
-\flatten(\grm{t(u)})			&:\equiv
+\flatten{(\blm{x : A}) \to B}	&:\equiv \grm{(\blm{x : A}) \to \flatten{B}} \\
+\flatten{x}				&:\equiv \grm{\bar{x}} \qquad \text{for variables \grm{x}} \\
+\flatten{t(u)}			&:\equiv
 	\begin{cases}
-	\flatten(\grm{t}) & \text{for \grm{t : (x : a) \to B :: \Sc},} \\
-	(\flatten(\grm{t}))\grm{(\blm{\flatten(\grm{u})})} & \text{for \grm{t : (x : a) \to B :: \Pc}}
+	\flatten{t} & \text{for \grm{t : (x : a) \to B :: \Sc},} \\
+	(\flatten{t})\grm{(\flatten{u})} & \text{for \grm{t : (x : a) \to B :: \Pc}}
 	\end{cases} \\
-\flatten(\grm{t(\blm{u})})		&:\equiv (\flatten(\grm{t}))\grm{(\blm{u})} \\
-\flatten(\grm{(\blm{x : A}) \to b})	&:\equiv \grm{(\blm{x : A}) \to \blm{\flatten(\grm{b})}} \\
-\flatten(\grm{t \app \blm{u}})		&:\equiv (\flatten(\grm{t}))\grm{(\blm{u})}
+\flatten{t(\blm{u})}		&:\equiv (\flatten{t})\grm{(\blm{u})} \\
+\flatten{(\blm{x : A}) \to b}	&:\equiv \grm{(\blm{x : A}) \to \flatten{b}} \\
+\flatten{t \app \blm{u}}	&:\equiv (\flatten{t}) \app \blm{u}
 \end{align*}
 \end{defn}
 
-Note that $\flatten$ converts all sorts in a context to be just \grm{\UU}.
+Note that $\flatten{}$ converts all sorts in a context to be just \grm{\UU}.
 If we have an inductive family and the inductive function type is not used in the
 specification of sorts, it does no substantial changes, except for a renaming
 of variables \grm{x} to \grm{\bar{x}}.
@@ -602,24 +602,43 @@ Its flattened version looks like this:
 \end{example}
 
 \begin{lemma}
-The operation $\flatten$ produces wellformed contexts in the sense that the
+The operation $\flatten{}$ produces wellformed contexts in the sense that the
 following rules hold true:
 \begin{equation*}
 \begin{gathered}
-\inferrule{\grm{\vdash \Gamma}}{\grm{\vdash \blm{\flatten(\grm{\Gamma})}}}
+\inferrule{\grm{\vdash \Gamma}}{\grm{\vdash \flatten{\Gamma}}}
 \qquad
-\inferrule{\grm{\Gamma \vdash A}}{\grm{\blm{\flatten(\grm{\Gamma})} \vdash \blm{\flatten(\grm{A})}}}
+\inferrule{\grm{\Gamma \vdash A}}{\grm{\flatten{\Gamma} \vdash \flatten{A}}}
 \\
-\inferrule{\grm{\Gamma \vdash t : A}}{\grm{\blm{\flatten(\grm{\Gamma})} \vdash \blm{\flatten(\grm{t})} : \blm{\flatten(\grm{A})}}}
+\inferrule{\grm{\Gamma \vdash t : A}}{\grm{\flatten{\Gamma} \vdash \flatten{t} : \flatten{A}}}
 \end{gathered}
 \end{equation*}
 \end{lemma}
 
 \begin{proof}
-Let us only consider the cases where $\flatten$ acts neither as the identity nor
-trivially by structural descent:
+The only cases in which $\flatten{}$ acts neither as the identity nor
+trivially by structural descent are the cases of inductive functions in the signature
+of sorts and their application.
 
-foo
+%Observe first that sorts in the flattened context are just iterated,
+%externally indexed functions of \grm{\UU}. %TODO make this less wirr
+
+Assuming that for \grm{\Gamma \vdash a : \UU} and \grm{\Gamma, x : \underline{a} \vdash B :: k}
+we have \\ \grm{\flatten{\Gamma} \vdash \flatten{a} : \flatten{\UU}}
+and \grm{\flatten{\Gamma, x : \underline{a}} \vdash \flatten{B}}.
+This resolves to \grm{\flatten{\Gamma} \vdash \flatten{a} : \UU} and
+\grm{\flatten{\Gamma}, \bar{x}:\underline{\flatten{a}} \vdash \flatten{B}}.
+Thus we have \grm{\flatten{\Gamma} \vdash \flatten{(x : a) \to B} \equiv \flatten{B}}.
+
+For the application term assume \grm{\flatten{\Gamma} \vdash \flatten{t} : \flatten{(x : a) \to B}}
+and \grm{\flatten{\Gamma} \vdash \flatten{u} : \underline{\flatten{a}}}.
+We have 
+\begin{align*}
+\grm{\flatten{t(u)} \equiv \flatten{t} : \flatten{(x : a) \to B}} &\equiv \grm{\flatten{B}} \\
+	&\equiv \grm{\flatten{B}[x \to u]} \text{,}
+\end{align*}
+where the last step holds since, as we have seen above, \grm{B} does not depend
+on \grm{x}.
 \end{proof}
 
 \section{Wellformedness Predicates}
