@@ -1,0 +1,516 @@
+\documentclass[12pt,headings=optiontohead,openany,oneside,a4paper]{book}
+%TODO: page layout
+\usepackage[backref=page,
+unicode,
+pdfauthor={Jakob von Raumer},
+pdftitle={Reducing Inductive-Inductive Types to Indexed Inductive Types},
+pdfsubject={Mathematics, Computer Science},
+pdfkeywords={interactive theorem proving}]{hyperref}
+
+%code listings
+\usepackage{mathpartir}
+\usepackage{newunicodechar}
+%\renewcommand{\MintedPygmentize}{./pygments-main/pygmentize}
+\usepackage{fontspec,xunicode}
+\usepackage[osf]{mathpazo}
+\usepackage{minted}
+\setmainfont[Ligatures=TeX]{TeX Gyre Pagella}
+\setmonofont{Ubuntu Mono}
+\newfontfamily{\freeserif}{DejaVu Sans}
+\newunicodechar{⦃}{\ensuremath{\texttt{\{}\mkern-7mu\texttt{|}}}
+	%{\makebox[.5em]{\freeserif⦃}}
+\newunicodechar{⦄}{\ensuremath{\texttt{|}\mkern-7mu\texttt{\}}}}
+	%{\makebox[.5em]{\freeserif⦄}}
+\newunicodechar{→}{\texttt{\freeserif{→}}}
+\newunicodechar{⟶}{\texttt{\freeserif{⟶}}}
+\newunicodechar{⁻}{\texttt{\freeserif{⁻}}}
+\newunicodechar{▹}{\freeserif{▹}}
+\newunicodechar{ℕ}{\texttt{\freeserif{ℕ}}}
+\newunicodechar{⟨}{\texttt{\freeserif{⟨}}}
+\newunicodechar{⟩}{\texttt{\freeserif{⟩}}}
+\newunicodechar{⬝}{\ensuremath{\ct}}
+\newunicodechar{∼}{\freeserif{∼}}
+\newunicodechar{≃}{\freeserif{≃}}
+\newunicodechar{≅}{\freeserif{≅}}
+\newunicodechar{∘}{\freeserif{∘}}
+\newunicodechar{ʰ}{\freeserif{ʰ}}
+\newunicodechar{ᵍ}{\freeserif{ᵍ}}
+\newunicodechar{⇒}{\freeserif{⇒}}
+\newunicodechar{⋆}{\freeserif{⋆}}
+\newunicodechar{∘}{\freeserif{∘}}
+\newunicodechar{←}{\freeserif{←}}
+
+%workaround to remove red boxes
+\AtBeginEnvironment{minted}{\renewcommand{\fcolorbox}[4][]{#4}}
+\usemintedstyle{colorful}
+\newminted{lean}{
+	linenos,
+	numbersep=5pt,
+	frame=single,
+	fontsize=\footnotesize,
+	framesep=1mm,
+	samepage,
+	autogobble}
+\newminted[leancodebr]{lean}{
+	linenos,
+	numbersep=5pt,
+	frame=single,
+	fontsize=\footnotesize,
+	framesep=1mm,
+	autogobble}
+\newcommand{\leani}[1]{\mintinline{lean}{#1}}
+\newminted{agda}{
+	linenos,
+	numbersep=5pt,
+	frame=single,
+	fontsize=\footnotesize,
+	framesep=1mm,
+	samepage,
+	autogobble}
+
+\linespread{1.05}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage[all,2cell,cmtip]{xy}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathmorphing,arrows}
+\usepackage[numbered]{bookmark}
+\usepackage{fancyhdr}
+\usepackage{amssymb,amsmath,amsthm,mathrsfs,wasysym}
+\usepackage{enumitem,mathtools,xspace}
+\usepackage[nottoc]{tocbibind}
+\usepackage{cleveref}
+\usepackage{aliascnt}
+\usepackage{natbib}
+\usepackage{mathtools}
+\usepackage{footnote}
+\usepackage{booktabs}
+%\usepackage[top=1in, bottom=1.25in, left=1.25in, right=1.25in]{geometry} %TODO decide
+
+\fancyhead[LO]{\leftmark}
+\fancyhead[RE]{\rightmark}
+\fancyhead[LE,RO]{\thepage}
+\cfoot{}
+\pagestyle{fancy}
+
+\def\defthm#1#2#3{
+	\newaliascnt{#1}{thm}
+	\newtheorem{#1}[#1]{#2}
+	\aliascntresetthe{#1}
+	\crefname{#1}{#2}{#3}
+}
+
+\newtheorem{thm}{Theorem}[section]
+\crefname{thm}{Theorem}{Theorems}
+\defthm{lemma}{Lemma}{Lemmas}
+\defthm{axiom}{Axiom}{Axioms}
+\defthm{corollary}{Corollary}{Corollaries}
+\theoremstyle{definition}
+\defthm{defn}{Definition}{Definitions}
+\defthm{example}{Example}{Examples}
+\defthm{remark}{Remark}{Remarks}
+
+\newcommand{\upperf}{\partial^-_1}
+\newcommand{\lowerf}{\partial^+_1}
+\newcommand{\leftf}{\partial^-_2}
+\newcommand{\rightf}{\partial^+_2}
+\newcommand{\inv}{^{-1}}
+\newcommand{\DCat}{\mathbf{DCat}}
+\newcommand{\DGpd}{\mathbf{DGpd}}
+\newcommand{\XMod}{\mathbf{XMod}}
+\newcommand{\twotype}{\mathbf{2}}
+\newcommand{\unit}{\mathbf{1}}
+\newcommand{\emptytype}{\mathbf{0}}
+\newcommand{\UU}{\mathcal{U}}
+\newcommand{\isProp}{\mathsf{isProp}}
+\newcommand{\isSet}{\mathsf{isSet}}
+\newcommand{\PropU}{\mathsf{Prop}}
+\newcommand{\SetU}{\mathsf{Set}}
+\newcommand{\seg}{\mathsf{seg}}
+\newcommand{\isContr}{\mathsf{isContr}}
+\newcommand{\isIso}{\mathsf{isIso}}
+\newcommand{\idtoiso}{\mathsf{idtoiso}}
+\newcommand{\idtoeqv}{\mathsf{idtoeqv}}
+\newcommand{\ua}{\mathsf{ua}}
+\newcommand{\alliso}{\mathsf{alliso}}
+\newcommand{\refl}{\mathsf{refl}}
+\newcommand{\ap}{\mathsf{ap}}
+\newcommand{\apd}{\mathsf{apd}}
+\newcommand{\ind}{\mathsf{ind}}
+\newcommand{\rec}{\mathsf{rec}}
+\newcommand{\pr}{\mathsf{pr}}
+\newcommand{\inl}{\mathsf{inl}}
+\newcommand{\inr}{\mathsf{inr}}
+\newcommand{\ishae}{\mathsf{ishae}}
+\newcommand{\apiop}{\ap_{\iota'}}
+\DeclareMathOperator{\comp}{comp}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\invv}{inv_1}
+\DeclareMathOperator{\invh}{inv_2}
+\DeclareMathOperator{\obj}{obj}
+\DeclareMathOperator{\EI}{EI}
+\DeclareMathOperator{\IE}{IE}
+\DeclareMathOperator{\op}{op}
+\DeclareMathOperator{\inj}{inj}
+\newcommand{\assoc}{\mathsf{assoc}}
+\newcommand{\assocv}{\mathsf{assoc}_1}
+\newcommand{\assoch}{\mathsf{assoc}_2}
+\newcommand{\idLeft}{\mathsf{idLeft}}
+\newcommand{\idLeftv}{\mathsf{idLeft}_1}
+\newcommand{\idLefth}{\mathsf{idLeft}_2}
+\newcommand{\idRight}{\mathsf{idRight}}
+\newcommand{\idRightv}{\mathsf{idRight}_1}
+\newcommand{\idRighth}{\mathsf{idRight}_2}
+\newcommand{\leftInv}{\mathsf{leftInv}}
+\newcommand{\leftInvv}{\mathsf{leftInv}_1}
+\newcommand{\leftInvh}{\mathsf{leftInv}_2}
+\newcommand{\rightInv}{\mathsf{rightInv}}
+\newcommand{\rightInvv}{\mathsf{rightInv}_1}
+\newcommand{\rightInvh}{\mathsf{rightInv}_2}
+\newcommand{\respectId}{\mathsf{respectId}}
+\newcommand{\respectIdv}{\mathsf{respectId}_1}
+\newcommand{\respectIdh}{\mathsf{respectId}_2}
+\newcommand{\respectComp}{\mathsf{respectComp}}
+\newcommand{\respectCompv}{\mathsf{respectComp}_1}
+\newcommand{\respectComph}{\mathsf{respectComp}_2}
+\newcommand{\isequiv}{\mathsf{isequiv}}
+\newcommand{\isodd}{\mathsf{isodd}}
+\newcommand{\thin}{\mathsf{thin}}
+\newcommand{\Sbase}{\mathsf{base}}
+\newcommand{\Sloop}{\mathsf{loop}}
+\newcommand{\Smerid}{\mathsf{merid}}
+\newcommand{\vecty}{\mathsf{vec}}
+\newcommand{\nil}{\mathsf{nil}}
+\newcommand{\cons}{\mathsf{cons}}
+\newcommand{\ct}{
+	\mathchoice{\mathbin{\raisebox{0.5ex}{$\displaystyle\centerdot$}}}
+		{\mathbin{\raisebox{0.5ex}{$\centerdot$}}}
+		{\mathbin{\raisebox{0.25ex}{$\scriptstyle\,\centerdot\,$}}}
+		{\mathbin{\raisebox{0.1ex}{$\scriptscriptstyle\,\centerdot\,$}}}
+}
+\newcommand{\trunc}[2]{\left\Vert #2\right\Vert_{#1}}
+\newcommand{\squash}[1]{\trunc{}{#1}}
+\newcommand{\isntype}[1]{\mathsf{is}\mbox{-}{#1}\mbox{-}\mathsf{type}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Sph}{\mathbb{S}}
+\newcommand{\Set}{\mathbf{Set}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Fam}{\mathbf{Fam}}
+\newcommand{\Alg}{\mathbf{Alg}}
+\newcommand{\CT}{\mathbf{CT}}
+\newcommand{\CTw}{\mathbf{CTw}}
+\newcommand{\old}[1]{\overline{#1}}
+\newcommand{\oldold}[1]{\overline{\overline{#1}}}
+\newcommand{\gr}[1]{{\color{ForestGreen}#1}}
+\newcommand{\grm}[1]{\ensuremath{\gr{#1}}}
+\newcommand{\blm}[1]{\ensuremath{{\color{Black}#1}}}
+%\newcommand{\grinfer}[2]{\grm{\inferrule{{#1}}{{#2}}}}
+\newcommand{\Sc}{\mathsf{S}}
+\newcommand{\Pc}{\mathsf{P}}
+\newcommand{\CC}{\mathsf{C}}
+\newcommand{\EE}{\mathsf{E}}
+\newcommand{\MM}{\mathsf{M}}
+\newcommand{\mm}{\mathsf{m}}
+\newcommand{\con}{\mathsf{con}}
+\newcommand{\elim}{\mathsf{elim}}
+\newcommand{\flatten}{\mathsf{flatten}}
+
+\renewcommand{\backrefalt}[4]{
+	\ifcase #1
+		(No citations.)
+	\or
+		(Cited on page\ #2.)
+	\else
+		(Cited on pages\ #2.)
+	\fi
+}
+
+\begin{document}
+
+\title{Reducing Inductive-Inductive Types to Indexed Inductive Types}
+\author{Jakob von Raumer}
+
+\frontmatter
+\maketitle
+
+\tableofcontents
+
+\mainmatter
+
+\chapter{Specification of Inductive-Inductive Types}
+
+Inductive-Inductive Types are specified by giving a context in  a small type
+theoretic syntax which we will refer to as \emph{source type theory}.
+
+This idea originates from Ambrus Kaposi's work on the syntax of \emph{higher}
+inductive-inductive types (~\cite{ambrussyntax}) which we adapt and rid of equality
+constructors to only allow for inductive-inductive types.
+In contrast to their presentation we will leave the context of the ambient type
+theory implicit and, instead of highlighting syntax of the ambient type theory,
+mark elements of the source type theory in \gr{green}.
+
+We assume that the source type theory makes use of the standard syntax of type
+theory, using contexts, types, terms, and variables.
+Types and terms are uniquely ascribed to one of two \emph{kinds}:
+Either their kind is \grm{\Sc} which indicates that the type contains sort
+constructors, or their kind is \grm{\Pc} because elements of it describe
+point constructors.
+We will write \grm{\Gamma \vdash A :: k} to say that \grm{A} is a type of kind
+\grm{k} and \grm{\Gamma \vdash t : A :: k} to state that \grm{t} is a term of the
+type \grm{A} which in turn has kind \grm{k}.
+Often, we will omit the annotation of the sort, meaning that a judgment is to
+hold true for both \grm{\Sc} and \grm{\Pc}, or that the kind of a term's type
+has already been specified.
+
+\section{The Source Type Theory}
+
+We will work with named variables and implicit weakening, giving the following
+rules:
+\begin{equation*}
+\begin{gathered}
+\inferrule{}{\grm{\vdash \cdot}}
+\qquad
+\inferrule{\grm{\Gamma \vdash A}}{\grm{\vdash \Gamma, x : A}}
+\qquad
+\inferrule{\grm{\Gamma \vdash A}}{\grm{\Gamma, x : A \vdash x : A}}
+\qquad
+\inferrule{\grm{\Gamma \vdash x : A} \\ \grm{\Gamma \vdash B}}{\grm{\Gamma, y : B \vdash x : A}}
+\end{gathered}
+\end{equation*}
+
+The universe \grm{\UU} is used as the type of constant sorts. We use a Tarski-style
+encoding of its elements, so we have an explicit notation for the extraction of
+``small'' types extracted from this universe:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\vdash \Gamma}}{\grm{\Gamma \vdash \UU :: \Sc}}
+\qquad
+\inferrule{\grm{\Gamma \vdash a : \UU :: \Sc}}{\grm{\Gamma \vdash \underline{a} :: \Pc}}
+\end{gathered}
+\end{equation*}
+
+Our source type theory finally features three different formers for $\Pi$-types.
+The first one are functions used for \emph{inductive parameters} which, to ensure
+strict positivity of constructors, allow only small domains.
+Their kind is thus determined only by the kind of their codomain:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\Gamma \vdash a : \UU} \\ \grm{\Gamma, x : \underline{a} \vdash B :: k}}
+	{\grm{\Gamma \vdash ((x : a) \to B) :: k}}
+\qquad
+\inferrule{\grm{\Gamma \vdash t : (x : a) \to B} \\ \grm{\Gamma \vdash u : \underline{a}}}
+	{\grm{\Gamma \vdash t(u) : B[x \mapsto u]}}
+\end{gathered}
+\end{equation*}
+
+For \emph{non-inductive}, or \emph{external parameters}, we introduce a function
+type whose domain
+is a type of the ambient theory we're working in:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\vdash \Gamma} \\ A : \UU_i \\ (x : A) \to (\grm{\Gamma \vdash B :: k})}
+	{\grm{\Gamma \vdash ((\blm{x : A}) \to B) :: k}}
+\qquad
+\inferrule{\grm{\Gamma \vdash t : (\blm{x : A}) \to B} \\ u : A}
+	{\grm{\Gamma \vdash t(\blm{u}) : B[\blm{x} \mapsto \blm{u}]}}
+\end{gathered}
+\end{equation*}
+
+Since for some examples of inductive-inductive types, especially ones which are
+\emph{infinitely branching}, we need functions with external domain as the domains of
+other functions, we will also add another function type which is itself small, and
+has external domain and small codomain:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\vdash \Gamma} \\ A : \UU_i \\ (x : A) \to (\grm{\Gamma \vdash b : \UU})}
+	{\grm{\Gamma \vdash ((\blm{x : A}) \to b) : \UU}}
+\qquad
+\inferrule{\grm{\Gamma \vdash t : \underline{(\blm{x : A}) \to b}} \\ u : A}
+	{\grm{\Gamma \vdash t(\blm{u}) : \underline{b[\blm{x} \mapsto \blm{u}]}}}
+\end{gathered}
+\end{equation*}
+
+Note that for none of the function types we add the means for $\lambda$-abstrac\-tion,
+so there is no need for $\alpha$-conversion, $\beta$-reduction, and $\eta$-conversion.
+
+As an example, the encoding of the natural numbers as would correspond to the
+follwing source type theory context:
+\begin{equation*}
+\grm{
+\cdot,\, \N : \UU,\, 0 : \underline{\N},\, \mathop{S} : (n : \N) \to \underline{\N}
+}\text{.}
+\end{equation*}
+The type of vectors over a type $A : \UU$ can be represented using the ``external''
+natural numbers $\N$.
+In the following, the constructor \blm{\mathop{cons}} uses both the non-inductive
+and the inductive function type:
+\begin{equation*}
+\grm{
+\cdot,\, \vecty : \blm{\N} \to \UU,\, \mathop{nil} : \underline{\vecty(\blm{0})},\,
+	\mathop{cons} : (\blm{n : \N})(\blm{a : A})(v : \vecty(\blm{n})) \to \underline{\vecty(\blm{S(n)})}
+}
+\end{equation*}
+An example for a type which uses the third, small function type is the following
+definition of full $\omega$-ary rooted trees:
+\begin{equation*}
+\grm{
+\cdot,\, T : \UU,\, \mathop{leaf} : \underline{T},\,
+	\mathop{node} : (\blm{\N} \to T) \to \underline{T}
+} \text{.}
+\end{equation*}
+
+TODO: Define indexed inductive types
+
+\section{Algebras for the Codes}
+
+To give meaning to the codes expressed in the source type theory, we need to
+interpret the contexts as a type in the ambient type theory whose elements are
+the algebras of of the specified inductive-inductive type.
+This means that the interpretation of our contexts must give the types of the
+sort and point constructors they specify.
+
+\begin{defn}[Constructor operator]
+By structural recursion over the source syntax, we define an operation $-^\CC$
+which assigns types to source contexts, fibrations over those to types and
+sections to terms:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\vdash \Gamma}}{\grm{\Gamma}^C : \UU_1}
+\qquad
+\inferrule{\grm{\Gamma \vdash A}}{\grm{A}^C : \grm{\Gamma}^C \to \UU_1}
+\qquad
+\inferrule{\grm{\Gamma \vdash t : A}}{\grm{t}^C : (\gamma : \grm{\Gamma}^C) \to \grm{A}^C(\gamma)}
+\end{gathered}
+\end{equation*}
+
+We will give the construction on contexts, types, and terms, while relying on
+the freshness of names to make sure that the construction respects the substitution
+calculus which we left implicit in this presentation. On contexts, the operation
+is defined by iterated $\Sigma$-types:
+\begin{align*}
+\grm{\cdot}^\CC &:\equiv \unit \text{ and} \\
+\grm{(\Gamma, x : A)}^\CC &:\equiv (\gamma : \grm{\Gamma}^\CC) \times \grm{A}^\CC(\gamma)
+\end{align*}
+Alternatively, context interpretation $\grm{(\cdot, x_1 : A_1, \ldots, x_n : A_n)}^\CC$
+can be considered a \emph{record type} with fields $x_1 : \grm{A_1}^\CC, \ldots, x_n : \grm{A_n}^\CC$.
+
+Sorts will be interpreted as functions into the universe, constructors as inhabiting
+these functions:
+\begin{align*}
+\grm{\UU}^\CC(\gamma) 			&:\equiv \UU_0 \text{,} \\
+\grm{(\underline{a})}^\CC(\gamma)	&:\equiv \grm{a}^\CC(\gamma) \text{,} \\
+\grm{((x : a) \to B)}^\CC(\gamma)	&:\equiv (x : \grm{a}^\CC(\gamma)) \to \grm{B}^\CC(\gamma, x) \text{, and} \\ %TODO notation?
+\grm{((\blm{x : A}) \to B)}^\CC(\gamma) &:\equiv (x : A) \to \grm{B}^\CC(\gamma) \text{.}
+\end{align*}
+
+The interpretation of terms is the straightforward translation into the type interpretation
+above:
+\begin{align*}
+\grm{x}^\CC(\gamma) 			&:\equiv \gamma.x \qquad \text{for variables $x$,} \\
+\grm{(t(u))}^\CC(\gamma)		&:\equiv (\grm{t}^\CC(\gamma))(\grm{u}^\CC(\gamma)) \text{,} \\
+\grm{((\blm{x : A}) \to b)}^\CC(\gamma)	&:\equiv (x : A) \to \grm{b}^\CC(\gamma) \text{, and} \\
+\grm{(t(\blm{u}))}^\CC(\gamma)		&:\equiv (\grm{t}^\CC(\gamma))(u) \text{.}
+\end{align*}
+
+\end{defn}
+
+TODO: Add some examples here.
+
+\section{Motives and Methods}
+
+TODO: Add definition of $\grm{-}^\MM$.
+
+TODO: Add examples.
+
+\section{Recursion and Computation}
+
+TODO: Add definition of $\grm{-}^\EE$.
+
+TODO: Add examples.
+
+\section{Existence of HIITs}
+
+\begin{defn}[Dependent Eliminator]
+An algebra $c : \grm{\Gamma}^\CC$ is said to admit \emph{dependent elimination}
+if for each motive $m : \grm{\Gamma}^\MM(c)$ there is a dependent eliminator
+$\elim_{\grm{\Gamma}}(m) : \grm{\Gamma}^\EE(c, m)$.
+\end{defn}
+
+\begin{thm}[Admissibility of Inductive-Inductive Types]
+Our type theory admits inductive-inductive types if for each wellformed context
+$\grm{\Gamma}$ we can find a constructor $\con_{\grm{\Gamma}}$ which admits dependent
+elimination $\elim_{\grm{\Gamma}}$.
+\end{thm}
+
+\section{Morphisms of Algebras}
+
+TODO: Add definition of algebra morphisms $\grm{-}^\mm$.
+
+TODO: Add examples.
+
+\chapter{Reducing Inductive-Inductive Types to Inductive Families}
+
+\section{Inductive Families}
+
+TODO: Add definition of inductive families
+
+TODO: postulate their existence
+
+\section{Initiality}
+
+\begin{defn}[Initial algebra]
+For a source context \grm{\vdash \Gamma}, an algebra $s : \grm{\Gamma}^\CC$ is
+called \textbf{initial}, if there is a \emph{unique} algebra morphism from $s$ to any
+other algebra, which is to say that the following two rules hold true:
+\begin{equation*}
+\begin{gathered}
+\inferrule{a : \grm{\Gamma}^\CC}{m_a : \grm{\Gamma}^\mm(s, a)}
+\qquad
+\inferrule{a : \grm{\Gamma}^\CC \\ m' : \grm{\Gamma}^\mm(s, a)}{m' = m_a}
+\end{gathered}
+\end{equation*}
+We will call the first rule \emph{weak initiality} and the second one \emph{universality}
+of the algebra.
+\end{defn}
+
+\section{Initiality implies Elimination}
+
+TODO: use sigma construction for this, cite whoever's done this first
+
+\section{Type Erasure}
+
+Since we cannot define type families simultaneously together with their index
+type, we will first produce a version of a given code, whose dependencies between
+sorts has been \emph{erased}.
+For this, we will use an operation on contexts, types and terms, which we will
+call \emph{flattening}.
+The resulting code will specify a type which is now a mutual definition
+of a number of plain types instead of families,
+but it will, in general, contain too many elements, because it lacks all the
+restrictions on which fiber arguments of inductively generated elements should
+lie in.
+The flattening construction is defined like this:
+
+\begin{defn}[Flattening]
+Let \grm{\Gamma} be a context. We inductively define an operation $\flatten$ on
+contexts, types and terms, returning contexts, types on flattened contexts, and
+terms of flattened types, respectively:
+\begin{align*}
+\flatten(\grm{\cdot})			&:\equiv \grm{\cdot} \\
+\flatten(\grm{\Gamma, x : A})		&:\equiv \grm{(\flatten(\Gamma), \bar{x} : \flatten(A))} %TODO bar or overline?
+\end{align*}
+\end{defn}
+
+\section{Wellformedness Predicates}
+
+TODO: Define wellformedness.
+
+
+
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+
+\end{document}
+
+
