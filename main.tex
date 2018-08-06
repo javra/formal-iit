@@ -620,8 +620,10 @@ The only cases in which $\flatten{}$ acts neither as the identity nor
 trivially by structural descent are the cases of inductive functions in the signature
 of sorts and their application.
 
-%Observe first that sorts in the flattened context are just iterated,
-%externally indexed functions of \grm{\UU}. %TODO make this less wirr
+Observe first that the all sort types in $\flatten{\Gamma}$ are iterated functions
+with external codomain and \grm{\UU} as their ultimate domain.
+Thus, if we have \grm{\Delta, x : A \vdash \flatten{B}} for any \grm{\Delta} and \grm{B},
+we also have \grm{\Delta \vdash \flatten{B}}. %TODO weniger wirr bitte
 
 Assuming that for \grm{\Gamma \vdash a : \UU} and \grm{\Gamma, x : \underline{a} \vdash B :: k}
 we have \\ \grm{\flatten{\Gamma} \vdash \flatten{a} : \flatten{\UU}}
