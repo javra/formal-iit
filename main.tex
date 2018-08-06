@@ -247,7 +247,7 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 In the following, we will take a look at a few examples which we are going to
 revisit at various steps throughout this presentation:
 
-\begin{example}[Type Theory Syntax]
+\begin{example}[Type Theory Syntax]\label{ex:ttintt}
 \cite{ttintt} showed how to internalise the syntax of type theory inside type
 theory itself, using a quotient inductive-inductive type.
 Leaving out terms and substitutions, we arrive at a fragment of type theoretical
@@ -256,9 +256,9 @@ together with type formers for a unit type and a $\Pi$-type:
 We want $\mathop{Con} : \UU$ to be inductively defined by
 \begin{align*}
 \mathop{nil}	&: \mathop{Con} \text{and } \\
-\mathop{ext}	&: (\Gamma : \mathop{Con})(A : \mathop{Ty}(\Gamma)) \to \mathop{Con} \text{,} \\
+\mathop{ext}	&: (\Gamma : \mathop{Con})(A : \mathop{Ty}(\Gamma)) \to \mathop{Con} \text{,}
 \end{align*}
-together with a type family $\mathop{Ty} : \mathop{Con} \to \UU$ with constructors
+while simultaneously defining a family $\mathop{Ty} : \mathop{Con} \to \UU$ with constructors
 \begin{align*}
 \mathop{unit}	&: (\Gamma : \mathop{Con}) \to \mathop{Ty}(\Gamma) \text{ and} \\
 \mathop{pi}	&: (\Gamma : \mathop{Con})(A : \mathop{Ty}(\Gamma))(B : \mathop{Ty}(\mathop{ext}(\Gamma, A))) \to \mathop{Ty}(\Gamma) \text{.}
@@ -415,7 +415,15 @@ definition of full $\omega$-ary rooted trees:
 \end{example}
 
 \begin{example}[Type Theory Syntax]
-foo
+The example of the syntax of type theory~\ref{ex:ttintt} is represented by the
+following code:
+\begin{multline*}
+\grm{\cdot,\, \mathop{Con} : \UU,\, \mathop{Ty} : \mathop{Con} \to \UU,} \\
+\grm{\mathop{nil} : \mathop{Con},} \\
+\grm{\mathop{ext} : (\Gamma : \mathop{Con})(A : \mathop{Ty}(\Gamma)) \to \underline{\mathop{Con}},} \\
+\grm{\mathop{unit} : (\Gamma : \mathop{Con}) \to \underline{\mathop{Ty}(\Gamma)},} \\
+\grm{\mathop{pi} : (\Gamma : \mathop{Con})(A : \mathop{Ty}(\Gamma))(B : \mathop{Ty}(\mathop{ext}(\Gamma, A))) \to \underline{\mathop{Ty}(\Gamma)}}
+\end{multline*} %TODO find a better way to typeset this!
 \end{example}
 
 \section{Algebras for the Codes}
@@ -561,7 +569,7 @@ terms of flattened types, respectively:
 \flatten(\grm{(x : a) \to B})		&:\equiv
 	\begin{cases}
 	\flatten(\grm{B}) & \text{for \grm{B :: \Sc},} \\
-	\grm{(x : \blm{\flatten(\grm{a})}) \to \blm{\flatten(\grm{B})}} & \text{for \grm{B :: \Pc}}
+	\grm{(\bar{x} : \blm{\flatten(\grm{a})}) \to \blm{\flatten(\grm{B})}} & \text{for \grm{B :: \Pc}}
 	\end{cases} \\
 \flatten(\grm{(\blm{x : A}) \to B})	&:\equiv \grm{(\blm{x : A}) \to \blm{\flatten(\grm{B})}} \\
 \flatten(\grm{x})				&:\equiv \grm{\bar{x}} \qquad \text{for variables \grm{x}} \\
@@ -581,7 +589,17 @@ If we have an inductive family and the inductive function type is not used in th
 specification of sorts, it does no substantial changes, except for a renaming
 of variables \grm{x} to \grm{\bar{x}}.
 
-As an example, consider the TODO
+\begin{example}
+Let \grm{\Gamma} be the code of our syntax example~\ref{ex:ttintt}.
+Its flattened version looks like this:
+\begin{multline*}
+\grm{\cdot,\, \overline{\mathop{Con}} : \UU,\, \overline{\mathop{Ty}} : \UU,} \\
+\grm{\overline{\mathop{nil}} : \overline{\mathop{Con}},} \\
+\grm{\overline{\mathop{ext}} : (\bar{\Gamma} : \overline{\mathop{Con}})(\bar{A} : \overline{\mathop{Ty}}) \to \underline{\overline{\mathop{Con}}},} \\
+\grm{\overline{\mathop{unit}} : (\bar{\Gamma} : \overline{\mathop{Con}}) \to \underline{\overline{\mathop{Ty}}},} \\
+\grm{\overline{\mathop{pi}} : (\bar{\Gamma} : \overline{\mathop{Con}})(\bar{A} : \overline{\mathop{Ty}})(\bar{B} : \overline{\mathop{Ty}}) \to \underline{\overline{\mathop{Ty}}}}
+\end{multline*} %TODO find a better way to typeset this!
+\end{example}
 
 \begin{lemma}
 The operation $\flatten$ produces wellformed contexts in the sense that the
@@ -599,7 +617,7 @@ following rules hold true:
 
 \begin{proof}
 Let us only consider the cases where $\flatten$ acts neither as the identity nor
-by trivial structural descent:
+trivially by structural descent:
 
 foo
 \end{proof}
