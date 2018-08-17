@@ -216,6 +216,8 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \newcommand{\con}{\mathsf{con}}
 \newcommand{\elim}{\mathsf{elim}}
 \newcommand{\flatten}[1]{\blm{\mathsf{flatten}(\grm{#1})}}
+\newcommand{\annotate}[1]{\blm{\mathsf{annotate}(\grm{#1})}}
+\newcommand{\anntwo}[2]{\blm{\mathsf{annotate}(#1, \grm{#2})}}
 \newcommand{\app}{\mathrel{@}}
 
 \renewcommand{\backrefalt}[4]{
@@ -564,29 +566,30 @@ terms of flattened types, respectively:
 \begin{align*}
 \flatten{\cdot}			&:\equiv \grm{\cdot} \\
 \flatten{\Gamma, x : A}		&:\equiv \grm{(\flatten{\Gamma}, \bar{x} : \flatten{A})} \\ %TODO bar or overline?
-\flatten{\UU}			&:\equiv \grm{\UU} \\
+\flatten{A :: \Sc}		&:\equiv \grm{\UU} \\
 \flatten{\underline{a}}		&:\equiv \grm{\underline{\flatten{\grm{a}}}} \\
-\flatten{(x : a) \to B}		&:\equiv
-	\begin{cases}
-	\flatten{B} & \text{for \grm{B :: \Sc},} \\
-	\grm{(\bar{x} : \flatten{a}) \to \flatten{B}} & \text{for \grm{B :: \Pc}}
-	\end{cases} \\
-\flatten{(\blm{x : A}) \to B}	&:\equiv \grm{(\blm{x : A}) \to \flatten{B}} \\
-\flatten{x}				&:\equiv \grm{\bar{x}} \qquad \text{for variables \grm{x}} \\
+\flatten{(x : a) \to B}		&:\equiv \grm{(\bar{x} : \flatten{a}) \to \flatten{B}} \text{ for \grm{B :: \Pc}} \\
+\flatten{(\blm{x : A}) \to B}	&:\equiv \grm{(\blm{x : A}) \to \flatten{B}} \text{ for \grm{B :: \Pc}} \\
+\flatten{x}				&:\equiv \grm{\bar{x}} \text{ for variables \grm{x}} \\
 \flatten{t(u)}			&:\equiv
 	\begin{cases}
 	\flatten{t} & \text{for \grm{t : (x : a) \to B :: \Sc},} \\
 	(\flatten{t})\grm{(\flatten{u})} & \text{for \grm{t : (x : a) \to B :: \Pc}}
 	\end{cases} \\
-\flatten{t(\blm{u})}		&:\equiv (\flatten{t})\grm{(\blm{u})} \\
+\flatten{t(\blm{u})}		&:\equiv
+	\begin{cases}
+	\flatten{t} & \text{for \grm{t : (\blm{x : A}) \to B :: \Sc},} \\
+	(\flatten{t})\grm{(\flatten{\blm{u}})} & \text{for \grm{t : (\blm{x : A}) \to B :: \Pc}}
+	\end{cases} \\
 \flatten{(\blm{x : A}) \to b}	&:\equiv \grm{(\blm{x : A}) \to \flatten{b}} \\
 \flatten{t \app \blm{u}}	&:\equiv (\flatten{t}) \app \blm{u}
 \end{align*}
 \end{defn}
 
-Note that $\flatten{}$ converts all sorts in a context to be just \grm{\UU}.
-If we have an inductive family and the inductive function type is not used in the
-specification of sorts, it does no substantial changes, except for a renaming
+Note that $\flatten{}$ erases all uses of the function type in the
+specifications of sorts.
+If we are given a specification of a mutual inductive type whose sorts are all
+\grm{\UU}, the operation does no substantial changes, except for a renaming
 of variables \grm{x} to \grm{\bar{x}}.
 
 \begin{example}
@@ -620,12 +623,10 @@ The only cases in which $\flatten{}$ acts neither as the identity nor
 trivially by structural descent are the cases of inductive functions in the signature
 of sorts and their application.
 
-Observe first that the all sort types in $\flatten{\Gamma}$ are iterated functions
-with external codomain and \grm{\UU} as their ultimate domain.
-Thus, if we have \grm{\Delta, x : A \vdash \flatten{B}} for any \grm{\Delta} and \grm{B},
+All sort types in $\flatten{\Gamma}$ are \grm{\UU}.
+Thus, if we have \grm{\Delta, x : A \vdash \flatten{B}} for any \grm{\Delta} and \grm{B :: \Sc},
 we also have \grm{\Delta \vdash \flatten{B}}. %TODO weniger wirr bitte
-
-Assuming that for \grm{\Gamma \vdash a : \UU} and \grm{\Gamma, x : \underline{a} \vdash B :: k}
+Assuming that for \grm{\Gamma \vdash a : \UU} and \grm{\Gamma, x : \underline{a} \vdash B :: \Sc}
 we have \\ \grm{\flatten{\Gamma} \vdash \flatten{a} : \flatten{\UU}}
 and \grm{\flatten{\Gamma, x : \underline{a}} \vdash \flatten{B}}.
 This resolves to \grm{\flatten{\Gamma} \vdash \flatten{a} : \UU} and
@@ -641,17 +642,111 @@ We have
 \end{align*}
 where the last step holds since, as we have seen above, \grm{B} does not depend
 on \grm{x}.
+Non-inductive functions are handled the same way. %TODO elaborate
+\end{proof}
+
+While $\flatten{\Gamma}$ doesn't specify the same types as \grm{\Gamma},
+it doesn't need induction-induction so we can obtain $\con_{\flatten{\Gamma}} : \flatten{\Gamma}^\CC$:
+\begin{lemma}
+If \grm{\vdash \Gamma}, then $\flatten{\Gamma}$ is an inductive family.
+\end{lemma}
+
+\begin{proof}
+This is obvious since every occurence of sorts using the inductive function type
+is erased by $\flatten{}$.
 \end{proof}
 
 \section{Wellformedness Predicates}
 
-TODO: Define wellformedness.
+From this section onwards we will, for the code $\grm{\Gamma \equiv (\cdot, x_1 : A_1, \ldots, x_n : A_n)}$
+in consideration, assume that we have the projections $\bar{x_1} : \bar{A_1}, \ldots, \bar{x_n} : \bar{A_1}$ of
+$\con_{\flatten{\Gamma}} : \flatten{\Gamma}^\CC$ at our disposal in the target
+language.
 
+To motivate the next step of our construction, consider the following code:
+\begin{equation*}
+\grm{
+A : \UU,\, B : A \to \UU,\, a_0, a_1 : \underline{A},\, b : \underline{B(a_0)}
+} \text{.}
+\end{equation*}
+In its flattened form
+\begin{equation*}
+\grm{
+\bar{A} : \UU,\, \bar{B} : \UU,\, \bar{a_0}, \bar{a_1} : \underline{\bar{A}},\, \bar{b} : \underline{\bar{B}}
+} \text{,}
+\end{equation*}
+there is no way to recognize, whether \grm{b} was meant to be in \grm{B(a_0)},
+in \grm{B(a_1)}.
+To reintroduce this piece of information, we will transform a given code into a
+mutually defined predicate over the flattened code, which shall indicate, in which
+fiber of a type family a given constructor (or one of its inductive arguments)
+should be located.
 
+\begin{defn}[Wellformedness]
+Like with \grm{\flatten{}}, we define a transformation on contexts, types, and
+terms by structural recursion on the syntax.
+\begin{align*}
+\annotate{\cdot}			&:\equiv \grm{\cdot} \\
+\annotate{(\Gamma, x : A)}		&:\equiv
+	\begin{cases}
+	\grm{\annotate{\Gamma}, W_x : \blm{\bar{x}} \to \annotate{A}}	& \text{for \grm{A :: \Sc}} \\
+	\grm{\annotate{\Gamma}, w_x : \anntwo{\bar{x}}{A}}		& \text{for \grm{A :: \Pc}}
+	\end{cases} \\
+\end{align*}
+As we can see, on point types, the operation takes another argument, which is a
+term of the target theory.
+\begin{align*}
+\anntwo{y}{\UU}			&:\equiv \grm{\UU} \\
+\anntwo{y}{\underline{a}}		&:\equiv \underline{\anntwo{y}{a}} \\
+\anntwo{y}{(x : a) \to B}		&:\equiv
+	\begin{cases}
+	\grm{(\blm{\bar{x} : \flatten{a}}) \to \annotate{B}}						& \text{for \grm{B :: \Sc}} \\
+	\begin{minipage}[c]{.44\textwidth} \grm{(\blm{\bar{x} : \flatten{a}})(\annotate{\blm{\bar{x}}, a})} 
+		\\ \hphantom{\qquad} \grm{\hfill{} \to \anntwo{y(\bar{x})}{B}} \end{minipage}		& \text{for \grm{B :: \Pc}} \\
+	\end{cases} \\
+\anntwo{y}{(\blm{x : A}) \to B}	&:\equiv
+	\begin{cases}
+	\grm{\blm{A} \to \annotate{B}} 			& \text{for \grm{B :: \Sc}} \\
+	\grm{(\blm{x : A}) \to \anntwo{y(x)}{B}}	& \text{for \grm{B :: \Pc}}
+	\end{cases} \\
+\end{align*}
+Annotate is also defined where the second argument is a term of a sort type:
+\begin{align*}
+\anntwo{y}{x}				&:\equiv \grm{W_x(\blm{y})} \text{ for variables \grm{x}} \\
+\anntwo{y}{t(u)}			&:\equiv \anntwo{y}{t} (\flatten{u}) \\
+\anntwo{y}{t(\blm{u})}			&:\equiv \anntwo{y}{t} (\blm{u}) \\
+\anntwo{y}{(\blm{x : A}) \to b}		&:\equiv \grm{(\blm{x : A}) \to \anntwo{y(x)}{b}} \\
+\anntwo{y}{t \app \blm{u}}		&:\equiv \anntwo{y}{t} \app \blm{u}
+\end{align*}
+\end{defn}
+
+\begin{example}
+Let us look at one sort and one point constructor of our prime example~\ref{ex:ttintt}.
+The sort \grm{\mathop{Ty} : \mathop{Con} \to \UU} gets transformed to the following:
+\begin{align*}
+\grm{W_{\mathop{Ty}} :} 
+&\phantom{\equiv~} \grm{\blm{\overline{Ty}} \to \annotate{Ty, \mathop{Con} \to \UU} } \\
+&\equiv \grm{\blm{\overline{Ty}} \to \flatten{\mathop{Con}} \to \annotate{Ty, \UU}} \\
+&\equiv \grm{\blm{\overline{Ty}} \to \blm{\overline{Con}} \to \UU} \text{.}
+\end{align*}
+The point constructor \grm{\mathop{pi} : (\Gamma : \mathop{Con})(A : \mathop{Ty}(\Gamma))(B : \mathop{Ty}(\mathop{ext}(\Gamma, A))) \to \mathop{Ty}(\Gamma)} becomes the following:
+\begin{align*}
+\grm{w_{\mathop{pi}} :}
+& \phantom{\equiv~} \grm{(\Gamma : \mathop{Con})(A : \mathop{Ty}(\Gamma))(B : \mathop{Ty}(\mathop{ext}(\Gamma, A))) \to \mathop{Ty}(\Gamma)} \\
+& \equiv \grm{(\blm{\overline{\Gamma} : \overline{Con}})(\annotate{\Gamma, \mathop{Con}}) \to foo}
+\end{align*}
+\end{example}
+
+\begin{lemma}
+We have \grm{\vdash \annotate{\Gamma}} for every \grm{\vdash \Gamma}.
+\end{lemma}
+
+\begin{proof}
+TODO: Somehow by recursion on \grm{\Gamma}...
+\end{proof}
 
 \bibliographystyle{unsrtnat}
 \bibliography{references}
 
 \end{document}
-
 
