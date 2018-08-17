@@ -520,9 +520,29 @@ TODO: Add examples.
 
 \section{Inductive Families}
 
-TODO: Add definition of inductive families
+We want to reduce inductive-inductive types to inductive families.
+This means, we postulate that inductive families be admissible in our target
+type theory and show that this implies the existence of all inductive-inductive
+types.
+Since we want to reuse the way of specifying inductive-inductive types to specify
+instances which are as well inductive families, we want to rediscover the specifications
+of inductive families as a subset of all inductive-inductive specifications:
 
-TODO: postulate their existence
+\begin{defn}[Inductive families]
+A context \grm{\Gamma} is said to specify a \textbf{inductive family} if it is
+generated without using the inductive function type in the specification of sorts
+and thus, no sorts depend on other sorts but are only iterated function depending
+on external types.
+This means that the formation rule for inductive function types is restricted
+to the case where \grm{k \equiv \Pc}.
+\end{defn}
+
+We assume for the remainder of this chapter, that if \grm{\Gamma} specifies an
+inductive family, we are provided with $\con_\grm{\Gamma} : \grm{\Gamma}^\CC$ and
+$\elim_\grm{\Gamma} : \grm{\Gamma}^\EE(\con_\grm{\Gamma}, m)$ for each
+$m : \grm{\Gamma}^\MM$.
+
+TODO: explain reduction to W-types maybe
 
 \section{Initiality}
 
@@ -771,7 +791,7 @@ becomes a term \grm{w_{\mathop{pi}}} of the following type:
 	(\blm{\overline{A} : \overline{Ty}})(W_{\mathop{Ty}}(\blm{\overline{A}}, \blm{\overline{\Gamma}}))
 	(\blm{\overline{B} : \overline{Ty}})(W_{\mathop{Ty}}(\blm{\overline{B}}, \blm{\overline{ext}(\overline{\Gamma}, \overline{A})}))
 } \\
-& \grm{
+& \grm{ \hspace*{0pt}\hfill
 	\to \underline{W_{\mathop{Ty}}(\blm{\overline{pi}(\overline{\Gamma}, \overline{A}, \overline{B})},\blm{\overline{\Gamma}})}
 } 
 \end{align*}
