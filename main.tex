@@ -782,7 +782,19 @@ We have \grm{\vdash \annotate{\Gamma}} for every \grm{\vdash \Gamma}.
 \end{lemma}
 
 \begin{proof}
-TODO: Somehow by recursion on \grm{\Gamma}...
+We simultaneouly prove that all of the following rules are admissible:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\vdash \Gamma}}{\grm{\vdash \annotate{\Gamma}}}
+\qquad
+\inferrule{\grm{\Gamma \vdash B :: \Sc}}{\grm{\annotate{\Gamma} \vdash \annotate{B} :: \Sc}}
+\\[.7em]
+\inferrule{\grm{\Gamma \vdash A :: \Pc} \\ \bar{x} : \flatten{A}}{\grm{\annotate{\Gamma} \vdash \anntwo{\bar{x}}{A} :: \Pc}}
+\\[.7em]
+\inferrule{\grm{\Gamma \vdash a : B : \Sc} \\ \bar{x} : \flatten{\underline{a}}}
+	{\grm{\annotate{\Gamma} \vdash \anntwo{\bar{x}}{a} : \annotate{B} :: \Sc}}
+\end{gathered}
+\end{equation*}
 \end{proof}
 
 \bibliographystyle{unsrtnat}
