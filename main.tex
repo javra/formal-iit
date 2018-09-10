@@ -382,6 +382,8 @@ has external domain and small codomain:
 
 Note that for none of the function types we add the means for $\lambda$-abstrac\-tion,
 so there is no need for $\alpha$-conversion, $\beta$-reduction, and $\eta$-conversion.
+We assume that the type theory is equipped with a substitution calculus for terms,
+the substitutions of which we will leave implicit in this exposition.
 
 \begin{example}
 To see what the different function types are used for, consider the following three
@@ -811,7 +813,7 @@ We simultaneouly prove that all of the following rules are admissible:
 \\[.7em]
 \inferrule{\grm{\Gamma \vdash A :: \Pc} \\ \bar{x} : \flatten{A}}{\grm{\annotate{\Gamma} \vdash \anntwo{\bar{x}}{A} :: \Pc}}
 \\[.7em]
-\inferrule{\grm{\Gamma \vdash a : B : \Sc} \\ \bar{x} : \flatten{\underline{a}}}
+\inferrule{\grm{\Gamma \vdash a : B :: \Sc} \\ \bar{x} : \flatten{a}} %TODO underline here??
 	{\grm{\annotate{\Gamma} \vdash \anntwo{\bar{x}}{a} : \annotate{B} :: \Sc}}
 \end{gathered}
 \end{equation*}
