@@ -216,8 +216,8 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \newcommand{\con}{\mathsf{con}}
 \newcommand{\elim}{\mathsf{elim}}
 \newcommand{\flatten}[1]{\blm{\mathsf{flatten}(\grm{#1})}}
-\newcommand{\annotate}[1]{\blm{\mathsf{annotate}(\grm{#1})}}
-\newcommand{\anntwo}[2]{\blm{\mathsf{annotate}(#1, \grm{#2})}}
+\newcommand{\annotate}[1]{\blm{\mathsf{an}(\grm{#1})}}
+\newcommand{\anntwo}[2]{\blm{\mathsf{an}(#1, \grm{#2})}}
 \newcommand{\app}{\mathrel{@}}
 
 \renewcommand{\backrefalt}[4]{
@@ -705,8 +705,10 @@ fiber of a type family a given constructor (or one of its inductive arguments)
 should be located.
 
 \begin{defn}[Wellformedness]
-Like with \grm{\flatten{}}, we define a transformation on contexts, types, and
+Like with \grm{\flatten{}}, we define a \emph{annotation}
+transformation \annotate{} on contexts, types, and
 terms by structural recursion on the syntax.
+On contexts and sort types it is defined like this:
 \begin{align*}
 \annotate{\cdot}			&:\equiv \grm{\cdot} \\
 \annotate{(\Gamma, x : A)}		&:\equiv
@@ -714,23 +716,20 @@ terms by structural recursion on the syntax.
 	\grm{\annotate{\Gamma}, W_x : \blm{\bar{x}} \to \annotate{A}}	& \text{for \grm{A :: \Sc}} \\
 	\grm{\annotate{\Gamma}, w_x : \anntwo{\bar{x}}{A}}		& \text{for \grm{A :: \Pc}}
 	\end{cases} \\
-\end{align*}
+\annotate{\UU}				&:\equiv \grm{\UU} \\
+\annotate{(x : a) \to B}		&:\equiv \grm{\flatten{a} \to \annotate{B}} \text{ for \grm{B :: \Sc}} \\
+\annotate{(\blm{x : A}) \to B}		&:\equiv \grm{\blm{A} \to \annotate{B}}  \text{ for \grm{B :: \Sc}}
+\end{align*} %TODO alignment
 As we can see, on point types, the operation takes another argument, which is a
 term of the target theory.
 \begin{align*}
 \anntwo{y}{\UU}				&:\equiv \grm{\UU} \\
 \anntwo{y}{\underline{a}}		&:\equiv \grm{\underline{\anntwo{y}{a}}} \\
 \anntwo{y}{(x : a) \to B}		&:\equiv
-	\begin{cases}
-	\grm{(\blm{\bar{x} : \flatten{a}}) \to \annotate{B}}						& \text{for \grm{B :: \Sc}} \\
-	\begin{minipage}[c]{.44\textwidth} \grm{(\blm{\bar{x} : \flatten{a}})(\annotate{\blm{\bar{x}}, a})} 
-		\\ \hphantom{\qquad} \grm{\hfill{} \to \anntwo{y(\bar{x})}{B}} \end{minipage}		& \text{for \grm{B :: \Pc}} \\
-	\end{cases} \\
+	\grm{(\blm{\bar{x} : \flatten{a}})(\annotate{\blm{\bar{x}}, a})}  \\
+	& \grm{\hfill{} \to \anntwo{y(\bar{x})}{B}} & \text{for \grm{B :: \Pc}} \\
 \anntwo{y}{(\blm{x : A}) \to B}	&:\equiv
-	\begin{cases}
-	\grm{\blm{A} \to \annotate{B}} 			& \text{for \grm{B :: \Sc}} \\
-	\grm{(\blm{x : A}) \to \anntwo{y(x)}{B}}	& \text{for \grm{B :: \Pc}}
-	\end{cases} \\
+	\grm{(\blm{x : A}) \to \anntwo{y(x)}{B}} & \text{for \grm{B :: \Pc}}
 \end{align*}
 Annotate is also defined where the second argument is a term of a sort type:
 \begin{align*}
@@ -817,6 +816,57 @@ We simultaneouly prove that all of the following rules are admissible:
 	{\grm{\annotate{\Gamma} \vdash \anntwo{\bar{x}}{a} : \annotate{B} :: \Sc}}
 \end{gathered}
 \end{equation*}
+For context extension by sort constructors,
+assume that \grm{\vdash \annotate{\Gamma}} and \grm{\annotate{\Gamma} \vdash \annotate{B} :: \Sc}.
+Since \blm{\overline{x} : \overline{A} \equiv \UU}, we infer \grm{\annotate{\Gamma} \vdash \blm{\overline{x}} \to \annotate{B}},
+and thus
+\begin{equation*}
+\grm{\vdash \annotate{\Gamma}, W_x : \blm{\overline{x}} \to \annotate{B} \equiv \annotate{\Gamma, x : A}} \text{.}
+\end{equation*}
+For extension by point constructors we similarly reason that given
+\grm{\vdash \annotate{\Gamma}} and \grm{\Gamma \vdash A :: \Pc}, from which we
+can infer \grm{\annotate{\Gamma} \vdash \anntwo{\overline{x}}{A}} for \blm{\overline{x} : \overline{A}},
+
+Let us next handle the case of types in \grm{\Sc}.
+Given \grm{\vdash \annotate{\Gamma}},
+we obviously have \grm{\annotate{\Gamma} \vdash \annotate{\UU} \equiv \UU}.
+To show that \grm{\annotate{\Gamma} \vdash \annotate{(x : a) \to B}}, we may assume
+that \grm{\vdash \annotate{\Gamma}} and that for \blm{\overline{x} : \overline{a}}
+we have \grm{\annotate{\Gamma} \vdash \anntwo{\overline{x}}{a} : \UU},
+and that \grm{\annotate{\Gamma, x : \underline{a}} \vdash \annotate{B}}.
+That latter reduces to
+\begin{equation*}
+\grm{\annotate{\Gamma}, w_x : \underline{\anntwo{\overline{x}}{a}} \vdash \annotate{B} :: \Sc} \text{,}
+\end{equation*}
+but since, by definition, \grm{B} cannot contain any reference to \grm{w_x},
+we conclude \grm{\annotate{\Gamma} \vdash \annotate{B}}, which, together with
+\grm{\annotate{\Gamma}} and \blm{\overline{A} : \UU}, suffices to show
+the desired result.
+The case of non-inductive functions works likewise.
+
+There are three formers for \grm{\Pc}-types: Small types, inductive functions, and
+non-inductive functions:
+\begin{itemize}
+\item Assume that \grm{\Gamma \vdash a : \UU} and thus that for each
+\blm{\overline{x} : \overline{a}} we have
+\grm{\annotate{\Gamma} \vdash \anntwo{\overline{x}}{a} : \UU}.
+We know that \grm{\annotate{\Gamma} \vdash \underline{\anntwo{\overline{x}}{a}}}
+which is enough to infer \grm{\annotate{\Gamma} \vdash \underline{\anntwo{\overline{x}}{a}} \equiv \anntwo{\overline{x}}{\underline{a}}}.
+\item Given \grm{\Gamma \vdash a : \UU} and \grm{\Gamma, x : \underline{a} \vdash B :: \Pc}
+we may assume that \grm{\annotate{\Gamma} \vdash \anntwo{\overline{x}}{a} : \UU} for \blm{\overline{x} : \overline{a}}
+and that for \blm{\overline{y}:\overline{B}} we have
+\begin{equation*}
+\grm{\annotate{\Gamma}, w_x : \anntwo{\overline{x}}{a} \vdash \anntwo{\overline{y}}{B} :: \Pc} \text{.}
+\end{equation*}
+We want to show that for \blm{\overline{f} : \overline{(x : a) \to B} \equiv (\overline{x} : \overline{a}) \to \overline{B}},
+\begin{align*}
+\grm{\annotate{\Gamma}} &\vdash \grm{\anntwo{\overline{f}}{(x : a) \to B} :: \Pc} \\
+&\equiv \grm{(\blm{\overline{x} : \overline{a}})(\anntwo{\overline{x}}{a}) \to \anntwo{\overline{f}(\overline{x})}{B}} \text{.}
+\end{align*}
+To this end, we need to show that for \blm{\overline{x} : \overline{a}} we have
+\grm{\annotate{\Gamma} \vdash \anntwo{\overline{x}}{a} \to \anntwo{\overline{f}(\overline{x})}{B}},
+but this is true by induction and weakening.
+\end{itemize}
 \end{proof}
 
 \bibliographystyle{unsrtnat}
