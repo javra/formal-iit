@@ -867,6 +867,32 @@ To this end, we need to show that for \blm{\overline{x} : \overline{a}} we have
 \grm{\annotate{\Gamma} \vdash \anntwo{\overline{x}}{a} \to \anntwo{\overline{f}(\overline{x})}{B}},
 but this is true by induction and weakening.
 \end{itemize}
+As a last part of this proof, we need to show that \grm{\annotate{}} behave well
+on the terms of \grm{\Sc}-types: Variables and applications of inductive and
+non-inductive functions.
+\begin{itemize}
+\item Given \grm{\Gamma \vdash B :: \Sc} and assuming \grm{\annotate{\Gamma} \vdash \annotate{B}},
+we want to show that for \blm{\overline{x}:\overline{a}} we have
+\begin{equation*}
+\grm{\annotate{\Gamma, a : B} \vdash \anntwo{\overline{x}}{a} : \annotate{B}} \text{,}
+\end{equation*}
+but this reduces to
+\begin{equation*}
+\grm{\annotate{\Gamma}, W_a : \blm{\overline{a}} \to \annotate{B} \vdash W_a(\blm{\overline{x}}) : \annotate{B}} \text{,}
+\end{equation*}
+which is obviously true.
+\item Let \grm{\Gamma \vdash t : (x : a) \to B :: \Sc}, which lets us assume
+\begin{equation*}
+\grm{\annotate{\Gamma} \vdash \anntwo{\overline{f}}{t} : \blm{\overline{a}} \to \annotate{B}} \text{ for \blm{\overline{f} : \overline{t}}.}
+\end{equation*}
+For \grm{u : \underline{a}} we than have that
+\begin{align*}
+\grm{\annotate{\Gamma} \vdash} & \grm{\anntwo{\overline{f}}{t}(\overline{u}) : \annotate{B}} \\
+& \grm{\equiv \anntwo{\overline{f}}{t(u)} : \annotate{B[x \mapsto u]}} \text{,}
+\end{align*}
+since each occurence of \grm{x} is foo.
+\item bar
+\end{itemize}
 \end{proof}
 
 \bibliographystyle{unsrtnat}
