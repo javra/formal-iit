@@ -890,8 +890,14 @@ For \grm{u : \underline{a}} we than have that
 \grm{\annotate{\Gamma} \vdash} & \grm{\anntwo{\overline{f}}{t}(\overline{u}) : \annotate{B}} \\
 & \grm{\equiv \anntwo{\overline{f}}{t(u)} : \annotate{B[x \mapsto u]}} \text{,}
 \end{align*}
-since each occurence of \grm{x} is foo.
-\item bar
+since \grm{x} is turned into \grm{w_x} which \grm{\annotate{B}} doesn't depend on. %TODO make this cleaner
+\item For \blm{A : \UU}, \grm{\vdash \annotate{\Gamma}}, and
+\begin{align*}
+\grm{\annotate{\Gamma} \vdash} & \anntwo{\overline{f}}{t} : \annotate{(\blm{x : A}) \to B} \\
+& \equiv \anntwo{\overline{f}}{t} : A \to \annotate{B} \text{ for \blm{\overline{f} : \overline{t}},}
+\end{align*}
+we see that for any \blm{u : A} we have \grm{\anntwo{\overline{f}}{t}(u) \equiv \anntwo{\overline{f}}{t(u)} : \annotate{B[\blm{x} \mapsto \blm{u}]}}
+as desired.
 \end{itemize}
 \end{proof}
 
