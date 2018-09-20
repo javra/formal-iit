@@ -682,7 +682,7 @@ is erased by $\flatten{}$.
 
 From this section onwards we will, for the code $\grm{\Gamma \equiv (\cdot, x_1 : A_1, \ldots, x_n : A_n)}$
 in consideration, assume that we have the projections $\bar{x_1} : \bar{A_1}, \ldots, \bar{x_n} : \bar{A_1}$ of
-$\con_{\flatten{\Gamma}} : \flatten{\Gamma}^\CC$ at our disposal in the target
+$\con_{\grm{\flatten{\Gamma}}} : \grm{\flatten{\Gamma}}^\CC$ at our disposal in the target
 language.
 
 To motivate the next step of our construction, consider the following code:
@@ -899,6 +899,18 @@ since \grm{x} is turned into \grm{w_x} which \grm{\annotate{B}} doesn't depend o
 we see that for any \blm{u : A} we have \grm{\anntwo{\overline{f}}{t}(u) \equiv \anntwo{\overline{f}}{t(u)} : \annotate{B[\blm{x} \mapsto \blm{u}]}}
 as desired.
 \end{itemize}
+\end{proof}
+
+Like \grm{\flatten{}}, \grm{\annotate{}} only produces inductive families, so
+we can assume to have $\con_{\grm{\annotate{\Gamma}}} : \grm{\annotate{\Gamma}}^\CC$:
+
+\begin{lemma}
+If \grm{\vdash{\Gamma}}, then \grm{\annotate{\Gamma}} is an inductive family.
+\end{lemma}
+
+\begin{proof}
+All occurences of inductive functions in sort constructors are replaced
+by non-inductive functions.
 \end{proof}
 
 \bibliographystyle{unsrtnat}
