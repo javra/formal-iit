@@ -213,7 +213,9 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \newcommand{\EE}{\mathsf{E}}
 \newcommand{\MM}{\mathsf{M}}
 \newcommand{\mm}{\mathsf{m}}
-\newcommand{\con}{\mathsf{con}}
+\newcommand{\con}[1]{\mathsf{con}(\grm{#1})}
+\newcommand{\contwo}[2]{\mathsf{con}(#1,\grm{#2})}
+\newcommand{\conthree}[3]{\mathsf{con}(#1, #2, \grm{#3})}
 \newcommand{\elim}{\mathsf{elim}}
 \newcommand{\flatten}[1]{\blm{\mathsf{flatten}(\grm{#1})}}
 \newcommand{\annotate}[1]{\blm{\mathsf{an}(\grm{#1})}}
@@ -507,7 +509,7 @@ $\elim_{\grm{\Gamma}}(m) : \grm{\Gamma}^\EE(c, m)$.
 
 \begin{thm}[Admissibility of Inductive-Inductive Types]
 Our type theory admits inductive-inductive types if for each wellformed context
-$\grm{\Gamma}$ we can find a constructor $\con_{\grm{\Gamma}}$ which admits dependent
+$\grm{\Gamma}$ we can find a constructor $\con{\grm{\Gamma}}$ which admits dependent
 elimination $\elim_{\grm{\Gamma}}$.
 \end{thm}
 
@@ -540,8 +542,8 @@ to the case where \grm{k \equiv \Pc}.
 \end{defn}
 
 We assume for the remainder of this chapter, that if \grm{\Gamma} specifies an
-inductive family, we are provided with $\con_\grm{\Gamma} : \grm{\Gamma}^\CC$ and
-$\elim_\grm{\Gamma} : \grm{\Gamma}^\EE(\con_\grm{\Gamma}, m)$ for each
+inductive family, we are provided with $\con{\Gamma} : \grm{\Gamma}^\CC$ and
+$\elim_\grm{\Gamma} : \grm{\Gamma}^\EE(\con{\Gamma}, m)$ for each
 $m : \grm{\Gamma}^\MM$.
 
 TODO: explain reduction to W-types maybe
@@ -668,7 +670,7 @@ Non-inductive functions are handled the same way. %TODO elaborate
 \end{proof}
 
 While $\flatten{\Gamma}$ doesn't specify the same types as \grm{\Gamma},
-it doesn't need induction-induction so we can obtain $\con_{\flatten{\Gamma}} : \flatten{\Gamma}^\CC$:
+it doesn't need induction-induction so we can obtain $\con{\flatten{\Gamma}} : \flatten{\Gamma}^\CC$:
 \begin{lemma}
 If \grm{\vdash \Gamma}, then $\flatten{\Gamma}$ is an inductive family.
 \end{lemma}
@@ -682,7 +684,7 @@ is erased by $\flatten{}$.
 
 From this section onwards we will, for the code $\grm{\Gamma \equiv (\cdot, x_1 : A_1, \ldots, x_n : A_n)}$
 in consideration, assume that we have the projections $\bar{x_1} : \bar{A_1}, \ldots, \bar{x_n} : \bar{A_1}$ of
-$\con_{\grm{\flatten{\Gamma}}} : \grm{\flatten{\Gamma}}^\CC$ at our disposal in the target
+$\con{\grm{\flatten{\Gamma}}} : \grm{\flatten{\Gamma}}^\CC$ at our disposal in the target
 language.
 
 To motivate the next step of our construction, consider the following code:
@@ -902,7 +904,7 @@ as desired.
 \end{proof}
 
 Like \grm{\flatten{}}, \grm{\annotate{}} only produces inductive families, so
-we can assume to have $\con_{\grm{\annotate{\Gamma}}} : \grm{\annotate{\Gamma}}^\CC$:
+we can assume to have $\con{\grm{\annotate{\Gamma}}} : \grm{\annotate{\Gamma}}^\CC$:
 
 \begin{lemma}
 If \grm{\vdash{\Gamma}}, then \grm{\annotate{\Gamma}} is an inductive family.
@@ -912,6 +914,43 @@ If \grm{\vdash{\Gamma}}, then \grm{\annotate{\Gamma}} is an inductive family.
 All occurences of inductive functions in sort constructors are replaced
 by non-inductive functions.
 \end{proof}
+
+\section{Constructing the initial algebra}
+
+With \grm{\flatten{\Gamma}} and \grm{\annotate{\Gamma}} with have two inductive
+families which will suffice to construct the initial algebra for any code \grm{\Gamma}:
+We use $\Sigma$-types over the wellformedness predicates to select which ones of
+the objects in the flattened types and type families we want to include in the
+initial algebra.
+
+\begin{defn}(Initial algebra)
+Define \blm{\con{}} on contexts by:
+\begin{align*}
+\con{\cdot} &:\equiv \star : \unit \\
+\con{\Gamma, x : A :: \Sc} &:\equiv (\con{\Gamma}, \contwo{W_x}{A}) \\
+\con{\Gamma, x : A :: \Pc} &:\equiv (\con{\Gamma}, \conthree{\bar{x}}{w_x}{A}) \\
+\end{align*}
+On sort constructors we need:
+\begin{align*}
+\contwo{f}{\UU} &:\equiv
+\begin{cases}
+(x : A) \to \contwo{b}{\UU} & \text{if \blm{f \equiv (x : A) \to b : \UU},} \\
+\Sigma(f) & \text{otherwise} %TODO avoid this distinction
+\end{cases}\\
+\contwo{f}{(x : a) \to B :: \Sc} &:\equiv \lambda x : \conthree{\flatten{a}}{\annotate{a}}{\UU}. \contwo{\lambda y. f(y, \pr_1(x))}{B} \\ %TODO fix
+\contwo{f}{(\blm{x : A}) \to B :: \Sc} &:\equiv \lambda x : A. \contwo{\lambda y. f(y, x)}{B}
+\end{align*}
+On point constructor we have:
+\begin{align*}
+\conthree{f}{w}{\underline{a}} &:\equiv (f, w) \text{ for a variable \grm{a}} \\
+\conthree{f}{w}{\underline{t(u)}} &:\equiv \conthree{f}{w}{\underline{t}} \\
+\conthree{f}{w}{\underline{(\blm{x : A}) \to b}} &:\equiv \lambda x : A. \conthree{f(x)}{w(x)}{\underline{b}} \\
+\conthree{f}{w}{(x : a) \to B :: \Pc} &:\equiv
+\lambda x : \conthree{\flatten{a}}{\annotate{a}}{\UU}. \conthree{f(\pr_1(x))}{w(\pr_1(x), \pr_2(x))}{B} %TODO fix
+\conthree{f}{w}{(\blm{x : A}) \to B :: \Pc} &:\equiv
+\lambda x : A. \conthree{f(x)}{w(x)}{B}
+\end{align*}
+\end{defn}
 
 \bibliographystyle{unsrtnat}
 \bibliography{references}
