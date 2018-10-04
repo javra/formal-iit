@@ -950,6 +950,13 @@ On point constructor we have:
 \conthree{f}{w}{(\blm{x : A}) \to B :: \Pc} &:\equiv
 \lambda x : A. \conthree{f(x)}{w(x)}{B}
 \end{align*}
+Here, \blm{\pr_1} and \blm{\pr_2} are generalized projections, defined on universe
+terms and for $i \in {1, 2}$ as follows:
+\begin{align*}
+\pr_i(y, \grm{a}) &:\equiv \pr_i(y) \text{ for a variable \grm{a}} \\
+\pr_i(y, \grm{t(u)}) &:\equiv \pr_i(y) \\ %TODO this really seems fishy
+\pr_i(y, \grm{(\blm{x : A}) \to b}) &:\equiv \lambda x : A. \pr_i(y(x), \grm{b})
+\end{align*}
 \end{defn}
 
 \bibliographystyle{unsrtnat}
