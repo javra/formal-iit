@@ -927,7 +927,7 @@ initial algebra.
 Define \blm{\con{}} on contexts by:
 \begin{align*}
 \con{\cdot} &:\equiv \star : \unit \\
-\con{\Gamma, x : A :: \Sc} &:\equiv (\con{\Gamma}, \contwo{W_x}{A}) \\
+\con{\Gamma, a : B :: \Sc} &:\equiv (\con{\Gamma}, \contwo{W_a}{B}) \\
 \con{\Gamma, x : A :: \Pc} &:\equiv (\con{\Gamma}, \conthree{\bar{x}}{w_x}{A}) \\
 \end{align*}
 On sort constructors we need:
@@ -957,7 +957,18 @@ terms and for $i \in {1, 2}$ as follows:
 \pr_i(y, \grm{t(u)}) &:\equiv \pr_i(y) \\ %TODO this really seems fishy
 \pr_i(y, \grm{(\blm{x : A}) \to b}) &:\equiv \lambda x : A. \pr_i(y(x), \grm{b})
 \end{align*}
+Also we need for universe terms a way to reference them as the domain of function
+types:
+\begin{align*}
+\mathsf{ref}(\grm{a}) &:\equiv \contwo{W_a}{\UU} \text{ for a variable \grm{a}} \\
+\mathsf{ref}(\grm{t(u)}) &:\equiv \mathsf{ref}(\grm{t})(\bar{u}) \\
+\mathsf{ref}(\grm{(\blm{x : A}) \to b}) &:\equiv (x : A) \to \mathsf{ref}(\grm{b})
+\end{align*}
 \end{defn}
+
+\section{Constructing the Eliminator}
+
+TODO: Define $r$
 
 \bibliographystyle{unsrtnat}
 \bibliography{references}
