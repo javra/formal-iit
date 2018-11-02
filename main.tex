@@ -209,10 +209,12 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 %\newcommand{\grinfer}[2]{\grm{\inferrule{{#1}}{{#2}}}}
 \newcommand{\Sc}{\mathsf{S}}
 \newcommand{\Pc}{\mathsf{P}}
-\newcommand{\CC}{\mathsf{C}}
+\newcommand{\CC}{\mathsf{A}} %TODO maybe jus replace
+\renewcommand{\AA}{\mathsf{A}}
 \newcommand{\EE}{\mathsf{E}}
-\newcommand{\MM}{\mathsf{M}}
+\newcommand{\PP}{\mathsf{P}}
 \newcommand{\mm}{\mathsf{m}}
+\newcommand{\MM}{\mathsf{M}}
 \newcommand{\con}[1]{\mathsf{con}(\grm{#1})}
 \newcommand{\contwo}[2]{\mathsf{con}(#1,\grm{#2})}
 \newcommand{\conthree}[3]{\mathsf{con}(#1, #2, \grm{#3})}
@@ -446,11 +448,11 @@ which assigns types to source contexts, fibrations over those to types and
 sections to terms:
 \begin{equation*}
 \begin{gathered}
-\inferrule{\grm{\vdash \Gamma}}{\grm{\Gamma}^C : \UU_1}
+\inferrule{\grm{\vdash \Gamma}}{\grm{\Gamma}^\CC : \UU_1}
 \qquad
-\inferrule{\grm{\Gamma \vdash A}}{\grm{A}^C : \grm{\Gamma}^C \to \UU_1}
+\inferrule{\grm{\Gamma \vdash A}}{\grm{A}^\CC : \grm{\Gamma}^\CC \to \UU_1}
 \qquad
-\inferrule{\grm{\Gamma \vdash t : A}}{\grm{t}^C : (\gamma : \grm{\Gamma}^C) \to \grm{A}^C(\gamma)}
+\inferrule{\grm{\Gamma \vdash t : A}}{\grm{t}^\CC : (\gamma : \grm{\Gamma}^\CC) \to \grm{A}^\CC(\gamma)}
 \end{gathered}
 \end{equation*}
 
@@ -946,7 +948,7 @@ On point constructor we have:
 \conthree{f}{w}{\underline{t(u)}} &:\equiv \conthree{f}{w}{\underline{t}} \\
 \conthree{f}{w}{\underline{(\blm{x : A}) \to b}} &:\equiv \lambda x : A. \conthree{f(x)}{w(x)}{\underline{b}} \\
 \conthree{f}{w}{(x : a) \to B :: \Pc} &:\equiv
-\lambda x : \conthree{\flatten{a}}{\annotate{a}}{\UU}. \conthree{f(\pr_1(x))}{w(\pr_1(x), \pr_2(x))}{B} %TODO fix
+\lambda x : \conthree{\flatten{a}}{\annotate{a}}{\UU}. \conthree{f(\pr_1(x))}{w(\pr_1(x), \pr_2(x))}{B} \\ %TODO fix
 \conthree{f}{w}{(\blm{x : A}) \to B :: \Pc} &:\equiv
 \lambda x : A. \conthree{f(x)}{w(x)}{B}
 \end{align*}
