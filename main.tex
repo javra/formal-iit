@@ -517,7 +517,26 @@ elimination $\elim_{\grm{\Gamma}}$.
 
 \section{Morphisms of Algebras}
 
-TODO: Add definition of algebra morphisms $\grm{-}^\mm$.
+In the following, it will be useful to regard the algebras of a given context
+\grm{\Gamma} as a category.
+To this end, we need to make clear what a morphism between \grm{\Gamma}-algebras
+is.
+
+\begin{defn}[Morphisms of Algebras]
+We want to define the following by mutual recursion on contexts, types and terms:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\vdash \Gamma} \\ \gamma_0, \gamma_1 : \grm{\Gamma}^\AA}
+	{\grm{\Gamma}^\mm(\gamma_0,\gamma_1) : \UU} \\
+\inferrule{\grm{\Gamma \vdash A} \\ \gamma_0, \gamma_1 : \grm{\Gamma}^\AA \\ g : \grm{\Gamma}^\mm(\gamma_0, \gamma_1) \\
+		\\ \alpha_0 : \grm{A}^\AA(\gamma_0) \\ \alpha_1 : \grm{A}^\AA(\gamma_1)}
+	{\grm{A}^\mm(g, \alpha_0, \alpha_1) : \UU} \\
+\inferrule{\grm{\Gamma \vdash t : A} \\ \gamma_0, \gamma_1 : \grm{\Gamma}^\AA 
+		\\ g : \grm{\Gamma}^\mm(\gamma_0, \gamma_1)}
+	{\grm{t}^\mm(g) : \grm{A}^\mm(g, \grm{t}^\AA(\gamma_0), \grm{t}^\AA(\gamma_1))}
+\end{gathered}
+\end{equation*}
+\end{defn}
 
 TODO: Add examples.
 
