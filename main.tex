@@ -521,21 +521,44 @@ In the following, it will be useful to regard the algebras of a given context
 \grm{\Gamma} as a category.
 To this end, we need to make clear what a morphism between \grm{\Gamma}-algebras
 is.
+Intutitively a morphism is given by maps between the interpretations of the sorts,
+together with evidence that those maps preserve the interpretation of point
+constructors.
 
 \begin{defn}[Morphisms of Algebras]
 We want to define the following by mutual recursion on contexts, types and terms:
 \begin{equation*}
 \begin{gathered}
 \inferrule{\grm{\vdash \Gamma} \\ \gamma_0, \gamma_1 : \grm{\Gamma}^\AA}
-	{\grm{\Gamma}^\mm(\gamma_0,\gamma_1) : \UU} \\
-\inferrule{\grm{\Gamma \vdash A} \\ \gamma_0, \gamma_1 : \grm{\Gamma}^\AA \\ g : \grm{\Gamma}^\mm(\gamma_0, \gamma_1) \\
+	{\grm{\Gamma}^\mm(\gamma_0,\gamma_1) : \UU} \\[.7em]
+\inferrule{\grm{\Gamma \vdash A} %\\ \gamma_0, \gamma_1 : \grm{\Gamma}^\AA TODO decide if show
+		\\ g : \grm{\Gamma}^\mm(\gamma_0, \gamma_1) \\
 		\\ \alpha_0 : \grm{A}^\AA(\gamma_0) \\ \alpha_1 : \grm{A}^\AA(\gamma_1)}
-	{\grm{A}^\mm(g, \alpha_0, \alpha_1) : \UU} \\
+	{\grm{A}^\mm(g, \alpha_0, \alpha_1) : \UU} \\[.7em]
 \inferrule{\grm{\Gamma \vdash t : A} \\ \gamma_0, \gamma_1 : \grm{\Gamma}^\AA 
 		\\ g : \grm{\Gamma}^\mm(\gamma_0, \gamma_1)}
 	{\grm{t}^\mm(g) : \grm{A}^\mm(g, \grm{t}^\AA(\gamma_0), \grm{t}^\AA(\gamma_1))}
 \end{gathered}
 \end{equation*}
+
+Like we did for the definition of algebras, we want morphisms of contexts to be
+just iterated $\Sigma$-types of the respective interpretation of types:
+\begin{align*}
+\grm{\cdot}^\mm(\gamma_0, \gamma_1) &:\equiv \unit \text{ and} \\
+\grm{(\Gamma, x : A)}^\mm(\gamma_0, \gamma_1) &:\equiv
+	(g : \grm{\Gamma}^\mm(\pr_1(\gamma_0), \pr_1(\gamma_1))) \times \grm{A}^\mm(g, \pr_2(\gamma_0), \pr_2(\gamma_1)) \text{.}
+\end{align*}
+
+The core of the definition on sort types is that the universe is interpreted as
+a function space:
+\begin{align*}
+\grm{\UU}^\mm(g, \alpha_0, \alpha_1)  			&:\equiv \alpha_0 \to \alpha_1 \text{,} \\
+\grm{(\underline{a})}^\mm(g, \alpha_0, \alpha_1)	&:\equiv (\grm{a}^\mm(g, \alpha_0) = \alpha_1) \text{,} \\
+\grm{((x : a) \to B)}^\mm(g, \alpha_0, \alpha_1)	&:\equiv (x : \grm{a}^\CC(\gamma_0))
+							\to \grm{B}^\mm((g, \refl), \alpha_0(x), \alpha_1(\grm{a}^\mm(g, x))) \text{,} \\
+\grm{((\blm{x : A}) \to B)}^\mm(g, \alpha_0, \alpha_1)  &:\equiv (x : A)
+							\to \grm{(B(\blm{x}))}^\mm(g, \alpha_0(x), \alpha_1(x)) \text{.}
+\end{align*}
 \end{defn}
 
 TODO: Add examples.
