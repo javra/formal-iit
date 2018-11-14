@@ -138,6 +138,7 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \newcommand{\refl}{\mathsf{refl}}
 \newcommand{\ap}{\mathsf{ap}}
 \newcommand{\apd}{\mathsf{apd}}
+\newcommand{\happly}{\mathsf{happly}}
 \newcommand{\ind}{\mathsf{ind}}
 \newcommand{\rec}{\mathsf{rec}}
 \newcommand{\pr}{\mathsf{pr}}
@@ -548,7 +549,6 @@ just iterated $\Sigma$-types of the respective interpretation of types:
 \grm{(\Gamma, x : A)}^\mm(\gamma_0, \gamma_1) &:\equiv
 	(g : \grm{\Gamma}^\mm(\pr_1(\gamma_0), \pr_1(\gamma_1))) \times \grm{A}^\mm(g, \pr_2(\gamma_0), \pr_2(\gamma_1)) \text{.}
 \end{align*}
-
 The core of the definition on sort types is that the universe is interpreted as
 a function space:
 \begin{align*}
@@ -559,6 +559,15 @@ a function space:
 \grm{((\blm{x : A}) \to B)}^\mm(g, \alpha_0, \alpha_1)  &:\equiv (x : A)
 							\to \grm{(B(\blm{x}))}^\mm(g, \alpha_0(x), \alpha_1(x)) \text{.}
 \end{align*}
+On terms, consider the foo
+\begin{align*}
+\grm{x}^\mm(g) 				&:\equiv g.\grm{x} \qquad \text{for variables \grm{x},} \\ %???
+\grm{(t(u))}^\mm(g)			&:\equiv (\grm{u}^\mm(g))_* (\grm{t}^\mm(g)(\grm{u}^\AA(\gamma_0))) \text{,} \\ %TODO check this
+\grm{((\blm{x : A}) \to b)}^\mm(g)	&:\equiv (x : A) \to \grm{b}^\mm(g) \text{,} \\
+\grm{(t(\blm{u}))}^\mm(g)		&:\equiv \grm{t}^\mm(g)(u) \text{, and} \\
+\grm{(t \app \blm{u})}^\mm(g)		&:\equiv (\grm{t}^\mm(g))(u) \text{.} %TODO use happly here sometimes!!! uargh
+\end{align*}
+
 \end{defn}
 
 TODO: Add examples.
