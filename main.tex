@@ -575,7 +575,26 @@ TODO: Add examples.
 \chapter{Reducing Inductive-Inductive Types to Inductive Families}
 \chaptermark{Reducing Inductive-Inductive Types}
 
-\section{Inductive Families}
+\section{Fragments of Inductive-Inductive Types}
+
+As we have seen in the previous sections, inductive-inductive types as specified
+allow for a very broad variety of definitions.
+We will now see that it is easy to carve out different subsets of specifications
+to obtain more restrictive fragments of inductive types.
+Starting from the largest of these subsets, we will first see that there is a
+straightforward way to restrict inductive-inductive types to those whose constructors
+are finitary in the sense that no point constructor depends on an infinite
+amount of data: %TODO improve that last sentence
+
+\begin{defn}[Finitary IITs]
+Given a specification \grm{\Gamma} for an inductive-inductive types we say that
+it is \textbf{finitary} if the infinitary $\Pi$-type is not used.
+\end{defn}
+
+One example of a specification which does not meet this requirement are the
+infinitely branching trees. %TODO cite example
+
+
 
 We want to reduce inductive-inductive types to inductive families.
 This means, we postulate that inductive families be admissible in our target
