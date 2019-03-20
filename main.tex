@@ -16,8 +16,8 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 %\usepackage{shellesc}
 \usepackage{minted}
 \setmainfont[Ligatures=TeX]{TeX Gyre Pagella}
-\setmonofont{Ubuntu Mono}
-\newfontfamily{\freeserif}{DejaVu Sans}
+\setmonofont{DejaVu Sans Mono}
+\newfontfamily{\freeserif}{DejaVu Sans Mono}
 \newunicodechar{⦃}{\ensuremath{\texttt{\{}\mkern-7mu\texttt{|}}}
 	%{\makebox[.5em]{\freeserif⦃}}
 \newunicodechar{⦄}{\ensuremath{\texttt{|}\mkern-7mu\texttt{\}}}}
@@ -40,10 +40,12 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \newunicodechar{⋆}{\freeserif{⋆}}
 \newunicodechar{∘}{\freeserif{∘}}
 \newunicodechar{←}{\freeserif{←}}
+\newunicodechar{∙}{\freeserif{∙}}
+\newunicodechar{▶}{\freeserif{▶}}
 
 %workaround to remove red boxes
 \AtBeginEnvironment{minted}{\renewcommand{\fcolorbox}[4][]{#4}}
-\usemintedstyle{colorful}
+\usemintedstyle{default}
 \newminted{lean}{
 	linenos,
 	numbersep=5pt,
@@ -68,8 +70,8 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 	framesep=1mm,
 	samepage,
 	autogobble}
-
-\linespread{1.05}
+\newcommand{\agdai}[1]{\mintinline{agda}{#1}}
+\linespread{1.1}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{graphicx}
 \usepackage{array}
@@ -207,6 +209,7 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \newcommand{\gr}[1]{{\color{ForestGreen}#1}}
 \newcommand{\grm}[1]{\ensuremath{\gr{#1}}}
 \newcommand{\blm}[1]{\ensuremath{{\color{Black}#1}}}
+\newcommand{\tqm}[1]{\ensuremath{{\color{Blue}#1}}}
 %\newcommand{\grinfer}[2]{\grm{\inferrule{{#1}}{{#2}}}}
 \newcommand{\Sc}{\mathsf{S}}
 \newcommand{\Pc}{\mathsf{P}}
@@ -224,6 +227,11 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \newcommand{\annotate}[1]{\blm{\mathsf{an}(\grm{#1})}}
 \newcommand{\anntwo}[2]{\blm{\mathsf{an}(#1, \grm{#2})}}
 \newcommand{\app}{\mathrel{@}}
+\newcommand{\SCon}{\vdash_\Sc}
+\newcommand{\var}{\mathsf{var}}
+\newcommand{\vz}{\mathsf{vz}}
+\newcommand{\vs}{\mathsf{vs}}
+\newcommand{\El}{\mathsf{El}} %TODO change to operator?
 
 \renewcommand{\backrefalt}[4]{
 	\ifcase #1
@@ -254,6 +262,10 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \chapter{Specification of Inductive-Inductive Types}
 
 \input{iit.tex}
+
+\chapter{Specification of Inductive Families}
+
+\input{if.tex}
 
 \chapter{Reducing Inductive-Inductive Types to Inductive Families}
 \chaptermark{Reducing Inductive-Inductive Types}
