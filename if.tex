@@ -126,4 +126,38 @@ data Con : SCon → Set₁ where
 %TODO remove backslash
 \end{remark}
 
+\begin{example}
+A common example for inductive types, the natural numbers, with one constructor for
+zero and one for the successor function, are represented by the context
+\begin{equation*}
+\tqm{\cdot, \UU, \El(\var(\vz)), \var(\vz) \Rightarrow_\Pc \El(\var(\vz))} \text{.}
+\end{equation*}
+An example of a real indexed type would be the type family of vectors over a fixed
+type \blm{A : \UU}:
+\begin{equation*}
+\begin{gathered}
+\tqm{\cdot, \Pi_\Sc(\blm{\N}, \blm{\lambda n. \tqm{\UU}}),} \\
+\tqm{\El(\var(\vz)(\blm{0})),}\\
+\tqm{\Pi_\Pc(A, \lambda a. \Pi_\Pc(\N, \lambda n. \var(\vz)(n) \Rightarrow_\Pc \El(\var(\vz)(n + 1)))}
+\end{gathered}
+\end{equation*}
+An easy example with non-trivial mutual dependency between the point constructors
+is the predicate of evenness and oddness on natural numbers:
+\begin{equation*}
+\begin{gathered}
+\tqm{\cdot, \Pi_\Sc(\blm{\N}, \blm{\lambda n. \tqm{\UU}}), \Pi_\Sc(\blm{\N}, \blm{\lambda n. \tqm{\UU}}),} \\
+\tqm{\El(\var(\vs(\vz))),} \\
+\tqm{\Pi_\Pc(\blm{\N}, \lambda n. \var(\vz)(n) \Rightarrow_\Pc \El(\var(\vs(\vz))(n + 1)),} \\
+\tqm{\Pi_\Pc(\blm{\N}, \lambda n. \var(\vs(\vz))(n) \Rightarrow_\Pc \El(\var(\vz)(n + 1))}
+\end{gathered}
+\end{equation*}
+Here, the first sort constructor represents evenness, the second one oddness,
+the first point constructor the proof that \blm{0} is even and the other two the
+proof that evenness implies oddness of the successor and vice versa.
+\end{example}
+
+%TODO substitutions
+
+\section{Algebras of Inductive Families}
+
 
