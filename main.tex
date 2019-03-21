@@ -16,32 +16,33 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 %\usepackage{shellesc}
 \usepackage{minted}
 \setmainfont[Ligatures=TeX]{TeX Gyre Pagella}
-\setmonofont{DejaVu Sans Mono}
-\newfontfamily{\freeserif}{DejaVu Sans Mono}
-\newunicodechar{⦃}{\ensuremath{\texttt{\{}\mkern-7mu\texttt{|}}}
+\setmonofont{Iosevka}
+%\newfontfamily{\freeserif}{DejaVu Sans Mono}
+%\newunicodechar{⦃}{\ensuremath{\texttt{\{}\mkern-7mu\texttt{|}}}
 	%{\makebox[.5em]{\freeserif⦃}}
-\newunicodechar{⦄}{\ensuremath{\texttt{|}\mkern-7mu\texttt{\}}}}
+%\newunicodechar{⦄}{\ensuremath{\texttt{|}\mkern-7mu\texttt{\}}}}
 	%{\makebox[.5em]{\freeserif⦄}}
-\newunicodechar{→}{\texttt{\freeserif{→}}}
-\newunicodechar{⟶}{\texttt{\freeserif{⟶}}}
-\newunicodechar{⁻}{\texttt{\freeserif{⁻}}}
-\newunicodechar{▹}{\freeserif{▹}}
-\newunicodechar{ℕ}{\texttt{\freeserif{ℕ}}}
-\newunicodechar{⟨}{\texttt{\freeserif{⟨}}}
-\newunicodechar{⟩}{\texttt{\freeserif{⟩}}}
-\newunicodechar{⬝}{\ensuremath{\ct}}
-\newunicodechar{∼}{\freeserif{∼}}
-\newunicodechar{≃}{\freeserif{≃}}
-\newunicodechar{≅}{\freeserif{≅}}
-\newunicodechar{∘}{\freeserif{∘}}
-\newunicodechar{ʰ}{\freeserif{ʰ}}
-\newunicodechar{ᵍ}{\freeserif{ᵍ}}
-\newunicodechar{⇒}{\freeserif{⇒}}
-\newunicodechar{⋆}{\freeserif{⋆}}
-\newunicodechar{∘}{\freeserif{∘}}
-\newunicodechar{←}{\freeserif{←}}
-\newunicodechar{∙}{\freeserif{∙}}
-\newunicodechar{▶}{\freeserif{▶}}
+%\newunicodechar{→}{\texttt{\freeserif{→}}}
+%\newunicodechar{⟶}{\texttt{\freeserif{⟶}}}
+%\newunicodechar{⁻}{\texttt{\freeserif{⁻}}}
+%\newunicodechar{▹}{\freeserif{▹}}
+%\newunicodechar{ℕ}{\texttt{\freeserif{ℕ}}}
+%\newunicodechar{⟨}{\texttt{\freeserif{⟨}}}
+%\newunicodechar{⟩}{\texttt{\freeserif{⟩}}}
+%\newunicodechar{⬝}{\ensuremath{\ct}}
+%\newunicodechar{∼}{\freeserif{∼}}
+%\newunicodechar{≃}{\freeserif{≃}}
+%\newunicodechar{≅}{\freeserif{≅}}
+%\newunicodechar{∘}{\freeserif{∘}}
+%\newunicodechar{ʰ}{\freeserif{ʰ}}
+%\newunicodechar{ᵍ}{\freeserif{ᵍ}}
+%\newunicodechar{⇒}{\freeserif{⇒}}
+%\newunicodechar{⋆}{\freeserif{⋆}}
+%\newunicodechar{∘}{\freeserif{∘}}
+%\newunicodechar{←}{\freeserif{←}}
+%\newunicodechar{∙}{\freeserif{∙}}
+%\newunicodechar{▶}{\freeserif{▶}}
+%\newunicodechar{∀}{\freeserif{∀}}
 
 %workaround to remove red boxes
 \AtBeginEnvironment{minted}{\renewcommand{\fcolorbox}[4][]{#4}}
@@ -232,6 +233,7 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \newcommand{\vz}{\mathsf{vz}}
 \newcommand{\vs}{\mathsf{vs}}
 \newcommand{\El}{\mathsf{El}} %TODO change to operator?
+\newcommand{\IFSub}[2]{\mathsf{Sub}(#1,#2)}
 
 \renewcommand{\backrefalt}[4]{
 	\ifcase #1

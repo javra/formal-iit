@@ -72,16 +72,19 @@ As a last building block of the syntax, we can now form full contexts consisting
 of sort and point constructors.
 Such a context \tqm{\Gamma} can be formed over a given sort context \tqm{\Gamma_\Sc}
 which we will denote as a subscript to the turnstile or omit when inferrable.
-The empty context can be formed over the empty sort context, an extension of
-a context by a sort constructor happens in parallel to an extension of its sort
-context, and an extension by a point constructor leaves the sort context fixed:
+%The empty context can be formed over the empty sort context, an extension of
+%a context by a sort constructor happens in parallel to an extension of its sort
+%context, and an extension by a point constructor leaves the sort context fixed:
+The empty context can be formed over any sort context, and an extension by a point
+constructor leaves the sort context fixed:
 \begin{equation*}
 \begin{gathered}
-\inferrule{}{\tqm{\vdash_{\cdot_\Sc} \cdot}}
+\inferrule{\tqm{\SCon \Gamma_\Sc}}{\tqm{\vdash_{\Gamma_\Sc} \Gamma}}
+%\inferrule{}{\tqm{\vdash_{\cdot_\Sc} \cdot}}
 \qquad
-\inferrule{\tqm{\vdash_{\Gamma_\Sc} \Gamma} \\ \tqm{B : \Sc}}
-  {\tqm{\vdash_{\Gamma_\Sc, B} \Gamma, B}}
-\qquad
+%\inferrule{\tqm{\vdash_{\Gamma_\Sc} \Gamma} \\ \tqm{B : \Sc}}
+%  {\tqm{\vdash_{\Gamma_\Sc, B} \Gamma, B}}
+%\qquad
 \inferrule{\tqm{\vdash_{\Gamma_\Sc} \Gamma} \\ \tqm{\Gamma_\Sc \SCon A}}
   {\tqm{\vdash_{\Gamma_\Sc} \Gamma, A}}
 \end{gathered}
@@ -106,49 +109,52 @@ data SCon : Set₁ where
   _▶c_ : SCon → TyS → SCon
 
 data Var : SCon → TyS → Set₁ where
-  vvz : ∀{Γc}{B} → Var (Γc ▶c B) B
-  vvs : ∀{Γc}{B}{B'} → Var Γc B → Var (Γc ▶c B') B
+  vvz : ∀{Γc B} → Var (Γc ▶c B) B
+  vvs : ∀{Γc B B'} → Var Γc B → Var (Γc ▶c B') B
 
-data Tm : SCon → TyS → Set₁ where
-  var  : ∀{Γc}{A} → Var Γc A → Tm Γc A
-  _\$S_ : ∀{Γc}{T}{B} → Tm Γc (Π̂S T B) → (α : T) → Tm Γc (B α)
+data Tm (Γc : SCon) : TyS → Set₁ where
+  var  : ∀{A} → Var Γc A → Tm Γc A
+  _\$S_ : ∀{T B} → Tm Γc (Π̂S T B) → (α : T) → Tm Γc (B α)
 
-data TyP : SCon → Set₁ where
-  El   : ∀{Γc} → Tm Γc U → TyP Γc
-  Π̂P   : ∀{Γc}(T : Set) → (T → TyP Γc) → TyP Γc
-  _⇒P_ : ∀{Γc} → Tm Γc U → TyP Γc → TyP Γc
+data TyP (Γc : SCon) : Set₁ where
+  El   : Tm Γc U → TyP Γc
+  Π̂P   : (T : Set) → (T → TyP Γc) → TyP Γc
+  _⇒P_ : Tm Γc U → TyP Γc → TyP Γc
 
-data Con : SCon → Set₁ where
-  ∙    : Con ∙c
-  _▶S_ : ∀{Γc} → Con Γc → (A : TyS) → Con (Γc ▶c A)
-  _▶P_ : ∀{Γc} → Con Γc → (B : TyP Γc) → Con Γc
+data Con (Γc : SCon) : Set₁ where
+  ∙    : Con Γc
+  _▶P_ : Con Γc → (B : TyP Γc) → Con Γc
 \end{agdacode}
 %TODO remove backslash
 \end{remark}
 
 \begin{example}
 A common example for inductive types, the natural numbers, with one constructor for
-zero and one for the successor function, are represented by the context
+zero and one for the successor function, are represented by the sort context
+\tqm{\cdot_\Sc, \UU} and the points
 \begin{equation*}
-\tqm{\cdot, \UU, \El(\var(\vz)), \var(\vz) \Rightarrow_\Pc \El(\var(\vz))} \text{.}
+\tqm{\El(\var(\vz)), \var(\vz) \Rightarrow_\Pc \El(\var(\vz))} \text{.}
 \end{equation*}
+
 An example of a real indexed type would be the type family of vectors over a fixed
-type \blm{A : \UU}:
+type \blm{A : \UU} which is defined over the sort context
+\tqm{\cdot_\Sc, \Pi_\Sc(\blm{\N}, \blm{\lambda n. \tqm{\UU}})} by
 \begin{equation*}
 \begin{gathered}
-\tqm{\cdot, \Pi_\Sc(\blm{\N}, \blm{\lambda n. \tqm{\UU}}),} \\
-\tqm{\El(\var(\vz)(\blm{0})),}\\
-\tqm{\Pi_\Pc(A, \lambda a. \Pi_\Pc(\N, \lambda n. \var(\vz)(n) \Rightarrow_\Pc \El(\var(\vz)(n + 1)))}
+\tqm{\cdot, \El(\var(\vz)(\blm{0})),}\\
+\tqm{\Pi_\Pc(A, \lambda a. \Pi_\Pc(\N, \lambda n. \var(\vz)(n) \Rightarrow_\Pc \El(\var(\vz)(n + 1)))} \text{.}
 \end{gathered}
 \end{equation*}
+
 An easy example with non-trivial mutual dependency between the point constructors
-is the predicate of evenness and oddness on natural numbers:
+is the predicate of evenness and oddness on natural numbers: The sorts are
+represented by \tqm{\cdot_\Sc, \Pi_\Sc(\blm{\N}, \blm{\lambda n. \tqm{\UU}}), \Pi_\Sc(\blm{\N}, \blm{\lambda n. \tqm{\UU}})}
+and the point constructors by
 \begin{equation*}
 \begin{gathered}
-\tqm{\cdot, \Pi_\Sc(\blm{\N}, \blm{\lambda n. \tqm{\UU}}), \Pi_\Sc(\blm{\N}, \blm{\lambda n. \tqm{\UU}}),} \\
-\tqm{\El(\var(\vs(\vz))),} \\
+\tqm{\cdot , \El(\var(\vs(\vz))),} \\
 \tqm{\Pi_\Pc(\blm{\N}, \lambda n. \var(\vz)(n) \Rightarrow_\Pc \El(\var(\vs(\vz))(n + 1)),} \\
-\tqm{\Pi_\Pc(\blm{\N}, \lambda n. \var(\vs(\vz))(n) \Rightarrow_\Pc \El(\var(\vz)(n + 1))}
+\tqm{\Pi_\Pc(\blm{\N}, \lambda n. \var(\vs(\vz))(n) \Rightarrow_\Pc \El(\var(\vz)(n + 1))} \text{.}
 \end{gathered}
 \end{equation*}
 Here, the first sort constructor represents evenness, the second one oddness,
@@ -156,7 +162,47 @@ the first point constructor the proof that \blm{0} is even and the other two the
 proof that evenness implies oddness of the successor and vice versa.
 \end{example}
 
-%TODO substitutions
+One component of the syntax which has completely gone missing are substitutions.
+Since we cant refer to previous point constructors, we certainly don't need them
+for the point contexts.
+But since we also got rid of sort interdependencies, we could reduce the recursive
+function types on points to a non-depenent one and thus don't need to use
+substitutions in the definition of application.
+It may still be helpful for syntax transformations to use substitutions \tqm{\mathsf{Sub}}
+of the sort contexts which we define as generated by
+\begin{equation*}
+\begin{gathered}
+\inferrule{\tqm{\SCon \Gamma_\Sc}}
+  {\tqm{\epsilon : \IFSub{\Gamma_\Sc}{\cdot_\Sc}}}
+\quad\text{and}\quad
+\inferrule{\tqm{\sigma : \IFSub{\Gamma_\Sc}{\Delta_\Sc}} \\ 
+  \tqm{\Gamma_\Sc \SCon t : B}}
+  {\tqm{(\sigma, t) : \IFSub{\Gamma_\Sc}{(\Delta_\Sc, B)}}}
+\text{.}
+\end{gathered}
+\end{equation*}
+These then allow us to substitute point types and sort terms via
+\begin{equation*}
+\begin{gathered}
+\inferrule{\tqm{\Gamma_\Sc \SCon A} \\
+  \tqm{\sigma : \IFSub{\Gamma_\Sc}{\Delta_\Sc}}}
+  {\tqm{\Delta_\Sc \SCon A[\sigma]}}
+\quad\text{and}\quad
+\inferrule{\tqm{\Gamma_\Sc \SCon t : B} \\
+  \tqm{\sigma : \IFSub{\Gamma_\Sc}{\Delta_\Sc}}}
+  {\tqm{\Delta_\Sc \SCon t[\sigma] : B}}
+\text{,}
+\end{gathered}
+\end{equation*}
+obeying the usual rules for substitution
+\begin{align*}
+\tqm{\Pi_\Pc(\blm{T}, A)[\sigma]} &= \tqm{\Pi(\blm{T}, \blm{\lambda \tau. \tqm{A(\blm{\tau})[\sigma]}})} \text{,} \\
+\tqm{\El(a)[\sigma]} &= \tqm{El(a[\sigma])} \text{,} \\
+\tqm{(a \Rightarrow_\Pc A)[\sigma]} &= \tqm{a[\sigma] \Rightarrow_\Pc A[\sigma]} \text{,} \\
+\tqm{\var(\vz)[\sigma, t]} &= \tqm{t} \text{,} \\
+\tqm{\var(\vs(t))[\sigma, s]} &= \tqm{\var(t)[\sigma]} \text{, and} \\
+\tqm{t(\tau)[\sigma]} &= \tqm{t[\sigma](\tau)} \text{.}
+\end{align*}
 
 \section{Algebras of Inductive Families}
 
