@@ -83,7 +83,64 @@ The substitutions should form a category as postulated by the following rules:
 \grm{(\sigma \circ \delta) \circ \gamma} &= \grm{\sigma \circ (\delta \circ \gamma)}
 \end{align*}
 
+We can pull back types and terms along substitutions, and these pullbacks are functorial
+in the categorical structure:
+\begin{equation*}
+\inferrule{\grm{\Delta \vdash A :: k} \\
+  \grm{\IISub{\sigma}{\Gamma}{\Delta}}}
+  {\grm{\Gamma \vdash A[\sigma] :: k}}
+\qquad
+\inferrule{\grm{\Delta \vdash t : A} \\
+  \grm{\IISub{\sigma}{\Gamma}{\Delta}}}
+  {\grm{\Gamma \vdash t[\sigma] : A[\sigma]}}
+\end{equation*}
+\begin{align*}
+\grm{A[\id]} &= \grm{A} \\
+\grm{A[\sigma \circ \delta]} &= \grm{A[\sigma][\delta]} \\
+\grm{t[\id]} &= \grm{t} \\
+\grm{t[\sigma \circ \delta]} &= \grm{t[\sigma][\delta]}
+\end{align*}
 
+We have a canonical substitution into the empty context and we can extend substitutions
+by giving a term in a type bulled back to their domain.
+\begin{equation*}
+\inferrule{\grm{\vdash \Gamma}}
+  {\grm{\IISub{\epsilon}{\Gamma}{\cdot}}}
+\qquad
+\inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta}} \\
+  \grm{\Delta \vdash A} \\
+  \grm{\Gamma \vdash t : A[\sigma]}}
+  {\grm{\IISub{\sigma, t}{\Gamma}{\Delta}}}
+\end{equation*}
+Empty substituition and extension simplify by the following laws:
+\begin{align*}
+\grm{\sigma} &= \grm{\epsilon}
+  &\text{ for all \grm{\IISub{\sigma}{\Gamma}{\cdot}}, and} \\
+\grm{(\delta , t) \circ \sigma} &= \grm{(\delta \circ \sigma), t[\sigma]}
+  &\text{ for \grm{\IISub{\delta}{\Gamma}{\Delta}}, \grm{\IISub{\sigma}{\Sigma}{\Gamma}}.}
+\end{align*}
+A substitution into an extended context allows us to project out
+a ``shorter`` substitution and a term in the terminal component:
+\begin{equation*}
+\inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta,A}}}
+  {\grm{\IISub{\pi_1(\sigma)}{\Gamma}{\Delta}}}
+\qquad
+\inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta,A}}}
+  {\grm{\Gamma \vdash \pi_2(\sigma) : A[\pi_1(\sigma)]}} \text{, with}
+\end{equation*}
+\begin{align*}
+\grm{\pi_1(\sigma, t)} &= \grm{\sigma} \text{,} \\
+\grm{\pi_2(\sigma, t)} &= \grm{t} \text{, and} \\
+\grm{(\pi_1(\sigma), \pi_2(\sigma))} &= \grm{\sigma} \text{.}
+\end{align*}
+Finally, we also need rules that tell us, how the constructors of the universe
+and the $\Pi$-type behave when pulled back along a substitution:
+\begin{align*}
+\grm{\UU[\sigma]} &= \grm{\UU} \text{,} \\
+\grm{\El(a)[\sigma]} &= \grm{\El(a[\sigma])} \text{,} \\
+\grm{\Pi(a, B)[\sigma]} &= \grm{\Pi(a[\sigma],B[\sigma + \El(a)])} \text{, and} \\
+\grm{\IIapp(t)[\sigma + El(a)]} &= \grm{\IIapp(t[\sigma])} \text{.}
+\end{align*}
 
 
 
