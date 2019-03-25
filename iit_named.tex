@@ -1,0 +1,278 @@
+Inductive-Inductive Types are specified by giving a context in  a small type
+theoretic syntax which we will refer to as \emph{source type theory}.
+
+This idea originates from Ambrus Kaposi's work on the syntax of \emph{higher}
+inductive-inductive types (~\cite{ambrussyntax}) which we adapt and rid of equality
+constructors to only allow for inductive-inductive types.
+In contrast to their presentation we will leave the context of the ambient type
+theory implicit and, instead of highlighting syntax of the ambient type theory,
+mark elements of the source type theory in \gr{green}.
+
+We assume that the source type theory makes use of the standard syntax of type
+theory, using contexts, types, terms, and variables.
+Types and terms are uniquely ascribed to one of two \emph{kinds}:
+Either their kind is \grm{\Sc} which indicates that the type contains sort
+constructors, or their kind is \grm{\Pc} because elements of it describe
+point constructors.
+We will write \grm{\Gamma \vdash A :: k} to say that \grm{A} is a type of kind
+\grm{k} and \grm{\Gamma \vdash t : A :: k} to state that \grm{t} is a term of the
+type \grm{A} which in turn has kind \grm{k}.
+Often, we will omit the annotation of the sort, meaning that a judgment is to
+hold true for both \grm{\Sc} and \grm{\Pc}, or that the kind of a term's type
+has already been specified.
+
+\section{(OLD) --The Source Type Theory}
+
+We will work with named variables and implicit weakening, giving the following
+rules:
+\begin{equation*}
+\begin{gathered}
+\inferrule{}{\grm{\vdash \cdot}}
+\qquad
+\inferrule{\grm{\Gamma \vdash A}}{\grm{\vdash \Gamma, x : A}}
+\qquad
+\inferrule{\grm{\Gamma \vdash A}}{\grm{\Gamma, x : A \vdash x : A}}
+\qquad
+\inferrule{\grm{\Gamma \vdash x : A} \\ \grm{\Gamma \vdash B}}{\grm{\Gamma, y : B \vdash x : A}}
+\end{gathered}
+\end{equation*}
+
+The universe \grm{\UU} is used as the type of constant sorts. We use a Tarski-style
+encoding of its elements, so we have an explicit notation for the extraction of
+``small'' types extracted from this universe:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\vdash \Gamma}}{\grm{\Gamma \vdash \UU :: \Sc}}
+\qquad
+\inferrule{\grm{\Gamma \vdash a : \UU :: \Sc}}{\grm{\Gamma \vdash \underline{a} :: \Pc}}
+\end{gathered}
+\end{equation*}
+
+Our source type theory finally features three different formers for $\Pi$-types.
+The first one are functions used for \emph{inductive parameters} which, to ensure
+strict positivity of constructors, allow only small domains.
+Their kind is thus determined only by the kind of their codomain:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\Gamma \vdash a : \UU} \\ \grm{\Gamma, x : \underline{a} \vdash B :: k}}
+	{\grm{\Gamma \vdash ((x : a) \to B) :: k}}
+\qquad
+\inferrule{\grm{\Gamma \vdash t : (x : a) \to B} \\ \grm{\Gamma \vdash u : \underline{a}}}
+	{\grm{\Gamma \vdash t(u) : B[x \mapsto u]}}
+\end{gathered}
+\end{equation*}
+
+For \emph{non-inductive}, or \emph{external parameters}, we introduce a function
+type whose domain
+is a type of the ambient theory we're working in:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\vdash \Gamma} \\ A : \UU_i \\ (x : A) \to (\grm{\Gamma \vdash B :: k})}
+	{\grm{\Gamma \vdash ((\blm{x : A}) \to B) :: k}}
+\qquad
+\inferrule{\grm{\Gamma \vdash t : (\blm{x : A}) \to B} \\ u : A}
+	{\grm{\Gamma \vdash t(\blm{u}) : B[\blm{x} \mapsto \blm{u}]}}
+\end{gathered}
+\end{equation*}
+
+Since for some examples of inductive-inductive types, especially ones which are
+\emph{infinitely branching}, we need functions with external domain as the domains of
+other functions, we will also add another function type which is itself small, and
+has external domain and small codomain:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\vdash \Gamma} \\ A : \UU_i \\ (x : A) \to (\grm{\Gamma \vdash b : \UU})}
+	{\grm{\Gamma \vdash ((\blm{x : A}) \to b) : \UU}}
+\qquad
+\inferrule{\grm{\Gamma \vdash t : \underline{(\blm{x : A}) \to b}} \\ u : A}
+	{\grm{\Gamma \vdash (t \app \blm{u}) : \underline{b[\blm{x} \mapsto \blm{u}]}}}
+\end{gathered}
+\end{equation*}
+
+Note that for none of the function types we add the means for $\lambda$-abstrac\-tion,
+so there is no need for $\alpha$-conversion, $\beta$-reduction, and $\eta$-conversion.
+We assume that the type theory is equipped with a substitution calculus for terms,
+the substitutions of which we will leave implicit in this exposition.
+
+\begin{example}
+To see what the different function types are used for, consider the following three
+examples:
+
+The encoding of the natural numbers as would correspond to the
+following source type theory context using the first :
+\begin{equation*}
+\grm{
+\cdot,\, \N : \UU,\, 0 : \underline{\N},\, \mathop{S} : (n : \N) \to \underline{\N}
+}\text{.}
+\end{equation*}
+
+The type of vectors over a type $A : \UU$ can be represented using the ``external''
+natural numbers $\N$.
+In the following, the constructor \blm{\mathop{cons}} uses both the non-inductive
+and the inductive function type:
+\begin{equation*}
+\grm{
+\cdot,\, \vecty : \blm{\N} \to \UU,\, \mathop{nil} : \underline{\vecty(\blm{0})},\,
+	\mathop{cons} : (\blm{n : \N})(\blm{a : A})(v : \vecty(\blm{n})) \to \underline{\vecty(\blm{S(n)})}
+}
+\end{equation*}
+
+An example for a type which uses the third, small function type is the following
+definition of full $\omega$-ary rooted trees:
+\begin{equation*}
+\grm{
+\cdot,\, T : \UU,\, \mathop{leaf} : \underline{T},\,
+	\mathop{node} : (\blm{\N} \to T) \to \underline{T}
+} \text{.}
+\end{equation*}
+\end{example}
+
+\begin{example}[Type Theory Syntax]
+The example of the syntax of type theory~\ref{ex:ttintt} is represented by the
+following code:
+\begin{multline*}
+\grm{\cdot,\, \mathop{Con} : \UU,\, \mathop{Ty} : \mathop{Con} \to \UU,} \\
+\grm{\mathop{nil} : \mathop{Con},} \\
+\grm{\mathop{ext} : (\Gamma : \mathop{Con})(A : \mathop{Ty}(\Gamma)) \to \underline{\mathop{Con}},} \\
+\grm{\mathop{unit} : (\Gamma : \mathop{Con}) \to \underline{\mathop{Ty}(\Gamma)},} \\
+\grm{\mathop{pi} : (\Gamma : \mathop{Con})(A : \mathop{Ty}(\Gamma))(B : \mathop{Ty}(\mathop{ext}(\Gamma, A))) \to \underline{\mathop{Ty}(\Gamma)}}
+\end{multline*} %TODO find a better way to typeset this!
+\end{example}
+
+\section{(OLD) --Algebras for the Codes}
+
+To give meaning to the codes expressed in the source type theory, we need to
+interpret the contexts as a type in the ambient type theory whose elements are
+the algebras of of the specified inductive-inductive type.
+This means that the interpretation of our contexts must give the types of the
+sort and point constructors they specify.
+
+\begin{defn}[Constructor operator]
+By structural recursion over the source syntax, we define an operation $-^\CC$
+which assigns types to source contexts, fibrations over those to types and
+sections to terms:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\vdash \Gamma}}{\grm{\Gamma}^\CC : \UU_1}
+\qquad
+\inferrule{\grm{\Gamma \vdash A}}{\grm{A}^\CC : \grm{\Gamma}^\CC \to \UU_1}
+\qquad
+\inferrule{\grm{\Gamma \vdash t : A}}{\grm{t}^\CC : (\gamma : \grm{\Gamma}^\CC) \to \grm{A}^\CC(\gamma)}
+\end{gathered}
+\end{equation*}
+
+We will give the construction on contexts, types, and terms, while relying on
+the freshness of names to make sure that the construction respects the substitution
+calculus which we left implicit in this presentation. On contexts, the operation
+is defined by iterated $\Sigma$-types:
+\begin{align*}
+\grm{\cdot}^\CC &:\equiv \unit \text{ and} \\
+\grm{(\Gamma, x : A)}^\CC &:\equiv (\gamma : \grm{\Gamma}^\CC) \times \grm{A}^\CC(\gamma)
+\end{align*}
+Alternatively, context interpretation $\grm{(\cdot, x_1 : A_1, \ldots, x_n : A_n)}^\CC$
+can be considered a \emph{record type} with fields $x_1 : \grm{A_1}^\CC, \ldots, x_n : \grm{A_n}^\CC$.
+
+Sorts will be interpreted as functions into the universe, constructors as inhabiting
+these functions:
+\begin{align*}
+\grm{\UU}^\CC(\gamma) 			&:\equiv \UU_0 \text{,} \\
+\grm{(\underline{a})}^\CC(\gamma)	&:\equiv \grm{a}^\CC(\gamma) \text{,} \\
+\grm{((x : a) \to B)}^\CC(\gamma)	&:\equiv (x : \grm{a}^\CC(\gamma)) \to \grm{B}^\CC(\gamma, x) \text{, and} \\ %TODO notation?
+\grm{((\blm{x : A}) \to B)}^\CC(\gamma) &:\equiv (x : A) \to \grm{B}^\CC(\gamma) \text{.}
+\end{align*}
+The interpretation of terms is the straightforward translation into the type interpretation
+above:
+\begin{align*}
+\grm{x}^\CC(\gamma) 			&:\equiv \gamma.\grm{x} \qquad \text{for variables \grm{x},} \\
+\grm{(t(u))}^\CC(\gamma)		&:\equiv (\grm{t}^\CC(\gamma))(\grm{u}^\CC(\gamma)) \text{,} \\
+\grm{((\blm{x : A}) \to b)}^\CC(\gamma)	&:\equiv (x : A) \to \grm{b}^\CC(\gamma) \text{,} \\
+\grm{(t(\blm{u}))}^\CC(\gamma)		&:\equiv (\grm{t}^\CC(\gamma))(u) \text{, and} \\
+\grm{(t \app \blm{u})}^\CC(\gamma)	&:\equiv (\grm{t}^\CC(\gamma))(u) \text{.}
+\end{align*}
+
+\end{defn}
+
+TODO: Add some examples here.
+
+\section{(OLD) --Motives and Methods}
+
+TODO: Add definition of $\grm{-}^\MM$.
+
+TODO: Add examples.
+
+\section{(OLD) --Recursion and Computation}
+
+TODO: Add definition of $\grm{-}^\EE$.
+
+TODO: Add examples.
+
+\section{(OLD) --Existence of HIITs}
+
+\begin{defn}[Dependent Eliminator]
+An algebra $c : \grm{\Gamma}^\CC$ is said to admit \emph{dependent elimination}
+if for each motive $m : \grm{\Gamma}^\MM(c)$ there is a dependent eliminator
+$\elim_{\grm{\Gamma}}(m) : \grm{\Gamma}^\EE(c, m)$.
+\end{defn}
+
+\begin{thm}[Admissibility of Inductive-Inductive Types]
+Our type theory admits inductive-inductive types if for each wellformed context
+$\grm{\Gamma}$ we can find a constructor $\con{\grm{\Gamma}}$ which admits dependent
+elimination $\elim_{\grm{\Gamma}}$.
+\end{thm}
+
+\section{(OLD) --Morphisms of Algebras}
+
+In the following, it will be useful to regard the algebras of a given context
+\grm{\Gamma} as a category.
+To this end, we need to make clear what a morphism between \grm{\Gamma}-algebras
+is.
+Intutitively a morphism is given by maps between the interpretations of the sorts,
+together with evidence that those maps preserve the interpretation of point
+constructors.
+
+\begin{defn}[Morphisms of Algebras]
+We want to define the following by mutual recursion on contexts, types and terms:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\vdash \Gamma} \\ \gamma_0, \gamma_1 : \grm{\Gamma}^\AA}
+	{\grm{\Gamma}^\mm(\gamma_0,\gamma_1) : \UU} \\[.7em]
+\inferrule{\grm{\Gamma \vdash A} %\\ \gamma_0, \gamma_1 : \grm{\Gamma}^\AA TODO decide if show
+		\\ g : \grm{\Gamma}^\mm(\gamma_0, \gamma_1) \\
+		\\ \alpha_0 : \grm{A}^\AA(\gamma_0) \\ \alpha_1 : \grm{A}^\AA(\gamma_1)}
+	{\grm{A}^\mm(g, \alpha_0, \alpha_1) : \UU} \\[.7em]
+\inferrule{\grm{\Gamma \vdash t : A} \\ \gamma_0, \gamma_1 : \grm{\Gamma}^\AA 
+		\\ g : \grm{\Gamma}^\mm(\gamma_0, \gamma_1)}
+	{\grm{t}^\mm(g) : \grm{A}^\mm(g, \grm{t}^\AA(\gamma_0), \grm{t}^\AA(\gamma_1))}
+\end{gathered}
+\end{equation*}
+
+Like we did for the definition of algebras, we want morphisms of contexts to be
+just iterated $\Sigma$-types of the respective interpretation of types:
+\begin{align*}
+\grm{\cdot}^\mm(\gamma_0, \gamma_1) &:\equiv \unit \text{ and} \\
+\grm{(\Gamma, x : A)}^\mm(\gamma_0, \gamma_1) &:\equiv
+	(g : \grm{\Gamma}^\mm(\pr_1(\gamma_0), \pr_1(\gamma_1))) \times \grm{A}^\mm(g, \pr_2(\gamma_0), \pr_2(\gamma_1)) \text{.}
+\end{align*}
+The core of the definition on sort types is that the universe is interpreted as
+a function space:
+\begin{align*}
+\grm{\UU}^\mm(g, \alpha_0, \alpha_1)  			&:\equiv \alpha_0 \to \alpha_1 \text{,} \\
+\grm{(\underline{a})}^\mm(g, \alpha_0, \alpha_1)	&:\equiv (\grm{a}^\mm(g, \alpha_0) = \alpha_1) \text{,} \\
+\grm{((x : a) \to B)}^\mm(g, \alpha_0, \alpha_1)	&:\equiv (x : \grm{a}^\CC(\gamma_0))
+							\to \grm{B}^\mm((g, \refl), \alpha_0(x), \alpha_1(\grm{a}^\mm(g, x))) \text{,} \\
+\grm{((\blm{x : A}) \to B)}^\mm(g, \alpha_0, \alpha_1)  &:\equiv (x : A)
+							\to \grm{(B(\blm{x}))}^\mm(g, \alpha_0(x), \alpha_1(x)) \text{.}
+\end{align*}
+On terms, consider the foo
+\begin{align*}
+\grm{x}^\mm(g) 				&:\equiv g.\grm{x} \qquad \text{for variables \grm{x},} \\ %???
+\grm{(t(u))}^\mm(g)			&:\equiv (\grm{u}^\mm(g))_* (\grm{t}^\mm(g)(\grm{u}^\AA(\gamma_0))) \text{,} \\ %TODO check this
+\grm{((\blm{x : A}) \to b)}^\mm(g)	&:\equiv (x : A) \to \grm{b}^\mm(g) \text{,} \\
+\grm{(t(\blm{u}))}^\mm(g)		&:\equiv \grm{t}^\mm(g)(u) \text{, and} \\
+\grm{(t \app \blm{u})}^\mm(g)		&:\equiv (\grm{t}^\mm(g))(u) \text{.} %TODO use happly here sometimes!!! uargh
+\end{align*}
+
+\end{defn}
+
+TODO: Add examples.
+
