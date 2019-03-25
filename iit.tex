@@ -168,8 +168,31 @@ This operation can be defined by
 \begin{equation*}
 \grm{\sigma \wedge A} := \grm{\sigma \circ \wk, \vz(A[\sigma])} \text{.}
 \end{equation*}
+At last, every term \grm{\Gamma \vdash t : A} gives rise to a substitution
+\grm{\IISub{\langle t \rangle}{\Gamma}{\Gamma, A}}, representing the extension
+of \grm{\Gamma} by \grm{t}, via
+\begin{equation*}
+\grm{\langle t \rangle} := \grm{id, t} \text{.}
+\end{equation*}
 \end{defn}
 
+\begin{defn}[Application]
+Most often, we want to use the application of the inductive function type in the
+form where we give the function term and its input separately, as in the following
+rule:
+\begin{equation*}
+\inferrule{\grm{\Gamma \vdash f : \Pi(a, B)} \\
+  \grm{\Gamma \vdash u : \El(a)}}
+  {\grm{\Gamma \vdash f(u) : B[\sigma]}}
+\text{,}
+\end{equation*}
+for some substitution \grm{\sigma}.
+Now we know that we can define this substitution by
+\begin{equation*}
+\grm{f(u)} := \grm{\IIapp(f)[\langle u \rangle]} \text{,}
+\end{equation*}
+and $\grm{\sigma} = \grm{\langle u \rangle}$.
+\end{defn}
 
 
 
