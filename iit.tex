@@ -153,7 +153,8 @@ a ``shorter'' substitution and a term in the terminal component:
 \grm{(\pi_1(\sigma), \pi_2(\sigma))} &= \grm{\sigma} \text{.}
 \end{align*}
 Finally, we also need rules that tell us, how the constructors of the universe
-and the $\Pi$-types behave when pulled back along a substitution:
+and the $\Pi$-types behave when pulled back along an arbitrary substitution
+\grm{\IISub{\sigma}{\Gamma}{\Delta}}:
 \begin{align*}
 \grm{\UU[\sigma]} &= \grm{\UU} \text{,} \\
 \grm{\El(a)[\sigma]} &= \grm{\El(a[\sigma])} \text{,} \\
@@ -215,7 +216,51 @@ Now we know that we can define this substitution by
 and $\grm{\sigma} = \grm{\langle u \rangle}$.
 \end{defn}
 
+We will now look at a few example to make it clearer on how to encode inductive-inductive
+declarations in the syntax presented above. %TODO more fluff
+To see what the different function types are used for, consider the following two
+examples:
 
+\begin{example}[Natural numbers, vectors]
+The encoding of the natural numbers as would correspond to the
+following source type theory context using the first :
+\begin{equation*}
+\grm{
+\cdot,\, \UU,\, \El(\vz),\, \Pi\left(\vs(\vz),\, \El(\vs(\vs(\vz)))\right)
+}\text{.}
+\end{equation*}
+Often, we will, instead of denoting variables using de~Bruijn indices, use names
+as binders in contexts and domains of $\Pi$-types to make example contexts more
+legible.
+Assuming we always use fresh names, this is not any more imprecise than restricting
+ourselves to use \grm{\vz} and \grm{\vz} instead:
+\begin{equation*}
+\grm{
+\cdot,\, \N : \UU,\, 0 : \El(\N),\, \mathop{S} : \Pi(n : \N,\, \El(\N))
+}\text{.}
+\end{equation*}
+
+The type of vectors over a type $A : \UU$ can be represented using the ``external''
+natural numbers $\N$.
+In the following, the constructor \grm{\mathop{cons}} uses both the non-inductive
+and the inductive function type:
+\begin{equation*}
+\begin{gathered}
+\grm{ \cdot,\, \mathop{vec} : \ExtPi{\N}{\lambda n.\, \UU},\, \mathop{nil} : \El(\mathop{vec}(\blm{0})),} \\
+\grm{ \mathop{cons} : \ExtPi{A}{\blm{\lambda a.\,
+  \grm{\ExtPi{\N}{\blm{\lambda n.\, \grm{\Pi(v : \mathop{vec}(\blm{n}),\, \El(\mathop{vec}(\blm{n + 1})))}}}}}}}
+\end{gathered}
+\end{equation*}
+
+%An example for a type which uses the third, small function type is the following
+%definition of full $\omega$-ary rooted trees:
+%\begin{equation*}
+%\grm{
+%\cdot,\, T : \UU,\, \mathop{leaf} : \underline{T},\,
+%	\mathop{node} : (\blm{\N} \to T) \to \underline{T}
+%} \text{.}
+%\end{equation*}
+\end{example}
 
 
 
