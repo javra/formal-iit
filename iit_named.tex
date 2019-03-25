@@ -14,51 +14,6 @@ has external domain and small codomain:
 \end{gathered}
 \end{equation*}
 
-\begin{example}
-To see what the different function types are used for, consider the following three
-examples:
-
-The encoding of the natural numbers as would correspond to the
-following source type theory context using the first :
-\begin{equation*}
-\grm{
-\cdot,\, \N : \UU,\, 0 : \underline{\N},\, \mathop{S} : (n : \N) \to \underline{\N}
-}\text{.}
-\end{equation*}
-
-The type of vectors over a type $A : \UU$ can be represented using the ``external''
-natural numbers $\N$.
-In the following, the constructor \blm{\mathop{cons}} uses both the non-inductive
-and the inductive function type:
-\begin{equation*}
-\grm{
-\cdot,\, \vecty : \blm{\N} \to \UU,\, \mathop{nil} : \underline{\vecty(\blm{0})},\,
-	\mathop{cons} : (\blm{n : \N})(\blm{a : A})(v : \vecty(\blm{n})) \to \underline{\vecty(\blm{S(n)})}
-}
-\end{equation*}
-
-An example for a type which uses the third, small function type is the following
-definition of full $\omega$-ary rooted trees:
-\begin{equation*}
-\grm{
-\cdot,\, T : \UU,\, \mathop{leaf} : \underline{T},\,
-	\mathop{node} : (\blm{\N} \to T) \to \underline{T}
-} \text{.}
-\end{equation*}
-\end{example}
-
-\begin{example}[Type Theory Syntax]
-The example of the syntax of type theory~\ref{ex:ttintt} is represented by the
-following code:
-\begin{multline*}
-\grm{\cdot,\, \mathop{Con} : \UU,\, \mathop{Ty} : \mathop{Con} \to \UU,} \\
-\grm{\mathop{nil} : \mathop{Con},} \\
-\grm{\mathop{ext} : (\Gamma : \mathop{Con})(A : \mathop{Ty}(\Gamma)) \to \underline{\mathop{Con}},} \\
-\grm{\mathop{unit} : (\Gamma : \mathop{Con}) \to \underline{\mathop{Ty}(\Gamma)},} \\
-\grm{\mathop{pi} : (\Gamma : \mathop{Con})(A : \mathop{Ty}(\Gamma))(B : \mathop{Ty}(\mathop{ext}(\Gamma, A))) \to \underline{\mathop{Ty}(\Gamma)}}
-\end{multline*} %TODO find a better way to typeset this!
-\end{example}
-
 \section{(OLD) --Algebras for the Codes}
 
 To give meaning to the codes expressed in the source type theory, we need to

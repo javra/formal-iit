@@ -262,7 +262,21 @@ and the inductive function type:
 %\end{equation*}
 \end{example}
 
+\begin{example}[Type Theory Syntax]
+The example of the syntax of type theory~\ref{ex:ttintt} is represented by the
+following code:
+\begin{equation*}
+\begin{gathered}
+\grm{\cdot,\, \mathop{Con} : \UU,\, \mathop{Ty} : \Pi(\Gamma : \mathop{Con},\, \UU),} \\
+\grm{\mathop{nil} : \El(\mathop{Con}),} \\
+\grm{\mathop{ext} : \Pi(\Gamma : \mathop{Con},\, \Pi(A : \mathop{Ty} ,\, \El(\mathop{Con}))),} \\
+\grm{\mathop{unit} : \Pi(\Gamma : \mathop{Con},\, \El(\IIapp(\mathop{Ty}))),} \\
+\grm{\mathop{pi} : \Pi(\Gamma : \mathop{Con},\, \Pi(A : \IIapp(\mathop{Ty}),\,
+   \Pi(B : ?,\, ?)))} %TODO complete this after doing it in agda
+\end{gathered}
+\end{equation*}
 
+\end{example}
 
 
 
