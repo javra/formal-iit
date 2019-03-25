@@ -110,7 +110,7 @@ by giving a term in a type bulled back to their domain.
 \inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta}} \\
   \grm{\Delta \vdash A} \\
   \grm{\Gamma \vdash t : A[\sigma]}}
-  {\grm{\IISub{\sigma, t}{\Gamma}{\Delta}}}
+  {\grm{\IISub{\sigma, t}{\Gamma, A}{\Delta}}}
 \end{equation*}
 Empty substituition and extension simplify by the following laws:
 \begin{align*}
@@ -138,9 +138,44 @@ and the $\Pi$-type behave when pulled back along a substitution:
 \begin{align*}
 \grm{\UU[\sigma]} &= \grm{\UU} \text{,} \\
 \grm{\El(a)[\sigma]} &= \grm{\El(a[\sigma])} \text{,} \\
-\grm{\Pi(a, B)[\sigma]} &= \grm{\Pi(a[\sigma],B[\sigma + \El(a)])} \text{, and} \\
-\grm{\IIapp(t)[\sigma + El(a)]} &= \grm{\IIapp(t[\sigma])} \text{.}
+\grm{\Pi(a, B)[\sigma]} &= \grm{\Pi(a[\sigma],B[\sigma \wedge \El(a)])} \text{, and} \\
+\grm{\IIapp(t)[\sigma \wedge El(a)]} &= \grm{\IIapp(t[\sigma])} \text{.} %TODO use a better symbol than wedge
 \end{align*}
+
+\begin{defn}
+Above, \grm{\sigma \wedge A} is one of several auxiliary constructions on the syntax
+which are helpful when dealing with substitutions and which can be derived from
+the other rules.
+
+The first one is the operation known as \emph{weakening} which for any \grm{\Gamma \vdash A}
+gives a substition \grm{\IISub{\wk}{\Gamma, A}{\Gamma}} from the extended into
+the original context by \grm{\wk := \pi_1(\id)}.
+
+Likewise, we can apply the second projection to the identity substitution such that
+whenever \grm{\Gamma \vdash A}, we have the first \emph{variable} of the context
+$\grm{\vz} := \grm{\pi_2(\id)}$ with \grm{\Gamma, A \vdash \vz : A[\wk]}.
+Transporting a term \grm{\Gamma \vdash t : A} along the weakening substitution
+defined above for any \grm{\Gamma \vdash B}, we get \grm{\Gamma, B : t[\wk] : A[\wk]}.
+We will write $\grm{vs(t)} := \grm{t[\wk]}$ for this variable.
+Together, \grm{\vz} and \grm{\vs} form \emph{typed de Bruijn indices} to select
+variables from a context via numbering them with a zero (\grm{\vz}) and a
+successor (\grm{\vs}).
+
+For \grm{\IISub{\sigma}{\Gamma}{\Delta}} and \grm{\Gamma \vdash A} we can
+``lift'' \grm{\sigma} along \grm{A} to get a substitution 
+\grm{\IISub{\sigma \wedge A}{\Gamma, A[\sigma]}{\Delta, A}}.
+This operation can be defined by
+\begin{equation*}
+\grm{\sigma \wedge A} := \grm{\sigma \circ \wk, \vz(A[\sigma])} \text{.}
+\end{equation*}
+\end{defn}
+
+
+
+
+
+
+
 
 
 
