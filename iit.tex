@@ -61,8 +61,27 @@ turns a term of a $\Pi$-type into a term of its codomain:
   \grm{\Gamma, \El(a) \vdash B :: k}}
   {\grm{\Gamma \vdash \Pi(a, B) :: k}}
 \qquad
-\inferrule{\grm{\Gamma \vdash t : \Pi(a, B)}}
-  {\grm{\Gamma, \El(a) \vdash \IIapp(t) : B}}
+\inferrule{\grm{\Gamma \vdash f : \Pi(a, B)}}
+  {\grm{\Gamma, \El(a) \vdash \IIapp(f) : B}}
+\end{equation*}
+
+Additionally, we want sorts to be able to be parameterized by previously defined
+types which are not part of the signature itself.
+The same goes for point constructors.
+Since this cannot be captured using the previous $\Pi$-type, we will do the obvious
+and just introduce another type former for this occasion.
+We will usuall call it \emph{external} or \emph{non-recursive} function type.
+Note that external functions must have a fixed kind.
+This is to prevent a function which, depending on the input returns sometimes
+a sort and sometimes a point constructor.
+\begin{equation*}
+\inferrule{T : \UU \\
+  (\bltau : T) \to \grm{\Gamma \vdash B(\bltau) :: k}}
+  {\grm{\Gamma \vdash \ExtPi{T}{B} :: k}} \\
+\qquad
+\inferrule{\grm{\Gamma \vdash f : \ExtPi{T}{B}} \\
+  \tau : T}
+  {\grm{\Gamma \vdash f(\bltau) : B(\bltau)}}
 \end{equation*}
 
 Since we are working with explicit substitutions, we need to postulate a calculus
@@ -120,7 +139,7 @@ Empty substituition and extension simplify by the following laws:
   &\text{ for \grm{\IISub{\delta}{\Gamma}{\Delta}}, \grm{\IISub{\sigma}{\Sigma}{\Gamma}}.}
 \end{align*}
 A substitution into an extended context allows us to project out
-a ``shorter`` substitution and a term in the terminal component:
+a ``shorter'' substitution and a term in the terminal component:
 \begin{equation*}
 \inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta,A}}}
   {\grm{\IISub{\pi_1(\sigma)}{\Gamma}{\Delta}}}
@@ -134,12 +153,14 @@ a ``shorter`` substitution and a term in the terminal component:
 \grm{(\pi_1(\sigma), \pi_2(\sigma))} &= \grm{\sigma} \text{.}
 \end{align*}
 Finally, we also need rules that tell us, how the constructors of the universe
-and the $\Pi$-type behave when pulled back along a substitution:
+and the $\Pi$-types behave when pulled back along a substitution:
 \begin{align*}
 \grm{\UU[\sigma]} &= \grm{\UU} \text{,} \\
 \grm{\El(a)[\sigma]} &= \grm{\El(a[\sigma])} \text{,} \\
-\grm{\Pi(a, B)[\sigma]} &= \grm{\Pi(a[\sigma],B[\sigma \wedge \El(a)])} \text{, and} \\
-\grm{\IIapp(t)[\sigma \wedge El(a)]} &= \grm{\IIapp(t[\sigma])} \text{.} %TODO use a better symbol than wedge
+\grm{\Pi(a, B)[\sigma]} &= \grm{\Pi(a[\sigma],B[\sigma \wedge \El(a)])} \text{,} \\
+\grm{\IIapp(f)[\sigma \wedge El(a)]} &= \grm{\IIapp(f[\sigma])} \text{,} \\ %TODO use a better symbol than wedge
+\grm{\ExtPi{T}{B}[\sigma]} &= \grm{\ExtPi{T}{\blm{\lambda \tau. \grm{B(\bltau)[\sigma]}}}} \text{, and} \\
+\grm{f(\bltau)[\sigma]} &= \grm{f[\sigma](\bltau)} \text{.}
 \end{align*}
 
 \begin{defn}
@@ -156,7 +177,7 @@ whenever \grm{\Gamma \vdash A}, we have the first \emph{variable} of the context
 $\grm{\vz} := \grm{\pi_2(\id)}$ with \grm{\Gamma, A \vdash \vz : A[\wk]}.
 Transporting a term \grm{\Gamma \vdash t : A} along the weakening substitution
 defined above for any \grm{\Gamma \vdash B}, we get \grm{\Gamma, B : t[\wk] : A[\wk]}.
-We will write $\grm{vs(t)} := \grm{t[\wk]}$ for this variable.
+We will write $\grm{\vs(t)} := \grm{t[\wk]}$ for this variable.
 Together, \grm{\vz} and \grm{\vs} form \emph{typed de Bruijn indices} to select
 variables from a context via numbering them with a zero (\grm{\vz}) and a
 successor (\grm{\vs}).
