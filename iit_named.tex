@@ -14,61 +14,6 @@ has external domain and small codomain:
 \end{gathered}
 \end{equation*}
 
-\section{(OLD) --Algebras for the Codes}
-
-To give meaning to the codes expressed in the source type theory, we need to
-interpret the contexts as a type in the ambient type theory whose elements are
-the algebras of of the specified inductive-inductive type.
-This means that the interpretation of our contexts must give the types of the
-sort and point constructors they specify.
-
-\begin{defn}[Constructor operator]
-By structural recursion over the source syntax, we define an operation $-^\CC$
-which assigns types to source contexts, fibrations over those to types and
-sections to terms:
-\begin{equation*}
-\begin{gathered}
-\inferrule{\grm{\vdash \Gamma}}{\grm{\Gamma}^\CC : \UU_1}
-\qquad
-\inferrule{\grm{\Gamma \vdash A}}{\grm{A}^\CC : \grm{\Gamma}^\CC \to \UU_1}
-\qquad
-\inferrule{\grm{\Gamma \vdash t : A}}{\grm{t}^\CC : (\gamma : \grm{\Gamma}^\CC) \to \grm{A}^\CC(\gamma)}
-\end{gathered}
-\end{equation*}
-
-We will give the construction on contexts, types, and terms, while relying on
-the freshness of names to make sure that the construction respects the substitution
-calculus which we left implicit in this presentation. On contexts, the operation
-is defined by iterated $\Sigma$-types:
-\begin{align*}
-\grm{\cdot}^\CC &:\equiv \unit \text{ and} \\
-\grm{(\Gamma, x : A)}^\CC &:\equiv (\gamma : \grm{\Gamma}^\CC) \times \grm{A}^\CC(\gamma)
-\end{align*}
-Alternatively, context interpretation $\grm{(\cdot, x_1 : A_1, \ldots, x_n : A_n)}^\CC$
-can be considered a \emph{record type} with fields $x_1 : \grm{A_1}^\CC, \ldots, x_n : \grm{A_n}^\CC$.
-
-Sorts will be interpreted as functions into the universe, constructors as inhabiting
-these functions:
-\begin{align*}
-\grm{\UU}^\CC(\gamma) 			&:\equiv \UU_0 \text{,} \\
-\grm{(\underline{a})}^\CC(\gamma)	&:\equiv \grm{a}^\CC(\gamma) \text{,} \\
-\grm{((x : a) \to B)}^\CC(\gamma)	&:\equiv (x : \grm{a}^\CC(\gamma)) \to \grm{B}^\CC(\gamma, x) \text{, and} \\ %TODO notation?
-\grm{((\blm{x : A}) \to B)}^\CC(\gamma) &:\equiv (x : A) \to \grm{B}^\CC(\gamma) \text{.}
-\end{align*}
-The interpretation of terms is the straightforward translation into the type interpretation
-above:
-\begin{align*}
-\grm{x}^\CC(\gamma) 			&:\equiv \gamma.\grm{x} \qquad \text{for variables \grm{x},} \\
-\grm{(t(u))}^\CC(\gamma)		&:\equiv (\grm{t}^\CC(\gamma))(\grm{u}^\CC(\gamma)) \text{,} \\
-\grm{((\blm{x : A}) \to b)}^\CC(\gamma)	&:\equiv (x : A) \to \grm{b}^\CC(\gamma) \text{,} \\
-\grm{(t(\blm{u}))}^\CC(\gamma)		&:\equiv (\grm{t}^\CC(\gamma))(u) \text{, and} \\
-\grm{(t \app \blm{u})}^\CC(\gamma)	&:\equiv (\grm{t}^\CC(\gamma))(u) \text{.}
-\end{align*}
-
-\end{defn}
-
-TODO: Add some examples here.
-
 \section{(OLD) --Motives and Methods}
 
 TODO: Add definition of $\grm{-}^\MM$.

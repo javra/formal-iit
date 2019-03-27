@@ -9,7 +9,7 @@ In contrast to their presentation we will leave the context of the ambient type
 theory implicit and, instead of highlighting syntax of the ambient type theory,
 mark elements of the source type theory in \gr{green}.
 
-\section{Signatures for Inductive-Inductive Types}
+\section{Signatures for Inductive-Inductive Types}\label{sec:ii-syntax}
 
 We assume that the source type theory makes use of the standard syntax of type
 theory, using contexts, types, terms, and variables.
@@ -57,7 +57,7 @@ kind of the \emph{codomain} of such a $\Pi$-type.
 To eliminate from $\Pi$-types we want a rule for its \emph{application} which
 turns a term of a $\Pi$-type into a term of its codomain:
 \begin{equation*}
-\inferrule{\grm{\Gamma \vdash a : \UU} \\ 
+\inferrule{\grm{\Gamma \vdash a : \UU} \\
   \grm{\Gamma, \El(a) \vdash B :: k}}
   {\grm{\Gamma \vdash \Pi(a, B) :: k}}
 \qquad
@@ -184,7 +184,7 @@ variables from a context via numbering them with a zero (\grm{\vz}) and a
 successor (\grm{\vs}).
 
 For \grm{\IISub{\sigma}{\Gamma}{\Delta}} and \grm{\Gamma \vdash A} we can
-``lift'' \grm{\sigma} along \grm{A} to get a substitution 
+``lift'' \grm{\sigma} along \grm{A} to get a substitution
 \grm{\IISub{\sigma \wedge A}{\Gamma, A[\sigma]}{\Delta, A}}.
 This operation can be defined by
 \begin{equation*}
@@ -221,7 +221,7 @@ declarations in the syntax presented above. %TODO more fluff
 To see what the different function types are used for, consider the following two
 examples:
 
-\begin{example}[Natural numbers, vectors]
+\begin{example}[Natural numbers, vectors]\label{ex:ii-syntax-nat}
 The encoding of the natural numbers as would correspond to the
 following source type theory context using the first :
 \begin{equation*}
@@ -277,6 +277,117 @@ following code:
 \end{equation*}
 
 \end{example}
+
+\section{Algebras of Inductive-Inductive Types}
+
+To give meaning to the codes expressed in the source type theory, we need to
+interpret the contexts as a type in the ambient type theory whose elements are
+the algebras of of the specified inductive-inductive type.
+This means that the interpretation of our contexts must give the types of the
+sort and point constructors they specify.
+
+\begin{defn}[Algebra operator] %TODO name?
+By structural recursion over the source syntax, we define an operation $-^\CC$
+which assigns types to source contexts, fibrations over those to types, sections of
+these fibrations to terms, and maps between types to substitutions:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\vdash \Gamma}}{\grm{\Gamma}^\CC : \UU_1}
+\qquad
+\inferrule{\grm{\Gamma \vdash A :: \Sc}}{\grm{A}^\CC : \grm{\Gamma}^\CC \to \UU_1}
+\qquad
+\inferrule{\grm{\Gamma \vdash A :: \Pc}}{\grm{A}^\CC : \grm{\Gamma}^\CC \to \UU_0}
+\\[.7em]
+\inferrule{\grm{\Gamma \vdash t : A}}
+  {\grm{t}^\CC : (\gamma : \grm{\Gamma}^\CC) \to \grm{A}^\CC(\gamma)}
+\qquad
+\inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta}}}
+  {\grm{\sigma}^\CC : \grm{\Gamma}^\CC \to \grm{\Delta}^\CC}
+\end{gathered}
+\end{equation*}
+
+We will give the construction on contexts, types, subsitutions and terms in the
+same order as there were presented in Section~\ref{sec:ii-syntax}.
+On contexts, the operation is defined by iterated $\Sigma$-types:
+\begin{align*}
+\grm{\cdot}^\CC &:\equiv \unit \text{ and} \\
+\grm{(\Gamma,\,A)}^\CC &:\equiv (\gamma : \grm{\Gamma}^\CC) \times \grm{A}^\CC(\gamma)
+\end{align*}
+
+The universe in the syntax needs of course be mapped to the metatheoretic universe.
+We chose $\UU_1$ as a target for context interpretation to make sure $\UU_0$ fits
+in there.
+The operation \grm{\El} is just there to make the conversation between small and
+big types, which in turn is needed to ensure positivity of the constructors.
+Since this distinction doesn't have any semantic meaning, \grm{\El} will just be
+ignored by the algebra operator:
+\begin{align*}
+\grm{\UU}^\CC(\gamma) 			&:\equiv \UU_0 \\
+\grm{(\El(a))}^\CC(\gamma)		&:\equiv \grm{a}^\CC(\gamma)
+\end{align*}
+Recursive $\Pi$-types become metatheoretic dependent function spaces, with \grm{\IIapp} the
+usual function application:
+\begin{align*}
+\grm{\Pi(a, B)}^\CC(\gamma)		&:\equiv (\alpha : \grm{a}^\CC(\gamma)) \to \grm{B}^\CC(\gamma, \alpha) \\
+\grm{\IIapp(t)}^\CC(\gamma, \alpha)	&:\equiv \grm{t}^\CC(\gamma, \alpha)
+\end{align*}
+Non-recursive $\Pi$-types also become functions, but here we have to apply the
+external argument to the codomain to be able to evaluate its interpretation:
+\begin{align*}
+\grm{\ExtPi{T}{B}}^\CC(\gamma)		&:\equiv (\tau : T) \to B(\bltau)^\CC(\gamma) \\
+\grm{f(\bltau)}^\CC(\gamma)		&:\equiv \grm{f}^\CC(\gamma, \tau)
+\end{align*}
+
+Unsurprisingly the category structure of substitution is achieved by interpreting
+it into the one of metatheoretic functions between context interpretations:
+\begin{align*}
+\grm{\id}^\CC(\gamma)			&:\equiv \gamma \\
+\grm{(\sigma \circ \delta)}^\CC(\gamma)	&:\equiv \grm{\sigma}^\CC(\grm{\delta}^\CC(\gamma))
+\end{align*}
+Pulling back a type or a term along a substitution means interpreting it after
+applying the function which we get from interpreting the substitution:
+\begin{align*}
+\grm{A[\sigma]}^\CC(\gamma)		&:\equiv \grm{A}^\CC(\grm{\sigma}^\CC(\gamma)) \\
+\grm{t[\sigma]}^\CC(\gamma)		&:\equiv \grm{t}^\CC(\grm{\sigma}^\CC(\gamma))
+\end{align*}
+The interpretation of the empty substitution is the unique map into the interpretation
+of the empty context.
+Extension of and projections from a substitution now justify their name by being
+interpreted as the extension of a function and the projections of a $\sigma$-type:
+\begin{align*}
+\grm{\epsilon}^\CC(\gamma)		&:\equiv \star \\
+\grm{(\sigma, t)}^\CC(\gamma)		&:\equiv (\grm{\sigma}^\CC(\gamma), \grm{t}^\CC(\gamma)) \\
+\grm{\pi_1(\sigma)}^\CC(\gamma)		&:\equiv \pr_1(\grm{\sigma}^\CC(\gamma)) \\
+\grm{\pi_2(\sigma)}^\CC(\gamma)		&:\equiv \pr_2(\grm{\sigma}^\CC(\gamma))
+\end{align*}
+
+All the rules of the substitution calculus which were mentioned in Section~\ref{sec:ii-syntax}
+are preserved \emph{definitionally}, which, in the end, is due to types and
+functions forming a \emph{strict} category. %TODO more explanation here
+
+%\begin{align*}
+%\grm{(t \app \blm{u})}^\CC(\gamma)	&:\equiv (\grm{t}^\CC(\gamma))(u) \text{.}
+%\end{align*}
+
+\end{defn}
+
+\begin{example}[Natural numbers]
+Strictly speaking, the algebra interpretation of the
+context from our example of natrual numbers (Example~\ref{ex:ii-syntax-nat})
+would compute to the following iterated $\Sigma$-type:
+\begin{equation*}
+\grm{\left(N' : (N : \top \times \UU) \times \pr_2(N)\right)
+  \times \left(\pr_2(\pr_1(N')) \to \pr_2(\pr_1(N')) \right) } \text{.}
+\end{equation*}
+Obviously, this is unnecessarily complicated and we can easily transform this
+type using equivalences to see that we can also express the algebras as being
+elements of the type
+\begin{equation*}
+\grm{(N : Set) \times N \times (N \to N)} \text{.}
+\end{equation*}
+\end{example}
+
+%TODO more examples
 
 
 
