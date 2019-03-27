@@ -197,12 +197,12 @@ These then allow us to substitute point types and sort terms via
 \end{equation*}
 obeying the usual rules for substitution
 \begin{align*}
-\tqm{\Pi_\Pc(\blm{T}, A)[\sigma]} &= \tqm{\Pi(\blm{T}, \blm{\lambda \tau. \tqm{A(\blm{\tau})[\sigma]}})} \text{,} \\
-\tqm{\El(a)[\sigma]} &= \tqm{El(a[\sigma])} \text{,} \\
-\tqm{(a \Rightarrow_\Pc A)[\sigma]} &= \tqm{a[\sigma] \Rightarrow_\Pc A[\sigma]} \text{,} \\
-\tqm{\var(\vz)[\sigma, t]} &= \tqm{t} \text{,} \\
-\tqm{\var(\vs(t))[\sigma, s]} &= \tqm{\var(t)[\sigma]} \text{, and} \\
-\tqm{t(\bltau)[\sigma]} &= \tqm{t[\sigma](\bltau)} \text{.}
+\tqm{\Pi_\Pc(\blm{T}, A)[\sigma]}		&= \tqm{\Pi_\Pc(\blm{T}, \blm{\lambda \tau. \tqm{A(\blm{\tau})[\sigma]}})} \text{,} \\
+\tqm{\El(a)[\sigma]}				&= \tqm{El(a[\sigma])} \text{,} \\
+\tqm{(a \Rightarrow_\Pc A)[\sigma]}		&= \tqm{a[\sigma] \Rightarrow_\Pc A[\sigma]} \text{,} \\
+\tqm{\var(\vz)[\sigma, t]}			&= \tqm{t} \text{,} \\
+\tqm{\var(\vs(t))[\sigma, s]}			&= \tqm{\var(t)[\sigma]} \text{, and} \\
+\tqm{t(\bltau)[\sigma]}				&= \tqm{t[\sigma](\bltau)} \text{.}
 \end{align*}
 
 We can derive from this the gadgets of the substitutional calculus which we
@@ -228,9 +228,19 @@ is defined by recursion on the first context:
 \tqm{\epsilon \circ \delta}			&:\equiv \tqm{\epsilon} \text{,} \\
 \tqm{(\sigma, t) \circ \delta}			&:\equiv \tqm{(\sigma \circ \delta), t[\delta]} \text{.}
 \end{align*}
+Projections \tqm{\IFSub{\pi_1(\sigma)}{\Gamma_\Sc}{\Delta_\Sc}} and
+\tqm{\Gamma_\Sc \SCon \pi_2(\sigma) : B} of a substitution
+\tqm{\IFSub{\sigma}{\Gamma_\Sc}{\Delta_\Sc, B}} can be defined as just that --
+projections.
+Any substitution between \tqm{\Gamma_\Sc} and \tqm{\Delta_\Sc,\, B} is of the form
+\tqm{\sigma,\, t} and we can just set
+\begin{align*}
+\tqm{\pi_1(\sigma,\, t)}				&:\equiv \tqm{\sigma} \text{ and} \\
+\tqm{\pi_2(\sigma,\, t)}				&:\equiv \tqm{t} \text{.}
+\end{align*}
 \end{defn}
 
-
+%TODO address equalities
 
 
 \section{Algebras of Inductive Families}
