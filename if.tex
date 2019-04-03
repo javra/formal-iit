@@ -61,7 +61,7 @@ internal function type used for recursive point constructors:
 \inferrule{\tqm{\Gamma_\Sc \SCon a : \UU}}{\tqm{\Gamma_\Sc \SCon \El(a)}}
 \qquad
 \inferrule{\blm{T : \UU} \\ \blm{(\tau : T) \to \tqm{\Gamma_\Sc \SCon B(\blm{\tau})}}}
-  {\tqm{\Gamma_\Sc \SCon \Pi_\Pc(\blm{T}, B)}}
+  {\tqm{\Gamma_\Sc \SCon \ExtPiP{T}{B}}}
 \\[.7em]
 \inferrule{\tqm{\Gamma_\Sc \SCon a : \UU} \\ \tqm{\Gamma_\Sc \SCon A}}
   {\tqm{\Gamma_\Sc \SCon a \Rightarrow_\Pc A}}
@@ -247,16 +247,57 @@ Any substitution between \tqm{\Gamma_\Sc} and \tqm{\Delta_\Sc,\, B} is of the fo
 Like for inductive-inductive types, we have to give a way to semantify the signatures
 by stating what kind of data they should represent.
 
-\begin{defn}
+\begin{defn}[Algebra operator]
 Again, sort contexts will be mapped to types, sort constructors to families over these
 types, their terms to sections of these families.
 Point contexts will give the same data, but depending on an interpretation of the sort
 contexts:
 \begin{equation*}
 \begin{gathered}
-foo
+\inferrule{\tqm{B :: \Sc}}
+  {\tqm{B}^\CC : \UU}
+\qquad
+\inferrule{\tqm{\SCon \Gamma_\Sc}}
+  {\tqm{\Gamma_\Sc}^\CC : \UU}
+\qquad
+\inferrule{\tqm{\Gamma_\Sc \SCon t : B :: \Sc}}
+  {\tqm{t}^\CC : \tqm{\Gamma_\Sc}^\CC \to \tqm{B}^\CC}
+\\[.7em]
+\inferrule{\tqm{\Gamma_\Sc \SCon A :: \Pc}}
+  {\tqm{A}^\CC : \tqm{\Gamma_\Sc}^\CC \to \UU}
+\qquad
+\inferrule{\tqm{\vdash_{\Gamma_\Sc} \Gamma}}
+  {\tqm{\Gamma}^\CC : \UU}
 \end{gathered}
 \end{equation*}
+
+Going through all of these translation in order, we first define the algebras
+of sorts to be interpreted into functions over the universe:
+\begin{align*}
+\tqm{\UU}^\CC				&:\equiv \UU \\
+\tqm{\ExtPiS{T}{B}}^\CC			&:\equiv (\tau : T) \to \tqm{B(\bltau)}^\CC
+\end{align*}
+Sort contexts become iterated product types -- note that we don't even need to
+use $\Sigma$-types since there are no dependencies between sorts:
+\begin{align*}
+\tqm{\cdot_\Sc}^\CC			&:\equiv \unit \\
+\tqm{(\Gamma_\Sc,\, B)}^\CC		&:\equiv \tqm{\Gamma_\Sc}^\CC \times \tqm{B}^\CC
+\end{align*}
+We use terms to navigate these iterated product via iterated projects, and to
+apply function sorts:
+\begin{align*}
+\tqm{\var(\vz)}^\CC(\gamma, \alpha)	&:\equiv \alpha \\
+\tqm{\var(\vs(t))}^\CC(\gamma, \alpha)	&:\equiv \tqm{\var(t)}^\CC(\gamma) \\
+\tqm{t(\bltau)}^\CC(\gamma)		&:\equiv \tqm{t}^\CC(\gamma, \bltau)
+\end{align*}
+For point constructors, we need to interpret both types of functions into functions
+while erasing the element operator, since it does not have any semantic meaning:
+\begin{align*}
+\tqm{\El(a)}^\CC(\gamma)		&:\equiv \tqm{a}^\CC(\gamma) \\
+\tqm{\ExtPiP{T}{A}}^\CC(\gamma)		&:\equiv (\tau : T) \to \tqm{A(\bltau)}^\CC(\gamma) \\
+\tqm{(a \Rightarrow_\Pc A)}^\CC(\gamma)	&:\equiv \tqm{a}^\CC(\gamma) \to \tqm{A}^\CC(\gamma)
+\end{align*}
+
 \end{defn}
 
 
