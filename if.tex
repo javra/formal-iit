@@ -128,7 +128,7 @@ data Con (Γc : SCon) : Set₁ where
 %TODO remove backslash
 \end{remark}
 
-\begin{example}
+\begin{example}[Natural numbers, Vectors]\label{ex:if-natvec}
 A common example for inductive types, the natural numbers, with one constructor for
 zero and one for the successor function, are represented by the sort context
 \tqm{\cdot_\Sc, \UU} and the points
@@ -297,6 +297,27 @@ while erasing the element operator, since it does not have any semantic meaning:
 \tqm{\ExtPiP{T}{A}}^\CC(\gamma)		&:\equiv (\tau : T) \to \tqm{A(\bltau)}^\CC(\gamma) \\
 \tqm{(a \Rightarrow_\Pc A)}^\CC(\gamma)	&:\equiv \tqm{a}^\CC(\gamma) \to \tqm{A}^\CC(\gamma)
 \end{align*}
+Just like for the sort contexts, point contexts are interdependency-free lists
+of point constructors and as such can be interpreted as simple products instead
+of $\Sigma$-types:
+\begin{align*}
+\tqm{\cdot}^\CC(\gamma)			&:\equiv \unit \\
+\tqm{(\Gamma,\, A)}^\CC(\gamma)		&:\equiv \tqm{\Gamma}^\CC(\gamma) \times \tqm{A}^\CC(\gamma)
+\end{align*}
+
+\begin{example}[Natural numbers]
+Looking at the signature of the natural numbers from Example~\ref{ex:if-natvec},
+we see that the algebra interpretation of its sort context evaluates to
+\begin{equation*}
+\unit \times \UU
+\end{equation*}
+and given an element \blm{(\star, N) : \unit \times \UU}, the algebras of its
+point contexts, evaluated at this point result in
+\begin{equation*}
+N \times (N \to N) \text{.}
+\end{equation*}
+%TODO vector example?
+\end{example}
 
 \end{defn}
 
