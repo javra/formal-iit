@@ -380,7 +380,74 @@ and that for all \blm{n : N}, we have \blm{f(s(n)) = p_s(f(n))}.
 %TODO add another example
 \end{example}
 
-foo
+Let's first concentrate on the first piece of data:
+\begin{defn}[Displayed Algebra Operator]
+As seen above, we want to map sorts to type families over the given algebra.
+Sort context will likewise be type families over an algebra:
+\begin{equation*}
+\inferrule{\tqm{B :: S}}
+  {\tqm{B}^\DD : \tqm{B}^\CC \to \UU}
+\qquad
+\inferrule{\tqm{\SCon \Gamma_\Sc}}
+  {\tqm{\Gamma_\Sc}^\DD : \tqm{\Gamma_\Sc}^\CC \to \UU}
+\end{equation*}
+Since sorts can themselves be interpreted as functions, we have to apply them
+whenever we encounter a sort function.
+Sort contexts will again be interpreted as iterated products.
+\begin{align*}
+\tqm{\UU}^\DD(\alpha)				&:\equiv \alpha \to \UU \\
+\tqm{\ExtPiS{T}{B}}^\DD(\alpha)			&:\equiv (\tau : T) \to \tqm{B(\bltau)}^\DD(\alpha(\bltau)) \\
+\tqm{\cdot_\Sc}^\DD(\star)			&:\equiv \unit \\
+\tqm{(\Gamma_\Sc,\, B)}^\DD(\gamma, \alpha)	&:\equiv \tqm{\Gamma}^\DD(\gamma) \times \tqm{B}^\DD(\alpha)
+\end{align*}
+
+The interpretation of point constructors and of point contexts now not only depends
+on the algebra, but also on the interpretation of the underlying sorts:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\tqm{\Gamma_\Sc \SCon A :: \Pc}}
+  {\tqm{A}^\DD : \{\gamma : \tqm{\Gamma_\Sc}^\CC\} \to \tqm{\Gamma_\Sc}^\DD(\gamma) 
+    \to \tqm{A}^\CC(\gamma) \to \UU }
+\\[.7em]
+\inferrule{\tqm{\vdash_{\Gamma_\Sc} \Gamma}}
+  {\tqm{\Gamma}^\DD : \{\gamma : \tqm{\Gamma_\Sc}^\CC\} \to \tqm{\Gamma_\Sc}^\DD(\gamma)
+    \to \tqm{\Gamma}^\CC(\gamma) \to \UU }
+\\[.7em]
+\inferrule{\tqm{\Gamma_\Sc \SCon t : B :: k}}
+  {\tqm{t}^\DD : \{\gamma : \tqm{\Gamma_\Sc}^\CC\} \to \tqm{\Gamma_\Sc}^\DD(\gamma)
+    \to \tqm{B}^\DD(\tqm{t}^\CC(\gamma)) }
+\end{gathered}
+\end{equation*}
+The definition on terms is almost the same as for fixed algebras:
+\begin{align*}
+\tqm{\var(\vz)}^\DD(\gamma^\DD, \alpha^\DD)
+  &:\equiv \alpha^\DD \text{,} \\
+\tqm{\var(\vs(t))}^\DD(\gamma^\DD, \alpha^\DD)
+  &:\equiv \tqm{\var(t)}^\DD(\gamma^\DD) \text{, and} \\
+\tqm{f(\bltau)}^\DD(\gamma^\DD)
+  &:\equiv \tqm{f}^\DD(\gamma^\DD)(\tau) \text{.}
+\end{align*}
+Displayed algebras on point constructors are defined fiberwise, like the ones for
+sorts:
+\begin{align*}
+\tqm{\El(a)}^\DD(\gamma_\Sc^\DD, \alpha)
+  &:\equiv \tqm{a}^\DD(\gamma_\Sc^\DD, \alpha) \\
+\tqm{\ExtPiP{T}{A}}^\DD(\gamma_\Sc^\DD, \pi)
+  &:\equiv (\tau : T) \to \tqm{A(\bltau)}^\DD(\gamma_\Sc^\DD, \pi(\tau)) \\
+\tqm{(a \Rightarrow_\Pc A)}^\DD(\gamma_\Sc^\DD, \pi)
+  &:\equiv \{\alpha : \tqm{a}^\CC(\_) \} \to \tqm{a}^\DD(\gamma_\Sc^\DD, \alpha)
+    \to \tqm{A}^\DD(\gamma_\Sc^\DD, \pi(\alpha))
+\end{align*}
+Finally, contexts are interpreted as iterated products again:
+\begin{align*}
+\tqm{\cdot}^\DD(\gamma_\Sc^\DD, \gamma)
+  &:\equiv \unit \\
+\tqm{(\Gamma,\, A)}^\DD(\gamma_\Sc^\DD, (\gamma, \alpha))
+  &:\equiv \tqm{\Gamma}^\DD(\gamma_\Sc^\DD, \gamma) \times \tqm{A}^\DD(\gamma_\Sc^\DD, \alpha)
+\end{align*}
+
+
+\end{defn}
 
 \section{Existence of Inductive Families}
 
