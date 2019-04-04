@@ -360,6 +360,29 @@ and all other by induction by the substitution.
 
 \section{Displayed algebras and their sections}
 
+To represent the dependent eliminator, we need algebras which vary over other
+algebras.
+To get a feeling about what these should look like, let us first look at our
+usual simplest example:
+
+\begin{example}\label{ex:if-d-nat}
+Take algebras \blm{(\star, N) : \unit \times \UU} and
+\blm{(\star, z, s) : \unit \times N \times (N \to N)} of
+the the signature of natural numbers (Example~\ref{ex:if-natvec}).
+A \emph{displayed algebra} over this should contain the data which the dependent
+eliminator of the natural numbers takes as input:
+A type family \blm{P : N \to \UU} together with a point \blm{p_z : P(z)}
+and a family of functions \blm{p_s : (n : N) \to P(n) \to P(s(n))}.
+
+A \emph{section} of this algebra would be a section \blm{f : (n : N) \to P(n)} of
+\blm{P} respecting the other data by ensuring that \blm{f(z) = p_z}
+and that for all \blm{n : N}, we have \blm{f(s(n)) = p_s(f(n))}.
+%TODO add another example
+\end{example}
+
+foo
+
+\section{Existence of Inductive Families}
 
 
 
