@@ -162,7 +162,7 @@ the first point constructor the proof that \blm{0} is even and the other two the
 proof that evenness implies oddness of the successor and vice versa.
 \end{example}
 
-\begin{defn}[Sort Substitutions]
+\begin{defn}[Sort Substitutions] \label{def:if-sort-subs}
 One component of the syntax which has completely gone missing are substitutions.
 Since we cant refer to previous point constructors, we certainly don't need them
 for the point contexts.
@@ -304,6 +304,7 @@ of $\Sigma$-types:
 \tqm{\cdot}^\CC(\gamma)			&:\equiv \unit \\
 \tqm{(\Gamma,\, A)}^\CC(\gamma)		&:\equiv \tqm{\Gamma}^\CC(\gamma) \times \tqm{A}^\CC(\gamma)
 \end{align*}
+\end{defn}
 
 \begin{example}[Natural numbers]
 Looking at the signature of the natural numbers from Example~\ref{ex:if-natvec},
@@ -319,7 +320,46 @@ N \times (N \to N) \text{.}
 %TODO vector example?
 \end{example}
 
+In the previous section, we introduced a substition calculus for the sort contexts.
+Obviously, we might also want to consider algebras over these substitutions.
+
+\begin{defn}[Algebras for substitutions]
+We can extend the algebra operator by defining it on substitutions by functions
+between the interpretations of sort contexts:
+\begin{equation*}
+\inferrule{\tqm{\IFSub{\sigma}{\Gamma_\Sc}{\Delta_\Sc}}}
+  {\tqm{\sigma}^\CC : \tqm{\Gamma_\Sc}^\CC \to \tqm{\Gamma_\Sc}^\CC}
+\end{equation*}
+This is done by setting
+\begin{align*}
+\tqm{\epsilon}^\CC		&:\equiv \star \text{ and}\\
+\tqm{(\sigma,\, t)}^\CC		&:\equiv \tqm{\sigma}^\CC \times \tqm{t}^\CC \text{.}
+\end{align*}
 \end{defn}
+
+\begin{lemma}
+It's easy to check that this definition of algebras of a subtitution respects
+the substitution calculus given in Definition~\ref{def:if-sort-subs} in the following
+sense:
+\begin{align*}
+\tqm{A[\sigma]}^\CC(\gamma)		&= \tqm{A}^\CC(\tqm{\sigma}^\CC(\gamma)) \text{,} \\
+\tqm{t[\sigma]}^\CC(\gamma)		&= \tqm{t}^\CC(\tqm{\sigma}^\CC(\gamma)) \text{,} \\
+\tqm{\id}^\CC(\gamma)			&= \gamma \text{,} \\
+\tqm{(\sigma \circ \delta)}^\CC(\gamma)	&= \tqm{\sigma}^\CC(\tqm{\delta}^\CC(\gamma)) \text{,} \\
+\tqm{\wk_\sigma}^\CC(\gamma, \alpha)	&= \tqm{\sigma}^\CC(\gamma) \text{,} \\
+\tqm{\pi_1(\sigma)}^\CC(\gamma)		&= \pr_1(\tqm{\sigma}^\CC(\gamma)) \text{, and } \\
+\tqm{\pi_2(\sigma)}^\CC(\gamma)		&= \pr_2(\tqm{\sigma}^\CC(\gamma)) \text{.}
+\end{align*}
+\end{lemma}
+\begin{proof}
+We can proof the first rule by recursion on the point type \tqm{\Gamma_\Sc \SCon A :: \Pc},
+the second rule by recursing on the term \tqm{\Gamma_\Sc \SCon t : B :: \Sc},
+the third by induction on the context,
+and all other by induction by the substitution.
+\end{proof}
+
+\section{Displayed algebras and their sections}
+
 
 
 
