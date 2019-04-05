@@ -323,7 +323,7 @@ N \times (N \to N) \text{.}
 In the previous section, we introduced a substition calculus for the sort contexts.
 Obviously, we might also want to consider algebras over these substitutions.
 
-\begin{defn}[Algebras for substitutions]
+\begin{defn}[Algebras of substitutions]\label{def:if-alg-sub}
 We can extend the algebra operator by defining it on substitutions by functions
 between the interpretations of sort contexts:
 \begin{equation*}
@@ -365,7 +365,7 @@ algebras.
 To get a feeling about what these should look like, let us first look at our
 usual simplest example:
 
-\begin{example}\label{ex:if-d-nat}
+\begin{example}\label{ex:if-ds-nat}
 Take algebras \blm{(\star, N) : \unit \times \UU} and
 \blm{(\star, z, s) : \unit \times N \times (N \to N)} of
 the the signature of natural numbers (Example~\ref{ex:if-natvec}).
@@ -413,7 +413,7 @@ on the algebra, but also on the interpretation of the underlying sorts:
   {\tqm{\Gamma}^\DD : \{\gamma : \tqm{\Gamma_\Sc}^\CC\} \to \tqm{\Gamma_\Sc}^\DD(\gamma)
     \to \tqm{\Gamma}^\CC(\gamma) \to \UU }
 \\[.7em]
-\inferrule{\tqm{\Gamma_\Sc \SCon t : B :: k}}
+\inferrule{\tqm{\Gamma_\Sc \SCon t : B :: \Sc}}
   {\tqm{t}^\DD : \{\gamma : \tqm{\Gamma_\Sc}^\CC\} \to \tqm{\Gamma_\Sc}^\DD(\gamma)
     \to \tqm{B}^\DD(\tqm{t}^\CC(\gamma)) }
 \end{gathered}
@@ -445,9 +445,109 @@ Finally, contexts are interpreted as iterated products again:
 \tqm{(\Gamma,\, A)}^\DD(\gamma_\Sc^\DD, (\gamma, \alpha))
   &:\equiv \tqm{\Gamma}^\DD(\gamma_\Sc^\DD, \gamma) \times \tqm{A}^\DD(\gamma_\Sc^\DD, \alpha)
 \end{align*}
-
-
 \end{defn}
+
+%TODO section fluff
+\begin{defn}[Section Operator]
+For sorts and sort contexts, we want the sections of a displayed algebra to be
+the sections of the type family they represent:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\tqm{B :: \Sc}}
+  {\tqm{B}^\SS : \{\alpha : \tqm{B}^\CC\} \to \tqm{B}^\DD(\alpha) \to \UU}
+\\[.7em]
+\inferrule{\tqm{\SCon \Gamma_\Sc}}
+  {\tqm{\Gamma_\Sc}^\SS : \{\gamma_\Sc : \tqm{\Gamma_\Sc}^CC\} \to 
+    \tqm{\Gamma_\Sc}^\DD(\gamma_\Sc) \to \UU }
+\end{gathered}
+\end{equation*}
+Both follow the structure of the underlying displayed algebra -- fibrewise for
+sort functions and by iterated products on sort contexts:
+\begin{align*}
+\tqm{\UU}^\SS(\alpha^\DD)
+  &:\equiv (x : \_) \to \alpha^\DD(x) \\
+\tqm{\ExtPiS{T}{B}}^\SS(\pi^\DD)
+  &:\equiv (\tau : T) \to \tqm{B(\bltau)}^\SS(\pi^\DD(\tau)) \\
+\tqm{\cdot_\Sc}(\gamma_\Sc^\DD)
+  &:\equiv \unit \\
+\tqm{(\Gamma_\Sc, B)}^\SS(\gamma_\Sc^\DD, \alpha^\DD)
+  &:\equiv \tqm{\Gamma_\Sc}^\SS(\gamma_\Sc^\DD) \times \tqm{B}^\SS(\alpha^\DD)
+\end{align*}
+
+Sections of point constructors, point contexts, and sort terms will clearly
+have to depend on a section of the underlying sort interpretation:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\tqm{\Gamma_\Sc \SCon A :: k}}
+  {\tqm{A}^\SS : \left\{\gamma_\Sc : \tqm{\Gamma_\Sc}^\CC\right\}
+    \left\{\gamma_\Sc^\DD : \tqm{\Gamma_\Sc}^\DD(\gamma_\Sc)\right\}
+    \left(\gamma_\Sc^\SS : \tqm{\Gamma_\Sc}^\SS(\gamma_\Sc^\DD)\right) \\
+    \left\{\alpha : \tqm{A}^\CC(\gamma_\Sc)\right\}
+    \left(\alpha^\DD : \tqm{A}^\DD(\gamma_\Sc^\DD, \alpha)\right)
+    \to \UU }
+\\[.7em]
+\inferrule{\tqm{\vdash_{\Gamma_\Sc} \Gamma}}
+  {\tqm{\Gamma}^\SS : 
+    \left\{\gamma_\Sc : \tqm{\Gamma_\Sc}^\CC\right\}
+    \left\{\gamma_\Sc^\DD : \tqm{\Gamma_\Sc}^\DD(\gamma_\Sc)\right\}
+    \left(\gamma_\Sc^\SS : \tqm{\Gamma_\Sc}^\SS(\gamma_\Sc^\DD)\right) \\
+    \left\{\gamma : \tqm{\Gamma}^\CC(\gamma_\Sc)\right\}
+    \left(\gamma^\DD : \tqm{\Gamma}^\DD(\gamma_\Sc^\DD, \gamma)
+    \to \UU \right)}
+\\[.7em]
+\inferrule{\tqm{\Gamma_\Sc \SCon t : B :: \Sc}}
+  {\tqm{t}^\SS :
+    \left\{\gamma_\Sc : \tqm{\Gamma_\Sc}^\CC\right\}
+    \left\{\gamma_\Sc^\DD : \tqm{\Gamma_\Sc}^\DD(\gamma_\Sc)\right\}
+    \left(\gamma_\Sc^\SS : \tqm{\Gamma_\Sc}^\SS(\gamma_\Sc^\DD)\right)
+  \to \tqm{B}^\SS\left(\tqm{t}^\DD(\gamma_\Sc^\DD)\right)}
+\end{gathered}
+\end{equation*}
+For point types we again descent fibrewise, but what to do about the element
+operator?
+This is where the equations which we have seen in Example~\ref{ex:if-ds-nat}
+come into play:
+The element which we get out of the interpretation of the section must coincide
+with the one we provided by giving the displayed algebra:
+\begin{align*}
+\tqm{\El(a)}^\SS(\gamma_\Sc^\SS, \alpha^\DD)
+  &:\equiv \left(\tqm{a}^\SS(\gamma_\Sc^\SS, \_) = \alpha^\DD  \right) \\
+\tqm{\ExtPiP{T}{A}}^\SS(\gamma_\Sc^\SS, \pi^\DD)
+  &:\equiv (\tau : T) \to \tqm{A(\bltau)}^\SS(\gamma_\Sc^\SS, \pi^\DD(\tau)) \\
+\tqm{(a \Rightarrow_\Pc A)}^\SS(\gamma_\Sc^\SS, \pi^\DD)
+  &:\equiv (\alpha : \tqm{a}^\CC(\_))
+    \to \tqm{A}^\SS\left(\gamma_\Sc^\SS, \pi^\DD(\tqm{a}^\SS(a, \gamma_\Sc^\SS)(\alpha))\right)
+\end{align*}
+The definition of sections of point contexts is easier as it is, again,
+just an iteration of products:
+\begin{align*}
+\tqm{\cdot}^\SS(\gamma_\Sc^\SS, \gamma^\DD)
+  &:\equiv \unit \\
+\tqm{(\Gamma,\, A)}^\SS(\gamma_\Sc^\SS, (\gamma^\DD, \alpha^\DD))
+  &:\equiv \tqm{\Gamma}^\SS(\gamma_\Sc^\SS, \gamma^\DD)
+    \times \tqm{A}^\SS(\gamma_\Sc^\SS, \alpha^\DD)
+\end{align*}
+At last, also terms follow the usual pattern of variables selecting sort interpretations
+via projects of products and interpreting the application by metatheoretic application:
+\begin{align*}
+\tqm{\var(\vz)}^\SS(\gamma_\Sc^\SS, \alpha^\SS)
+  &:\equiv \alpha^\SS \\
+\tqm{\var(\vs(t))}^\SS(\gamma_\Sc^\SS, \alpha^\SS)
+  &:\equiv \tqm{\var(t)}^\SS(\gamma_\Sc^\SS) \\
+\tqm{f(\bltau)}^\SS(\gamma_\Sc^\SS)
+  &:\equiv \tqm{f}^\SS(\gamma_\Sc^\SS)(\tau)
+\end{align*}
+\end{defn}
+
+Sometimes, we will need that, following Definition~\ref{def:if-alg-sub}, we can
+interpret sort substitutions with the means of displayed algebras, for which
+we also need a definition of a section:
+\begin{defn}[Displayed Algebras of Substitutions]
+foo
+\end{defn}
+
+
+
 
 \section{Existence of Inductive Families}
 
