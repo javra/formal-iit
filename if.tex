@@ -333,7 +333,7 @@ between the interpretations of sort contexts:
 This is done by setting
 \begin{align*}
 \tqm{\epsilon}^\CC		&:\equiv \star \text{ and}\\
-\tqm{(\sigma,\, t)}^\CC		&:\equiv \tqm{\sigma}^\CC \times \tqm{t}^\CC \text{.}
+\tqm{(\sigma,\, t)}^\CC		&:\equiv (\tqm{\sigma}^\CC , \tqm{t}^\CC) \text{.}
 \end{align*}
 \end{defn}
 
@@ -543,15 +543,54 @@ Sometimes, we will need that, following Definition~\ref{def:if-alg-sub}, we can
 interpret sort substitutions with the means of displayed algebras, for which
 we also need a definition of a section:
 \begin{defn}[Displayed Algebras of Substitutions]
-foo
+Given a sort substitution, its type of displayed algebras should be the type
+of function between the displayed algebras of its domain and codomain, where in the
+latter we have to apply the function which we get from the \emph{algebra} over
+the substitution:
+\begin{equation*}
+\inferrule{\tqm{\IFSub{\sigma}{\Gamma_\Sc}{\Delta_\Sc}}}
+  {\tqm{\sigma}^\DD :
+    \left\{\gamma_\Sc : \tqm{\Gamma_\Sc}^\CC\right\}
+    \to \tqm{\Gamma_\Sc}^\DD(\gamma_\Sc)
+    \to \tqm{\Delta_\Sc}^\DD(\tqm{\sigma}^\CC(\gamma_\Sc))}
+\end{equation*}
+These are defined, like in the non-displayed case, by
+\begin{align*}
+\tqm{\epsilon}^\DD(\gamma_\Sc^\DD)
+  &:\equiv \star \text{ and} \\
+\tqm{(\sigma,\, t)}^\DD(\gamma_\Sc^\DD)
+  &:\equiv \left(\tqm{\sigma}^\DD(\gamma_\Sc^\DD), \tqm{t}^\DD(\gamma_\Sc^\DD)\right) \text{.}
+\end{align*}
 \end{defn}
 
-
+\begin{defn}[Sections of Substitutions]
+A section of a displayed algebra of a sort substitution is supposed to map
+sections of its domain to sections of its codomain:
+\begin{equation*}
+\inferrule{\tqm{\IFSub{\sigma}{\Gamma_\Sc}{\Delta_\Sc}}}
+  {\tqm{\sigma}^\DD :
+    \left\{\gamma_\Sc : \tqm{\Gamma_\Sc}^\CC\right\}
+    \left\{\gamma_\Sc^\DD : \tqm{\Gamma_\Sc}^\DD(\gamma_\Sc)\right\}
+    \to \tqm{\Gamma_\Sc}^\SS(\gamma_\Sc^\DD)
+    \to \tqm{\Delta_\Sc}^\SS(\tqm{\sigma}^\DD(\gamma_\Sc^\DD)) }
+\end{equation*}
+Again, this is happening componentwise:
+\begin{align*}
+\tqm{\epsilon}^\SS(\gamma_\Sc^\SS)
+  &:\equiv \star \text{ and} \\
+\tqm{(\sigma,\, t)}^\SS(\gamma_\Sc^\SS)
+  &:\equiv \left(\tqm{\sigma}^\SS(\gamma_\Sc^\SS), \tqm{t}^\SS(\gamma_\Sc^\SS) \right) \text{.}
+\end{align*}
+\end{defn}
 
 
 \section{Existence of Inductive Families}
 
-
+\begin{itemize}
+\item point terms
+\item lifted substitution
+\item kripke trick
+\end{itemize}
 
 
 
