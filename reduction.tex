@@ -90,6 +90,42 @@ In our syntax we will now see why the operation is called ``type erasure'':
 %TODO
 \end{example}
 
+To go from examples to the general case, we will present the different components
+of the type erasure operation in roughly the same order in which they appear in
+Section~\ref{sec:ii-syntax}, most often needing to distinguish between sort
+and point constructors.
+
+\begin{defn}[Type Erasure]
+First of all, each context will need to be split into a sort context and a point
+context:
+\begin{equation*}
+\inferrule{\grm{\vdash \Gamma}}
+  {\tqm{\SCon \grm{\Gamma}^\EE_\Sc}}
+\qquad
+\inferrule{\grm{\vdash \Gamma}}
+  {\tqm{\vdash_{\grm{\Gamma}^\EE_\Sc} \grm{\Gamma}^\EE }}
+\end{equation*}
+To descent down the components of the contexts, we will need to define the operation
+on types as well.
+Since we are erasing all information from the sorts, we will only need this for
+point types, though.
+Unsurprisingly, we wan them to be translated to point types in the appropriate
+sort context:
+\begin{equation*}
+\inferrule{\grm{\Gamma \vdash A :: \Pc}}
+  {\tqm{\grm{\Gamma}^\EE_\Sc \SCon \grm{A}^\EE :: \Pc}}
+\end{equation*}
+Using this we will be able to define the operation creting sort contexts by
+\begin{align*}
+\tqm{\grm{\cdot}^\EE_\Sc}
+  &:\equiv\tqm{\cdot_\Sc} \text{,} \\
+\tqm{\grm{(\Gamma,\, A)}^\EE_\Sc}
+  &:\equiv \tqm{\left(\grm{\Gamma}^\EE_\Sc,\, \grm{A}^\EE_\Sc\right)} \text{ for \grm{A :: \Sc}, and} \\
+\tqm{\grm{(\Gamma,\, A)}^\EE_\Sc}
+  &:\equiv \tqm{\grm{\Gamma}^\EE_\Sc} \text{ for \grm{A :: \Pc}.}
+\end{align*}
+\end{defn}
+
 \section{(OLD) -- Type Erasure}
 
 Since we cannot define type families simultaneously together with their index
