@@ -1,4 +1,4 @@
-\section{Fragments of Inductive-Inductive Types}
+\section{(OLD) -- Fragments of Inductive-Inductive Types}
 
 As we have seen in the previous sections, inductive-inductive types as specified
 allow for a very broad variety of definitions.
@@ -43,28 +43,54 @@ $m : \grm{\Gamma}^\MM$.
 
 TODO: explain reduction to W-types maybe
 
-\section{Initiality}
-
-\begin{defn}[Initial algebra]
-For a source context \grm{\vdash \Gamma}, an algebra $s : \grm{\Gamma}^\CC$ is
-called \textbf{initial}, if there is a \emph{unique} algebra morphism from $s$ to any
-other algebra, which is to say that the following two rules hold true:
-\begin{equation*}
-\begin{gathered}
-\inferrule{a : \grm{\Gamma}^\CC}{m_a : \grm{\Gamma}^\mm(s, a)}
-\qquad
-\inferrule{a : \grm{\Gamma}^\CC \\ m' : \grm{\Gamma}^\mm(s, a)}{m' = m_a}
-\end{gathered}
-\end{equation*}
-We will call the first rule \emph{weak initiality} and the second one \emph{universality}
-of the algebra.
-\end{defn}
-
-\section{Initiality implies Elimination}
-
-TODO: use sigma construction for this, cite whoever's done this first
-
 \section{Type Erasure}
+
+As seen in the examples, the first step to prove the reducability is to formally
+define the operation which we will call \emph{flattening} or -- inspired by
+the syntax example -- \emph{type erasure}.
+This operation strips away any dependencies between the sorts of a signature
+as well as all external indices to sorts.
+The operation should take arbitrary inductive-inductive signatures (contexts) and
+return signatures for inductive families.
+Let us look at what type erasure should do with our running examples:
+
+\begin{example}[Natural Numbers]\label{ex:red-e-nat}
+Since the inductive-inductive signature of the \emph{natural numbers}~\ref{ex:ii-syntax-nat} doesn't
+contain any indexed sorts, type erasure should ``do nothing'' with it.
+That is, returning the sort context and point context of the inductive family
+syntax which looks like a obvious correspondence to it (cf. Example~\ref{ex:if-natvec}):
+\begin{align*}
+  &\grm{(\cdot,\, \UU,\, \El(\vz),\, \Pi\left(\vs(\vz),\, \El(\vs(\vs(\vz)))\right))}^\EE_\Sc \\
+= &\tqm{(\cdot_\Sc,\, \UU)} \text{ and} \\
+  &\grm{(\cdot,\, \UU,\, \El(\vz),\, \Pi\left(\vs(\vz),\, \El(\vs(\vs(\vz)))\right))}^\EE \\
+= &\tqm{(\cdot,\, \El(\var(\vz)),\, \var(\vz) \Rightarrow_\Pc \El(\var(\vz)))} \text{.}
+\end{align*}
+\end{example}
+
+\begin{example}[Vectors]
+In the example of vectors \ref{ex:ii-syntax-vec} we need to erase the natural numbers
+index of the only sort under consideration:
+\begin{align*}
+\grm{\Gamma_{vec}}^\EE_\Sc
+ &= \tqm{(\cdot_\Sc,\, \UU)} \text{ and} \\
+\grm{\Gamma_{vec}}^\EE
+  &= \tqm{(\cdot,\, \El(\var(\vz)),\, 
+    \ExtPiP{A}{\blm{\lambda a.\,}\ExtPiP{\N}{\blm{\lambda n.\,}
+    \var(\vz) \Rightarrow_\Pc \El(\var(\vz))}})} \text{.}
+\end{align*}
+Note that the erasure of the vectors does not coincide with the vectors represented
+as an inductive family (Example~\ref{ex:if-natvec}), because its sort lacks the
+indexing over the natural numbers.
+In fact, it's easy to see that the algebras of this signature would no be isomorphic
+to the type of lists over the type \blm{A \times \N}.
+\end{example}
+
+\begin{example}[Type Theory Syntax]
+In our syntax we will now see why the operation is called ``type erasure'':
+%TODO
+\end{example}
+
+\section{(OLD) -- Type Erasure}
 
 Since we cannot define type families simultaneously together with their index
 type, we will first produce a version of a given code, whose dependencies between

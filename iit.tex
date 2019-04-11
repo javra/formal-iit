@@ -221,12 +221,12 @@ declarations in the syntax presented above. %TODO more fluff
 To see what the different function types are used for, consider the following two
 examples:
 
-\begin{example}[Natural numbers, vectors]\label{ex:ii-syntax-nat}
+\begin{example}[Natural numbers]\label{ex:ii-syntax-nat}
 The encoding of the natural numbers as would correspond to the
 following source type theory context using the first :
 \begin{equation*}
 \grm{
-\cdot,\, \UU,\, \El(\vz),\, \Pi\left(\vs(\vz),\, \El(\vs(\vs(\vz)))\right)
+\cdot,\, \UU,\, \El(\vz),\, \ExtPi{\vs(\vz)}{\El(\vs(\vs(\vz)))}
 }\text{.}
 \end{equation*}
 Often, we will, instead of denoting variables using de~Bruijn indices, use names
@@ -236,10 +236,12 @@ Assuming we always use fresh names, this is not any more imprecise than restrict
 ourselves to use \grm{\vz} and \grm{\vz} instead:
 \begin{equation*}
 \grm{
-\cdot,\, \N : \UU,\, 0 : \El(\N),\, \mathop{S} : \Pi(n : \N,\, \El(\N))
+\cdot,\, \N : \UU,\, 0 : \El(\N),\, \mathop{S} : \ExtPi{n : \N}{\El(\N)}
 }\text{.}
 \end{equation*}
+\end{example}
 
+\begin{example}[Vectors]\label{ex:ii-syntax-vec}
 The type of vectors over a type $A : \UU$ can be represented using the ``external''
 natural numbers $\N$.
 In the following, the constructor \grm{\mathop{cons}} uses both the non-inductive
@@ -251,7 +253,14 @@ and the inductive function type:
   \grm{\ExtPi{\N}{\blm{\lambda n.\, \grm{\Pi(v : \mathop{vec}(\blm{n}),\, \El(\mathop{vec}(\blm{n + 1})))}}}}}}}
 \end{gathered}
 \end{equation*}
-
+With de-Bruijn indices instead of names the signature \grm{\Gamma_{vec}} would be
+\begin{equation*}
+\begin{gathered}
+\grm{ \cdot,\, \ExtPi{\N}{\lambda n.\, \UU},\, \El(\vz(\blm{0})),} \\
+\grm{ \ExtPi{A}{\blm{\lambda a.\,
+  \grm{\ExtPi{\N}{\blm{\lambda n.\, \grm{\Pi(\vs(\vz)(\blm{n}),\, \El(\vs(\vs(\vz))(\blm{n + 1})))}}}}}}}
+\end{gathered}
+\end{equation*}
 %An example for a type which uses the third, small function type is the following
 %definition of full $\omega$-ary rooted trees:
 %\begin{equation*}
@@ -264,7 +273,7 @@ and the inductive function type:
 
 \begin{example}[Type Theory Syntax]
 The example of the syntax of type theory~\ref{ex:ttintt} is represented by the
-following code:
+following signature \grm{\Gamma_{ConTy}}:
 \begin{equation*}
 \begin{gathered}
 \grm{\cdot,\, \mathop{Con} : \UU,\, \mathop{Ty} : \Pi(\Gamma : \mathop{Con},\, \UU),} \\
@@ -389,6 +398,38 @@ elements of the type
 
 %TODO more examples
 
+\section{Initiality}
+
+\begin{defn}[Initial algebra]
+For a source context \grm{\vdash \Gamma}, an algebra $s : \grm{\Gamma}^\CC$ is
+called \textbf{initial}, if there is a \emph{unique} algebra morphism from $s$ to any
+other algebra, which is to say that the following two rules hold true:
+\begin{equation*}
+\begin{gathered}
+\inferrule{a : \grm{\Gamma}^\CC}{m_a : \grm{\Gamma}^\mm(s, a)}
+\qquad
+\inferrule{a : \grm{\Gamma}^\CC \\ m' : \grm{\Gamma}^\mm(s, a)}{m' = m_a}
+\end{gathered}
+\end{equation*}
+We will call the first rule \emph{weak initiality} and the second one \emph{universality}
+of the algebra.
+\end{defn}
+
+\section{Morphisms of Algebras}
+
+%TODO
+
+\section{Displayed Algebras and Sections}
+
+%TODO
+
+\section{Existence of Inductive-Inductive Types}
+
+%TODO
+
+\section{Initiality implies Elimination}
+
+TODO: use sigma construction for this, cite whoever's done this first
 
 
 
