@@ -168,10 +168,39 @@ respective counterparts in the syntax of inductive families:
 \tqm{\grm{\ExtPi{T}{A}}^\EE}
   &:\equiv \tqm{\ExtPiP{T}{\blm{\lambda \tau.\, }\grm{A(\bltau)}^\EE}} \text{, and} \\
 \tqm{\grm{f(\bltau)}^\EE}
-  &:\equiv \tqm{\grm{f}^\EE} \text{ for \grm{\Gamma \vdash t : \ExtPi{T}{B} : \Sc}}
+  &:\equiv \tqm{\grm{f}^\EE} \text{ for \grm{\Gamma \vdash f : \ExtPi{T}{B} : \Sc}}
 \end{align*} %TODO this is a bit confusing since the application is for sorts and the types for points
-
-
+Defining the erasure on point types and sort terms pulled back along a substitution,
+we see that we will also need to erase entire sort substitutions.
+This is achieved by extending the operation as follows:
+\begin{equation*}
+\inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta}}}
+  {\tqm{\IISub{\grm{\sigma}^\EE_\Sc}{\grm{\Gamma}^\EE_\Sc}{\grm{\Delta}^\EE_\Sc}}}
+\end{equation*}
+We will then be able to use this in a straight forward way to define the pullbacks:
+\begin{align*}
+\tqm{\grm{A[\sigma]}^\EE}
+  &:\equiv \tqm{\grm{A}^\EE[\sigma^\EE_\Sc]} \text{ for \grm{\Gamma \vdash A :: \Pc} and} \\
+\tqm{\grm{t[\sigma]}^\EE}
+  &:\equiv \tqm{\grm{t}^\EE[\sigma^\EE_\Sc]} \text{ for \grm{\Gamma \vdash t : B :: \Sc}.}
+\end{align*}
+Erasure of substitutions is built recursively, ignoring point types.
+Likewise, the first projection will ignore point types:
+\begin{align*}
+\tqm{\grm{\epsilon}^\EE_\Sc}
+  &:\equiv \tqm{\epsilon} \text{,} \\
+\tqm{\grm{(\sigma,\, t)}^\EE_\Sc}
+  &:\equiv \tqm{(\grm{\epsilon}^\EE_\Sc,\, \grm{t}^\EE)} \text{ for \grm{\Gamma \vdash t : B :: \Sc}, and} \\
+\tqm{\grm{(\sigma,\, t)}^\EE_\Sc}
+  &:\equiv \tqm{\grm{\epsilon}^\EE_\Sc} \text{.} \\
+\tqm{\grm{\pi_1(\sigma)}^\EE_\Sc}
+  &:\equiv \tqm{\pi_1(\grm{\sigma}^\EE_\Sc)} \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\, B :: \Sc)}},} \\
+\tqm{\grm{\pi_1(\sigma)}^\EE_\Sc}
+  &:\equiv \tqm{\grm{\sigma}^\EE_\Sc} \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\, A :: \Pc)}}, and} \\
+\tqm{\grm{\pi_2(\sigma)}^\EE}
+  &:\equiv \tqm{\pi_2(\grm{\sigma}^\EE_\Sc)} \text{.}
+\end{align*} %TODO laws
+This concludes the definition of the erasure operation.
 \end{defn}
 
 \section{(OLD) -- Type Erasure}
