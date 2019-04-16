@@ -60,9 +60,9 @@ contain any indexed sorts, type erasure should ``do nothing'' with it.
 That is, returning the sort context and point context of the inductive family
 syntax which looks like a obvious correspondence to it (cf. Example~\ref{ex:if-natvec}):
 \begin{align*}
-  &\grm{(\cdot,\, \UU,\, \El(\vz),\, \Pi\left(\vs(\vz),\, \El(\vs(\vs(\vz)))\right))}^\EE_\Sc \\
+  &\tqm{\grm{(\cdot,\, \UU,\, \El(\vz),\, \Pi\left(\vs(\vz),\, \El(\vs(\vs(\vz)))\right))}^\EE_\Sc} \\
 = &\tqm{(\cdot_\Sc,\, \UU)} \text{ and} \\
-  &\grm{(\cdot,\, \UU,\, \El(\vz),\, \Pi\left(\vs(\vz),\, \El(\vs(\vs(\vz)))\right))}^\EE \\
+  &\tqm{\grm{(\cdot,\, \UU,\, \El(\vz),\, \Pi\left(\vs(\vz),\, \El(\vs(\vs(\vz)))\right))}^\EE} \\
 = &\tqm{(\cdot,\, \El(\var(\vz)),\, \var(\vz) \Rightarrow_\Pc \El(\var(\vz)))} \text{.}
 \end{align*}
 \end{example}
@@ -71,9 +71,9 @@ syntax which looks like a obvious correspondence to it (cf. Example~\ref{ex:if-n
 In the example of vectors \ref{ex:ii-syntax-vec} we need to erase the natural numbers
 index of the only sort under consideration:
 \begin{align*}
-\grm{\Gamma_{vec}}^\EE_\Sc
+\tqm{\grm{\Gamma_{vec}}^\EE_\Sc}
  &= \tqm{(\cdot_\Sc,\, \UU)} \text{ and} \\
-\grm{\Gamma_{vec}}^\EE
+\tqm{\grm{\Gamma_{vec}}^\EE}
   &= \tqm{(\cdot,\, \El(\var(\vz)),\, 
     \ExtPiP{A}{\blm{\lambda a.\,}\ExtPiP{\N}{\blm{\lambda n.\,}
     \var(\vz) \Rightarrow_\Pc \El(\var(\vz))}})} \text{.}
@@ -109,7 +109,7 @@ To descent down the components of the contexts, we will need to define the opera
 on types as well.
 Since we are erasing all information from the sorts, we will only need this for
 point types, though.
-Unsurprisingly, we wan them to be translated to point types in the appropriate
+Unsurprisingly, we want them to be translated to point types in the appropriate
 sort context:
 \begin{equation*}
 \inferrule{\grm{\Gamma \vdash A :: \Pc}}
@@ -119,11 +119,58 @@ Using this we will be able to define the operation creating sort contexts by
 \begin{align*}
 \tqm{\grm{\cdot}^\EE_\Sc}
   &:\equiv\tqm{\cdot_\Sc} \text{,} \\
-\tqm{\grm{(\Gamma,\, A)}^\EE_\Sc}
-  &:\equiv \tqm{\left(\grm{\Gamma}^\EE_\Sc,\, \grm{A}^\EE_\Sc\right)} \text{ for \grm{A :: \Sc}, and} \\
+\tqm{\grm{(\Gamma,\, B)}^\EE_\Sc}
+  &:\equiv \tqm{\left(\grm{\Gamma}^\EE_\Sc,\, \grm{\UU}^\EE_\Sc\right)} \text{ for \grm{B :: \Sc}, and} \\
 \tqm{\grm{(\Gamma,\, A)}^\EE_\Sc}
   &:\equiv \tqm{\grm{\Gamma}^\EE_\Sc} \text{ for \grm{A :: \Pc}.}
 \end{align*}
+The generated point context over this sort context has to be extended in the case
+where the input is an extension by a point type.
+In the case where it is an extension by a sort type, we want to return the
+unextended context, but to make up for the definition above, we need to weaken
+to account for the extension of the resulting sort context:
+\begin{align*}
+\tqm{\grm{\cdot}^\EE}
+  &:\equiv\tqm{\cdot} \text{,} \\
+\tqm{\grm{(\Gamma,\, B)}^\EE}
+  &:\equiv \tqm{\grm{\Gamma}^\EE[\wk_{\id}]} \text{ for \grm{B :: \Sc}, and} \\
+\tqm{\grm{(\Gamma,\, A)}^\EE}
+  &:\equiv \tqm{\left(\grm{\Gamma}^\EE,\, \grm{A}^\EE\right)} \text{ for \grm{A :: \Pc}.}
+\end{align*}
+So how do we define \tqm{\grm{A}^\EE} for a point type \grm{A}?
+The fact the we have to recurse on \grm{\El(a)} makes it clear that we will have
+to extend our operation to terms of sort types at least.
+That is, together with \tqm{\grm{A}^\EE} we also need the following:
+\begin{equation*}
+\inferrule{\grm{\Gamma \vdash t : B :: \Sc}}
+  {\tqm{\grm{\Gamma}^\EE_\Sc \SCon \grm{t}^\EE : \UU}}
+\end{equation*}
+And indeed, with this we can set
+\begin{align*}
+\tqm{\grm{\El(a)}^\EE}
+  &:\equiv \tqm{\El(\grm{a}^\EE)} \text{.}
+\end{align*}
+For recursive $\Pi$-types, we need only care about the ones yielding point types.
+Note that the operation turns a $\Pi$-type into a non-dependent function type!
+\begin{align*}
+\tqm{\grm{\Pi(a, A)}^\EE}
+  &:\equiv \tqm{\grm{a}^\EE \Rightarrow_\Pc \grm{A}^\EE}
+\end{align*}
+Since we forgot about the indexing of sort types, erasure of sort-kinded application terms
+is just erasure of its $\Pi$-type term:
+\begin{align*}
+\tqm{\grm{\IIapp(f)}^\EE}
+  &:\equiv \tqm{\grm{f}^\EE} \text{ for \grm{\Gamma \vdash t : \Pi(a, B) :: \Sc}.}
+\end{align*}
+External $\Pi$-types and their applications convert directly into their
+respective counterparts in the syntax of inductive families:
+\begin{align*}
+\tqm{\grm{\ExtPi{T}{A}}^\EE}
+  &:\equiv \tqm{\ExtPiP{T}{\blm{\lambda \tau.\, }\grm{A(\bltau)}^\EE}} \text{, and} \\
+\tqm{\grm{f(\bltau)}^\EE}
+  &:\equiv \tqm{\grm{f}^\EE} \text{ for \grm{\Gamma \vdash t : \ExtPi{T}{B} : \Sc}}
+\end{align*} %TODO this is a bit confusing since the application is for sorts and the types for points
+
 
 \end{defn}
 
