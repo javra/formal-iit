@@ -203,6 +203,11 @@ Likewise, the first projection will ignore point types:
 This concludes the definition of the erasure operation.
 \end{defn}
 
+For the steps that follow it will be necessary to equip the \emph{algebras}
+of the resulting signatures with a substitution calculus that also considers
+point contexts instead of only sort contexts.
+To this end, we defined what we called lifted substitution algebras in Definition~\ref{def:if-alg-lsub}
+
 \section{(OLD) -- Type Erasure}
 
 Since we cannot define type families simultaneously together with their index
@@ -215,106 +220,11 @@ of a number of plain types instead of families,
 but it will, in general, contain too many elements, because it lacks all the
 restrictions on which fiber arguments of inductively generated elements should
 lie in.
-The flattening construction is defined like this:
-
-\begin{defn}[Flattening]
-Let \grm{\Gamma} be a context. We inductively define an operation $\flatten{}$ on
-contexts, types and terms, returning contexts, types on flattened contexts, and
-terms of flattened types, respectively:
-\begin{align*}
-\flatten{\cdot}			&:\equiv \grm{\cdot} \\
-\flatten{\Gamma, x : A}		&:\equiv \grm{(\flatten{\Gamma}, \bar{x} : \flatten{A})} \\ %TODO bar or overline?
-\flatten{A :: \Sc}		&:\equiv \grm{\UU} \\
-\flatten{\underline{a}}		&:\equiv \grm{\underline{\flatten{\grm{a}}}} \\
-\flatten{(x : a) \to B}		&:\equiv \grm{(\bar{x} : \flatten{a}) \to \flatten{B}} \text{ for \grm{B :: \Pc}} \\
-\flatten{(\blm{x : A}) \to B}	&:\equiv \grm{(\blm{x : A}) \to \flatten{B}} \text{ for \grm{B :: \Pc}} \\
-\flatten{x}				&:\equiv \grm{\bar{x}} \text{ for variables \grm{x}} \\
-\flatten{t(u)}			&:\equiv
-	\begin{cases}
-	\flatten{t} & \text{for \grm{t : (x : a) \to B :: \Sc},} \\
-	(\flatten{t})\grm{(\flatten{u})} & \text{for \grm{t : (x : a) \to B :: \Pc}}
-	\end{cases} \\
-\flatten{t(\blm{u})}		&:\equiv
-	\begin{cases}
-	\flatten{t} & \text{for \grm{t : (\blm{x : A}) \to B :: \Sc},} \\
-	(\flatten{t})\grm{(\flatten{\blm{u}})} & \text{for \grm{t : (\blm{x : A}) \to B :: \Pc}}
-	\end{cases} \\
-\flatten{(\blm{x : A}) \to b}	&:\equiv \grm{(\blm{x : A}) \to \flatten{b}} \\
-\flatten{t \app \blm{u}}	&:\equiv (\flatten{t}) \app \blm{u}
-\end{align*}
-\end{defn}
 
 Note that $\flatten{}$ erases all uses of the function type in the
 specifications of sorts.
-If we are given a specification of a mutual inductive type whose sorts are all
-\grm{\UU}, the operation does no substantial changes, except for a renaming
-of variables \grm{x} to \grm{\bar{x}}.
 
-\begin{example}[Type Theory Syntax]
-Let \grm{\Gamma} be the code of our syntax example~\ref{ex:ttintt}.
-Its flattened version looks like this:
-\begin{multline*}
-\grm{\cdot,\, \overline{\mathop{Con}} : \UU,\, \overline{\mathop{Ty}} : \UU,} \\
-\grm{\overline{\mathop{nil}} : \overline{\mathop{Con}},} \\
-\grm{\overline{\mathop{ext}} : (\bar{\Gamma} : \overline{\mathop{Con}})(\bar{A} : \overline{\mathop{Ty}}) \to \underline{\overline{\mathop{Con}}},} \\
-\grm{\overline{\mathop{unit}} : (\bar{\Gamma} : \overline{\mathop{Con}}) \to \underline{\overline{\mathop{Ty}}},} \\
-\grm{\overline{\mathop{pi}} : (\bar{\Gamma} : \overline{\mathop{Con}})(\bar{A} : \overline{\mathop{Ty}})(\bar{B} : \overline{\mathop{Ty}}) \to \underline{\overline{\mathop{Ty}}}}
-\end{multline*} %TODO find a better way to typeset this!
-\end{example}
-
-\begin{lemma}
-The operation $\flatten{}$ produces wellformed contexts in the sense that the
-following rules hold true:
-\begin{equation*}
-\begin{gathered}
-\inferrule{\grm{\vdash \Gamma}}{\grm{\vdash \flatten{\Gamma}}}
-\qquad
-\inferrule{\grm{\Gamma \vdash A}}{\grm{\flatten{\Gamma} \vdash \flatten{A}}}
-\\
-\inferrule{\grm{\Gamma \vdash t : A}}{\grm{\flatten{\Gamma} \vdash \flatten{t} : \flatten{A}}}
-\end{gathered}
-\end{equation*}
-\end{lemma}
-
-\begin{proof}
-The only cases in which $\flatten{}$ acts neither as the identity nor
-trivially by structural descent are the cases of inductive functions in the signature
-of sorts and their application.
-
-All sort types in $\flatten{\Gamma}$ are \grm{\UU}.
-Thus, if we have \grm{\Delta, x : A \vdash \flatten{B}} for any \grm{\Delta} and \grm{B :: \Sc},
-we also have \grm{\Delta \vdash \flatten{B}}. %TODO weniger wirr bitte
-Assuming that for \grm{\Gamma \vdash a : \UU} and \grm{\Gamma, x : \underline{a} \vdash B :: \Sc}
-we have \\ \grm{\flatten{\Gamma} \vdash \flatten{a} : \flatten{\UU}}
-and \grm{\flatten{\Gamma, x : \underline{a}} \vdash \flatten{B}}.
-This resolves to \grm{\flatten{\Gamma} \vdash \flatten{a} : \UU} and
-\grm{\flatten{\Gamma}, \bar{x}:\underline{\flatten{a}} \vdash \flatten{B}}.
-Thus we have \grm{\flatten{\Gamma} \vdash \flatten{(x : a) \to B} \equiv \flatten{B}}.
-
-For the application term assume \grm{\flatten{\Gamma} \vdash \flatten{t} : \flatten{(x : a) \to B}}
-and \grm{\flatten{\Gamma} \vdash \flatten{u} : \underline{\flatten{a}}}.
-We have 
-\begin{align*}
-\grm{\flatten{t(u)} \equiv \flatten{t} : \flatten{(x : a) \to B}} &\equiv \grm{\flatten{B}} \\
-	&\equiv \grm{\flatten{B}[x \to u]} \text{,}
-\end{align*}
-where the last step holds since, as we have seen above, \grm{B} does not depend
-on \grm{x}.
-Non-inductive functions are handled the same way. %TODO elaborate
-\end{proof}
-
-While $\flatten{\Gamma}$ doesn't specify the same types as \grm{\Gamma},
-it doesn't need induction-induction so we can obtain $\con{\flatten{\Gamma}} : \flatten{\Gamma}^\CC$:
-\begin{lemma}
-If \grm{\vdash \Gamma}, then $\flatten{\Gamma}$ is an inductive family.
-\end{lemma}
-
-\begin{proof}
-This is obvious since every occurence of sorts using the inductive function type
-is erased by $\flatten{}$.
-\end{proof}
-
-\section{Wellformedness Predicates}
+\section{(OLD) -- Wellformedness Predicates}
 
 From this section onwards we will, for the code $\grm{\Gamma \equiv (\cdot, x_1 : A_1, \ldots, x_n : A_n)}$
 in consideration, assume that we have the projections $\bar{x_1} : \bar{A_1}, \ldots, \bar{x_n} : \bar{A_1}$ of
