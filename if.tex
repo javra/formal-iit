@@ -248,7 +248,7 @@ Any substitution between \tqm{\Gamma_\Sc} and \tqm{\Delta_\Sc,\, B} is of the fo
 
 %TODO address equalities
 
-\section{Algebras of Inductive Families}
+\section{Algebras of Inductive Families}\label{sec:if-alg}
 
 Like for inductive-inductive types, we have to give a way to semantify the signatures
 by stating what kind of data they should represent.
@@ -383,7 +383,7 @@ $\phi : \left\{\gamma_\Sc : \tqm{\Gamma_\Sc}^\CC\right\} \left(\gamma : \tqm{\Ga
 
 %TODO define calculus for lifted subs
 
-\section{Displayed Algebras and their Sections}
+\section{Displayed Algebras and their Sections}\label{sec:if-ds}
 
 To represent the dependent eliminator, we need algebras which vary over other
 algebras.
@@ -608,8 +608,80 @@ Again, this is happening componentwise:
 \end{align*}
 \end{defn}
 
-
 \section{Existence of Inductive Families}
+
+Having a specification for Inductive Families is not worth much if there is no
+way to know what it means for a type theory to actually ``support'' types of this
+specification.
+The intended meaning of the signatures is clear from the definition of their algebras
+as seen in Section~\ref{sec:if-alg} and as discussed in Section~\ref{sec:if-ds},
+candidates for their eliminators and computation rules are specified in the definition
+of sections displayed algebras.
+This means that we can formally say what the requirements are for inductive
+families to exist.
+In this section, we will prove that any metatheory as premised in Section~\ref{sec:meta}
+actually supports inductive families as specified here.
+
+\begin{thm}[Existence of Inductive Families]
+For every signature of inductive families given by a sort context \tqm{\SCon \Omega_\Sc}
+and a point context \tqm{\vdash_{\Omega_\Sc} \Omega}, there are are sort and point
+\emph{constructors} in the form of
+\begin{align*}
+\IFconS{\Omega}		&: \tqm{\Omega_\Sc}^\CC \text{ and} \\
+\IFcon{\Omega}		&: \tqm{\Omega}^\CC(\IFconS{\Omega})
+\end{align*}
+such that for each displayed algebra given by motives $\omega_\Sc^\DD : \tqm{\Omega_\Sc}^\DD(\IFconS{\Omega})$
+and methods $\omega^\DD : \tqm{\Omega}^\DD(\omega_\Sc^\DD, \IFcon{\Omega})$
+we can prove an \emph{eliminator} in the by the means of sections
+\begin{align*}
+\IFelimS{\Omega}{\omega^\DD}	&: \tqm{\Omega_\Sc}^\SS(\omega_\Sc^\DD) \text{ with} \\
+\IFelim{\Omega}{\omega^\DD}	&: \tqm{\Omega}^\SS(\IFelimS{\Omega}{\omega^\DD}, \omega^\DD) \text{.}
+\end{align*}
+\end{thm}
+
+To prove this theorem in our setting, we will need to make up for some of the
+short cuts and simplifications in our definition of signatures.
+In the theory of semantics of type theory, which studies various models of different
+type theories, the model which is initial in the category of all models
+is usually called the \emph{term model}.
+This is because in this model, a type get interpreted as the set of all of its
+terms.
+Since our signatures form -- or are at least strongly
+inspired by -- a type theoretic syntax as well, we might hope to deploy the same
+strategy for inductive families.
+In the core of this interpretation is the issue of how to find an interpretation
+for a given sort term \tqm{a} of the universe toke \tqm{\UU}.
+The interpretation of this ought to be the terms of the \emph{point type}
+\tqm{\El(a)} associated with this sort term.
+But our syntax does not mention terms of point types at all, since point constructor
+are not interdependent!
+So our solution is to retrofit the theory with terms, as well as substitutions
+for the point contexts:
+
+\begin{defn}[Point Substitution Calculus]
+It turns out that there are four ways to construct reasonable terms of point types:
+Via two constructors for de-Bruijn indices to navigate point contexts and
+by an application constructor for each of the two kinds of $\Pi$-type present in
+the syntax.
+\begin{equation*}
+\begin{gathered}
+\inferrule{\tqm{\Gamma \vdash_{\Gamma_\Sc}} \\
+  \tqm{\Gamma_\Sc \SCon A}}
+  {\tqm{\Gamma,\, A \vdash \var(\vz) : A :: \Pc}}
+\qquad
+\inferrule{\tqm{\Gamma_\Sc \SCon A} \\ \tqm{\Gamma_\Sc \SCon A'} \\
+  \tqm{\Gamma \vdash \var(t) : A :: \Pc}}
+  {\tqm{\Gamma,\, A' \vdash \var(\vs(t)) : A :: \Pc}}
+\\[.7em]
+\inferrule{\tqm{\Gamma \vdash f : (a \Rightarrow_\Pc A)} \\
+  \tqm{\Gamma  \vdash t : \El(a)}}
+  {\tqm{\Gamma \vdash f(t) : A :: \Pc}}
+\\[.7em]
+\inferrule{\tqm{\Gamma \vdash f : \ExtPiP{T}{A}} \\ \tau : T}
+  {\tqm{\Gamma \vdash f(\bltau) : A(\bltau) :: \Pc}}
+\end{gathered}
+\end{equation*}
+\end{defn}
 
 \begin{itemize}
 \item point terms
