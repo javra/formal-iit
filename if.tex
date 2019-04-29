@@ -162,7 +162,7 @@ the first point constructor the proof that \blm{0} is even and the other two the
 proof that evenness implies oddness of the successor and vice versa.
 \end{example}
 
-\begin{defn}[Sort Substitutions] \label{def:if-sort-subs}
+\begin{defn}[Sort Substitutions]\label{def:if-sort-subs}
 One component of the syntax which has completely gone missing are substitutions.
 Since we cant refer to previous point constructors, we certainly don't need them
 for the point contexts.
@@ -659,14 +659,15 @@ So our solution is to retrofit the theory with terms, as well as substitutions
 for the point contexts:
 
 \begin{defn}[Point Substitution Calculus]
-It turns out that there are four ways to construct reasonable terms of point types:
+Let us fix a sort context \tqm{\SCon {\Gamma_\Sc}}.
+It turns out that there are four ways to construct reasonable terms of point types
+in \tqm{\Gamma_\Sc}:
 Via two constructors for de-Bruijn indices to navigate point contexts and
 by an application constructor for each of the two kinds of $\Pi$-type present in
 the syntax.
 \begin{equation*}
 \begin{gathered}
-\inferrule{\tqm{\Gamma \vdash_{\Gamma_\Sc}} \\
-  \tqm{\Gamma_\Sc \SCon A}}
+\inferrule{\tqm{\vdash_{\Gamma_\Sc} \Gamma} \\ \tqm{\Gamma_\Sc \SCon A}}
   {\tqm{\Gamma,\, A \vdash \var(\vz) : A :: \Pc}}
 \qquad
 \inferrule{\tqm{\Gamma_\Sc \SCon A} \\ \tqm{\Gamma_\Sc \SCon A'} \\
@@ -681,10 +682,22 @@ the syntax.
   {\tqm{\Gamma \vdash f(\bltau) : A(\bltau) :: \Pc}}
 \end{gathered}
 \end{equation*}
+Like with the sort substitutions defined in \label{def:if-sort-subs}, we
+define substitutions between point contexts over a fixed sort context
+\tqm{\SCon \Gamma_\Sc} to be lists of point terms:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\tqm{\vdash_{\Gamma_\Sc} \Gamma}}
+  {\tqm{\IFSub{\epsilon}{\Gamma}{\cdot}}}
+\qquad
+\inferrule{\tqm{\IFSub{\sigma_\Pc}{\Gamma}{\Delta}} \\
+  \tqm{\Gamma \vdash t : A :: \Pc}}
+  {\tqm{\IFSub{\sigma_\Pc,\, t}{\Gamma}{\Delta,\, A}}}
+\end{gathered}
+\end{equation*}
 \end{defn}
 
 \begin{itemize}
-\item point terms
 \item lifted substitution
 \item kripke trick
 \end{itemize}
