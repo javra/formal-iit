@@ -789,7 +789,7 @@ well-behaved under the other components of substitutional calculus:
 \end{align*}
 \end{defn}
 
-\begin{defn}[Displayed Algebras of Point Terms \& Subsitutions]
+\begin{defn}[Displayed Algebras of Point Terms \& Subsitutions]\label{def:if-ex-psub-ds}
 Let us for this definition fix a sort context \tqm{\SCon \Gamma_\Sc} with an
 algebra \tqm{\gamma_\Sc : \tqm{\Gamma_\Sc}^\CC} as well as a displayed
 algebra \tqm{\gamma_\Sc^\DD : \tqm{\Gamma_\Sc}^\DD(\gamma_\Sc)} over \tqm{\gamma_\Sc}.
@@ -812,6 +812,22 @@ This leads to the addition of the following rules:
     \to \tqm{\Delta}^\DD(\gamma_\Sc^\DD, \tqm{\sigma_\Pc}^\CC(\gamma))}
 \end{gathered}
 \end{equation*}
+We define them by setting
+\begin{align*}
+\tqm{\var(\vz)}^\DD(\gamma^\DD, \alpha^\DD)
+  &:\equiv \alpha^\DD \text{,} \\
+\tqm{\var(\vs(t_\Pc))}^\DD(\gamma^\DD, \alpha^\DD)
+  &:\equiv \tqm{\var(t_\Pc)}^\DD(\gamma^\DD) \text{,} \\
+\tqm{f_\Pc(t_\Pc)}^\DD(\gamma^\DD)
+  &:\equiv \tqm{f_\Pc}^\DD(\gamma^\DD)\left(\tqm{t_\Pc}^\CC(\gamma),\, \tqm{t_\Pc}^\DD(\gamma^\DD)\right) \text{, and} \\
+\tqm{f_\Pc(\bltau)}^\DD(\gamma^\DD)
+  &:\equiv \tqm{f_\Pc}^\DD(\gamma^\DD)(\tau) \text{ for terms, and} \\
+\tqm{\epsilon_\Pc}^\DD(\gamma^\DD)
+  &:\equiv \star \text{ and} \\
+\tqm{(\sigma_\Pc,\, t_\Pc)}^\DD(\gamma^\DD)
+  &:\equiv \left(\tqm{\sigma_\Pc}^\DD(\gamma^\DD), \tqm{t_\Pc}^\DD(\gamma^\DD) \right) \text{ for point substitutions.}
+\end{align*}
+Again, substitution rules analogous to the ones in \ref{def:if-ex-psub-a} hold. %TODO repeat them?
 \end{defn}
 
 \begin{defn}[Sections of Point Terms \& Substitutions]
