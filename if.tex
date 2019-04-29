@@ -406,7 +406,7 @@ and that for all \blm{n : N}, we have \blm{f(s(n)) = p_s(f(n))}.
 \end{example}
 
 Let's first concentrate on the first piece of data:
-\begin{defn}[Displayed Algebra Operator]
+\begin{defn}[Displayed Algebra Operator]\label{def:if-ds}
 As seen above, we want to map sorts to type families over the given algebra.
 Sort context will likewise be type families over an algebra:
 \begin{equation*}
@@ -588,7 +588,7 @@ These are defined, like in the non-displayed case, by
 \end{align*}
 \end{defn}
 
-\begin{defn}[Sections of Substitutions]
+\begin{defn}[Sections of Substitutions]\label{def:if-ds-sub}
 A section of a displayed algebra of a sort substitution is supposed to map
 sections of its domain to sections of its codomain:
 \begin{equation*}
@@ -789,7 +789,34 @@ well-behaved under the other components of substitutional calculus:
 \end{align*}
 \end{defn}
 
+\begin{defn}[Displayed Algebras of Point Terms \& Subsitutions]
+Let us for this definition fix a sort context \tqm{\SCon \Gamma_\Sc} with an
+algebra \tqm{\gamma_\Sc : \tqm{\Gamma_\Sc}^\CC} as well as a displayed
+algebra \tqm{\gamma_\Sc^\DD : \tqm{\Gamma_\Sc}^\DD(\gamma_\Sc)} over \tqm{\gamma_\Sc}.
+For the displayed version of these algebras, the interpretation of point terms
+and of point substitutions needs to depend these and, additionally, on
+an algebra and displayed algebra of the underlying point context.
+This leads to the addition of the following rules:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\tqm{\Gamma \vdash_{\Gamma_\Sc} t_\Pc : A :: \Pc}}
+  {\tqm{t_\Pc}^\DD :
+    \left\{\gamma : \tqm{\Gamma}^\CC(\gamma_\Sc) \right\}
+    \to \tqm{\Gamma}^\DD(\gamma_\Sc^\DD, \gamma)
+    \to \tqm{A}^\DD(\gamma_\Sc^\DD, \tqm{t_\Pc}^\CC(\gamma))}
+\\[.7em]
+\inferrule{\tqm{\IFSub{\sigma_\Pc}{\Gamma}{\Delta}}}
+  {\tqm{\sigma_\Pc}^\DD :
+    \left\{\gamma : \tqm{\Gamma}^\CC(\gamma_\Sc) \right\}
+    \to \tqm{\Gamma}^\DD(\gamma_\Sc^\DD, \gamma) 
+    \to \tqm{\Delta}^\DD(\gamma_\Sc^\DD, \tqm{\sigma_\Pc}^\CC(\gamma))}
+\end{gathered}
+\end{equation*}
+\end{defn}
 
+\begin{defn}[Sections of Point Terms \& Substitutions]
+bar
+\end{defn}
 
 
 
