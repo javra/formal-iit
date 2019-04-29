@@ -827,11 +827,69 @@ We define them by setting
 \tqm{(\sigma_\Pc,\, t_\Pc)}^\DD(\gamma^\DD)
   &:\equiv \left(\tqm{\sigma_\Pc}^\DD(\gamma^\DD), \tqm{t_\Pc}^\DD(\gamma^\DD) \right) \text{ for point substitutions.}
 \end{align*}
-Again, substitution rules analogous to the ones in \ref{def:if-ex-psub-a} hold. %TODO repeat them?
+Again, substitution rules analogous to the ones in \ref{def:if-ex-psub-a} hold:
+\begin{align*}
+\tqm{t_\Pc[\sigma_\Pc]}^\DD(\gamma^\DD)
+  &= \tqm{t_\Pc}^\DD(\tqm{\sigma_\Pc}^\DD(\gamma^\DD)) \text{,} \\
+\tqm{\vs(t_\Pc)}^\DD(\gamma^\DD, \alpha^\DD)
+  &= \tqm{t_\Pc}^\DD(\gamma^\DD) \text{,} \\
+\tqm{\wk_{\sigma_\Pc}}^\DD(\gamma^\DD, \alpha^\DD)
+  &= \tqm{\sigma_\Pc}^\DD(\gamma^\DD) \text{,} \\
+\tqm{\id_\Pc}^\DD(\gamma^\DD)
+  &= \gamma^\DD \text{, and} \\
+\tqm{(\sigma_\Pc \circ \delta_\Pc)}^\DD(\gamma^\DD)
+  &= \tqm{\sigma_\Pc}^\DD(\tqm{\delta_\Pc}^\DD(\gamma^\DD)) \text{.}
+\end{align*}
 \end{defn}
 
 \begin{defn}[Sections of Point Terms \& Substitutions]
-bar
+I'm not sure if we need these...
+\end{defn}
+
+For the remainder of this section, let us fix the sort context \tqm{\SCon \Omega_\Sc}
+and the point context \tqm{\vdash_{\Omega_\Sc} \Omega} which we want to construct
+by giving
+\begin{align*}
+\IFconS{\Omega}		&: \tqm{\Omega_\Sc}^\CC \text{ and} \\
+\IFcon{\Omega}		&: \tqm{\Omega}^\CC(\IFconS{\Omega}) \text{.}
+\end{align*}
+Our definition of the constructor uses the trick %TODO cite whoever invented this trick
+to index several of the constructions by a second sort or point context together
+with a sort or point substitution from \tqm{\Omega_\Sc} or \tqm{\Omega}.
+We can think of this second context as some sort of a ``sub-context'' of a fixed
+context.
+
+\begin{defn}[Definition of the Sort Constructor]
+The generalized sort constructor consists of the following data:
+\begin{equation*}
+\inferrule{\tqm{\SCon \Gamma_\Sc} \\
+  \tqm{\IFSub{\sigma}{\Omega_\Sc}{\Gamma_\Sc}}}
+  {\IFconS{\sigma} : \tqm{\Gamma_\Sc}^\CC }
+\end{equation*}
+We can define this recursively via
+\begin{align*}
+\IFconS{\epsilon}
+  &:\equiv \star \text{ and} \\
+\IFconS{\sigma,\, t}
+  &:\equiv \left(\IFconS{\sigma},\, \IFconS{t}\right) \text{,}
+\end{align*}
+where on sort terms we will define a constructor operation yielding an algebra
+of the respective sort type:
+\begin{equation*}
+\inferrule{\tqm{\Omega_\Sc \SCon t : B :: \Sc}}
+  {\IFconS{t} : \tqm{B}^\CC }
+\end{equation*}
+This operation will on universe terms consist of the type of point terms, while
+on external sort functions, it will return a function with constructor of the applied
+term: %TODO formulation
+\begin{align*}
+\IFconS{t}
+  &:\equiv \left\{ \tqm{t_\Pc} \,\middle|\, \tqm{\Omega \vdash_{\Omega_\Sc} t_\Pc : \El(t) :: \Pc}  \right\}
+  & \text{ for \tqm{\Omega_\Sc \SCon t : \UU :: \Sc} and} \\
+\IFconS{t}
+  &:\equiv \lambda \tau.\, \IFconS{t(\bltau)}
+  & \text{ for \tqm{\Omega_\Sc \SCon t : \ExtPiS{T}{B} :: \Sc} .}
+\end{align*}
 \end{defn}
 
 
