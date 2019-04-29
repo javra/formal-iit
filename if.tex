@@ -658,7 +658,7 @@ are not interdependent!
 So our solution is to retrofit the theory with terms, as well as substitutions
 for the point contexts:
 
-\begin{defn}[Point Substitution Calculus]
+\begin{defn}[Point Substitution Calculus]\label{def:if-ex-subp}
 Let us fix a sort context \tqm{\SCon {\Gamma_\Sc}}.
 It turns out that there are four ways to construct reasonable terms of point types
 in \tqm{\Gamma_\Sc}:
@@ -682,7 +682,7 @@ the syntax.
   {\tqm{\Gamma \vdash f(\bltau) : A(\bltau) :: \Pc}}
 \end{gathered}
 \end{equation*}
-Like with the sort substitutions defined in \label{def:if-sort-subs}, we
+Like with the sort substitutions defined in \ref{def:if-sort-subs}, we
 define substitutions between point contexts over a fixed sort context
 \tqm{\SCon \Gamma_\Sc} to be lists of point terms:
 \begin{equation*}
@@ -695,6 +695,49 @@ define substitutions between point contexts over a fixed sort context
   {\tqm{\IFSub{\sigma_\Pc,\, t}{\Gamma}{\Delta,\, A}}}
 \end{gathered}
 \end{equation*}
+We can again define a pullback operation for terms -- this time for point terms --
+along substitutions in the form of
+\begin{equation*}
+\begin{gathered}
+\inferrule{\tqm{\Delta \vdash_{\Gamma_\Sc} t : A :: \Pc} \\
+  \tqm{\IFSub{\sigma_\Pc}{\Gamma}{\Delta}}}
+  {\tqm{\Gamma \vdash_{\Gamma_\Sc} t[\sigma] : A :: \Pc}}
+\end{gathered}
+\end{equation*}
+which is recursively defined by
+\begin{align*}
+\tqm{\var(\vz)[\sigma_\Pc,\, t_\Pc]}
+  &:\equiv \tqm{t_\Pc} \text{,} \\
+\tqm{\var(\vs(v_\Pc))[\sigma_\Pc,\, t_\Pc]}
+  &:\equiv \tqm{\var(v_\Pc)[\sigma_\Pc]} \text{,} \\
+\tqm{f(t)[\sigma_\Pc]}
+  &:\equiv \tqm{f[\sigma_\Pc](t[\sigma_\Pc]) } \text{, and} \\
+\tqm{f(\bltau)[\sigma_\Pc]}
+  &:\equiv \tqm{f[\sigma_\Pc](\bltau)} \text{.}
+\end{align*}
+Analogously to \ref{def:if-sort-subs} we can define the weakening
+\tqm{\IFSub{\wk_{\sigma_\Pc}}{\Gamma,\,A}{\Delta}} of a point substitution
+\tqm{\IFSub{\sigma_\Pc}{\Gamma}{\Delta}} along a point type \tqm{\Gamma_\Sc \SCon A :: \Pc},
+the identity substitution \tqm{\IFSub{\id_\Pc}{\Gamma}{\Gamma}}, and
+the Composition \tqm{\IFSub{\sigma_\Pc \circ \delta_\Pc}{\Gamma}{\Sigma}} of substitutions
+\tqm{\IFSub{\sigma_\Pc}{\Delta}{\Sigma}} and \tqm{\IFSub{\delta_\Pc}{\Gamma}{\Delta}}
+causing the analogous effect when being used to pullback point terms:
+\begin{align*}
+\tqm{t_\Pc[\wk_{\sigma_\Pc}]}
+  &= \tqm{\vs(t_\Pc[\sigma_\Pc])} \\
+\tqm{t_\Pc[\id]}
+  &= \tqm{t_\Pc} \\
+\tqm{t_\Pc[\sigma_\Pc \circ \delta_\Pc]}
+  &= {t_\Pc[\sigma_\Pc][\delta_\Pc]}
+\end{align*}
+\end{defn}
+
+As an auxiliary construction for our existenc proof we will furthermore need
+notions of algebra, displayed algebras, and sections for the point terms and
+point substitutions:
+
+\begin{defn}[Algebras of Point Substitutions \& Terms]\label{def:if-ex-psub-a}
+foo
 \end{defn}
 
 \begin{itemize}
