@@ -688,7 +688,7 @@ define substitutions between point contexts over a fixed sort context
 \begin{equation*}
 \begin{gathered}
 \inferrule{\tqm{\vdash_{\Gamma_\Sc} \Gamma}}
-  {\tqm{\IFSub{\epsilon}{\Gamma}{\cdot}}}
+  {\tqm{\IFSub{\epsilon_\Pc}{\Gamma}{\cdot}}}
 \qquad
 \inferrule{\tqm{\IFSub{\sigma_\Pc}{\Gamma}{\Delta}} \\
   \tqm{\Gamma \vdash t : A :: \Pc}}
@@ -728,22 +728,72 @@ causing the analogous effect when being used to pullback point terms:
 \tqm{t_\Pc[\id]}
   &= \tqm{t_\Pc} \\
 \tqm{t_\Pc[\sigma_\Pc \circ \delta_\Pc]}
-  &= {t_\Pc[\sigma_\Pc][\delta_\Pc]}
+  &= \tqm{t_\Pc[\sigma_\Pc][\delta_\Pc]}
 \end{align*}
 \end{defn}
 
-As an auxiliary construction for our existenc proof we will furthermore need
+As an auxiliary construction for our existence proof we will furthermore need
 notions of algebra, displayed algebras, and sections for the point terms and
 point substitutions:
 
 \begin{defn}[Algebras of Point Substitutions \& Terms]\label{def:if-ex-psub-a}
-foo
+We can give semantic meaning to point types and point substitution by extending
+the algebra operator with the following components, all over a fixed sort
+context \tqm{\SCon \Gamma_\Sc}:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\tqm{\Gamma \vdash_{\Gamma_\Sc} t_\Pc : A :: \Pc}}
+  {\tqm{t_\Pc}^\CC :
+   \left\{\gamma_\Sc : \tqm{\Gamma_\Sc}^\CC\right\} \to \tqm{\Gamma}^\CC(\gamma_\Sc) \to
+   \tqm{A}^\CC(\gamma_\Sc)}
+\\[.7em]
+\inferrule{\tqm{\IFSub{\sigma_\Pc}{\Gamma}{\Delta}}}
+  {\tqm{\sigma_\Pc}^\CC :
+    \left\{\gamma_\Sc : \tqm{\Gamma_\Sc}^\CC\right\}
+    \to \tqm{\Gamma}^\CC(\gamma_\Sc)
+    \to \tqm{\Delta}^\CC(\gamma_\Sc)}
+\end{gathered}
+\end{equation*}
+These components are, in essence, defined as iterated tuples and projections.
+For point terms, these defining equations are
+\begin{align*}
+\tqm{\var(\vz)}^\CC(\gamma, \alpha)
+  &:\equiv \alpha \text{,} \\
+\tqm{\var(\vs(t))}^\CC(\gamma, \alpha)
+  &:\equiv \tqm{\var(t)}^\CC(\gamma) \text{,} \\
+\tqm{f(t)}^\CC(\gamma)
+  &:\equiv \tqm{f}^\CC(\gamma)(\tqm{t}^\CC(\gamma)) \text{, and} \\
+\tqm{f(\bltau)}^\CC(\gamma)
+  &:\equiv \tqm{f}^\CC(\gamma)(\tau) \text{,}
+\end{align*}
+while for point contexts we have the usual
+\begin{align*}
+\tqm{\epsilon_\Pc}^\CC(\gamma)
+  &:\equiv \star \text{ and} \\
+\tqm{(\Gamma,\, A)}^\CC(\gamma)
+  &:\equiv \left(\tqm{\Gamma}^\CC(\gamma), \tqm{A}^\CC(\gamma)\right) \text{.}
+\end{align*}
+Of course, apart from these defining equations, this definition of algebras is also
+well-behaved under the other components of substitutional calculus:
+\begin{align*}
+\tqm{t_\Pc[\sigma_\Pc]}^\CC(\gamma)
+  &= \tqm{t_\Pc}^\CC(\tqm{\sigma_\Pc}^\CC(\gamma)) \text{,} \\
+\tqm{\vs(t_\Pc)}^\CC(\gamma, \alpha)
+  &= \tqm{t_\Pc}^\CC(\gamma) \text{,} \\
+\tqm{\wk_{\sigma_\Pc}}^\CC(\gamma, \alpha)
+  &= \tqm{\sigma_\Pc}^\CC(\gamma) \text{,} \\
+\tqm{\id_\Pc}^\CC(\gamma)
+  &= \gamma \text{, and} \\
+\tqm{(\sigma_\Pc \circ \delta_\Pc)}^\CC(\gamma)
+  &= \tqm{\sigma_\Pc}^\CC(\tqm{\delta_\Pc}^\CC(\gamma)) \text{.}
+\end{align*}
 \end{defn}
 
-\begin{itemize}
-\item lifted substitution
-\item kripke trick
-\end{itemize}
+
+
+
+
+
 
 
 
