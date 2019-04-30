@@ -622,7 +622,7 @@ families to exist.
 In this section, we will prove that any metatheory as premised in Section~\ref{sec:meta}
 actually supports inductive families as specified here.
 
-\begin{thm}[Existence of Inductive Families]
+\begin{thm}[Existence of Inductive Families]\label{thm:if-ex}
 For every signature of inductive families given by a sort context \tqm{\SCon \Omega_\Sc}
 and a point context \tqm{\vdash_{\Omega_\Sc} \Omega}, there are are sort and point
 \emph{constructors} in the form of
@@ -892,11 +892,17 @@ term: %TODO formulation
 \end{align*}
 \end{defn}
 
+This construction is already enought to give the sort constructor required in
+Theorem~\ref{thm:if-ex} by pinning the substitution to be the identity:
+\begin{equation}\label{eq:if-ex-sorts}
+\IFconS{\Omega} :\equiv \IFconS{\id_{\Omega_\Sc}} : \tqm{\Omega_\Sc}^\CC
+\end{equation}
+
 It is not immediately clear that the operation on substitutions and the operation
 on sort terms is well-behaved under the pullback along substitutions.
 We can, however, show that this is indeed the case.
 
-\begin{lemma}
+\begin{lemma}\label{lem:if-ex-cont}
 For all subsitutions \tqm{\IFSub{\sigma}{\Gamma_\Sc}{\Delta_\Sc}} and sort terms
 \tqm{\Gamma_\Sc \SCon t : B :: \Sc}, taking a constructor of \tqm{t} pulled back
 along \tqm{\sigma} has the same effect as taking the term algebra over the context
@@ -929,7 +935,47 @@ In this case, lets recurse on the term and see that
 \end{align*}
 \end{proof}
 
+We can now use this lemma to be able to do trick with $\IFcon{\Omega}$ similar
+to the trick we did for $\IFconS{\Omega}$:
+Replace the fixed point context with a variable one, together with a substitution
+from \tqm{\Omega}, and define the constructor recursively on point types.
 
+\begin{defn}[The Point Constructor]
+We define operations on point contexts and point terms, resulting in algebras, in
+the form of the following:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\tqm{\vdash_{\Gamma_\Sc} \Gamma} \\ \tqm{\IFSub{\sigma_\Pc}{\Omega}{\Gamma}}}
+  {\IFcon{\sigma_\Pc} : \tqm{\Gamma}^\CC(\IFconS{\Omega})}
+\qquad
+\inferrule{\tqm{\Omega \vdash_{\Omega\Sc} t_\Pc : A :: \Pc}}
+  {\IFcon{t_\Pc} : \tqm{A}^\CC(\IFconS{\Omega}) }
+\end{gathered}
+\end{equation*}
+The operation on point substitutions is defined recursively by
+\begin{align*}
+\IFcon{\epsilon_\Pc}
+  &:\equiv \star \text{ and} \\
+\IFcon{\sigma_\Pc,\, t_\Pc}
+  &:\equiv \left(\IFcon{\sigma_\Pc}, \IFcon{t_\Pc} \right) \text{,}
+\end{align*}
+wheres for point terms, note that if \tqm{\Omega \vdash t_\Pc : \El(a) :: \Pc},
+then by Lemma~\ref{lem:if-ex-cont}
+\begin{equation*}
+\tqm{t_\Pc} : \IFconS{a} \equiv \IFconS{a[\id]} = \tqm{a}^\CC(\IFconS{\id_{\Omega_\Sc}}) \equiv \tqm{\El(a)}^\CC(\IFconS{\Omega}) \text{,}
+\end{equation*}
+which us to define the constructor operator by
+\begin{align*}
+\IFcon{t_\Pc}
+  &:\equiv \tqm{t_\Pc} & \text{ for \tqm{\Omega \vdash t_\Pc : \El(a)},} \\
+\IFcon{f_\Pc}
+  &:\equiv \lambda \tqm{t}.\, \IFcon{f(t)} & \text{ for \tqm{\Omega \vdash f_\Pc : a \Rightarrow_\Pc A}, and} \\
+\IFcon{f_\Pc}
+  &:\equiv \lambda \tau.\, \IFcon{f(\bltau)} & \text{ for \tqm{\Omega \vdash f_\Pc : \ExtPiP{T}{A}}.}
+\end{align*}
+
+
+\end{defn}
 
 
 
