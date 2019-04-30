@@ -859,7 +859,7 @@ with a sort or point substitution from \tqm{\Omega_\Sc} or \tqm{\Omega}.
 We can think of this second context as some sort of a ``sub-context'' of a fixed
 context.
 
-\begin{defn}[Definition of the Sort Constructor]
+\begin{defn}[The Sort Constructor]
 The generalized sort constructor consists of the following data:
 \begin{equation*}
 \inferrule{\tqm{\SCon \Gamma_\Sc} \\
@@ -897,12 +897,11 @@ Theorem~\ref{thm:if-ex} by pinning the substitution to be the identity:
 \begin{equation}\label{eq:if-ex-sorts}
 \IFconS{\Omega} :\equiv \IFconS{\id_{\Omega_\Sc}} : \tqm{\Omega_\Sc}^\CC
 \end{equation}
-
 It is not immediately clear that the operation on substitutions and the operation
 on sort terms is well-behaved under the pullback along substitutions.
 We can, however, show that this is indeed the case.
 
-\begin{lemma}\label{lem:if-ex-cont}
+\begin{lemma}[Coherence of the Sort Constructor]\label{lem:if-ex-cont}
 For all subsitutions \tqm{\IFSub{\sigma}{\Gamma_\Sc}{\Delta_\Sc}} and sort terms
 \tqm{\Gamma_\Sc \SCon t : B :: \Sc}, taking a constructor of \tqm{t} pulled back
 along \tqm{\sigma} has the same effect as taking the term algebra over the context
@@ -922,12 +921,12 @@ In this case, lets recurse on the term and see that
 \tqm{\var(\vz)}^\CC(\IFconS{\sigma,\, s})
   &= \tqm{\var(\vz)}^\CC(\IFconS{\sigma}, \IFconS{s}) \\
   &= \IFconS{s} \\
-  &= \IFconS{\var(\vz)[\sigma,\, s]} \text{,} \\
+  &= \IFconS{\var(\vz)[\sigma,\, s]} \text{,} \\[.7em]
 \tqm{\var(\vs(t))}^\CC(\IFconS{\sigma,\, s})
   &= \tqm{\var(\vs(t))}^\CC(\IFconS{\sigma}, \IFconS{s}) \\
   &= \tqm{\var(t)}^\CC(\IFconS{\sigma}) \\
   &= \IFconS{\var(t)[\sigma]} & \text{ by induction} \\
-  &= \IFconS{\var(\vs(t))[\sigma,\, s]} \text, & \text{ and lastly} \\
+  &= \IFconS{\var(\vs(t))[\sigma,\, s]} \text, & \text{ and lastly} \\[.7em]
 \tqm{f(\bltau)}^\CC(\IFconS{\sigma,\, s})
   &= \tqm{f}^\CC(\IFconS{\sigma,\, s})(\bltau) \\
   &= \IFconS{f[\sigma,\, s]}(\bltau) & \text{ by induction} \\
@@ -969,13 +968,55 @@ which us to define the constructor operator by
 \IFcon{t_\Pc}
   &:\equiv \tqm{t_\Pc} & \text{ for \tqm{\Omega \vdash t_\Pc : \El(a)},} \\
 \IFcon{f_\Pc}
-  &:\equiv \lambda \tqm{t}.\, \IFcon{f(t)} & \text{ for \tqm{\Omega \vdash f_\Pc : a \Rightarrow_\Pc A}, and} \\
+  &:\equiv \lambda \tqm{t_\Pc}.\, \IFcon{f_\Pc(t_\Pc)} & \text{ for \tqm{\Omega \vdash f_\Pc : a \Rightarrow_\Pc A}, and} \\
 \IFcon{f_\Pc}
-  &:\equiv \lambda \tau.\, \IFcon{f(\bltau)} & \text{ for \tqm{\Omega \vdash f_\Pc : \ExtPiP{T}{A}}.}
+  &:\equiv \lambda \tau.\, \IFcon{f_\Pc(\bltau)} & \text{ for \tqm{\Omega \vdash f_\Pc : \ExtPiP{T}{A}}.}
 \end{align*}
-
-
 \end{defn}
+
+This concludes the definition of the constructors, since we can set, like for the
+sort constructor
+\begin{equation}
+\IFcon{\Omega} :\equiv \IFcon{\id_\Omega} : \tqm{\Omega}^\CC(\IFconS{\Omega}) \text{.}
+\end{equation}
+Again, the construction comes with a property that makes it coherent under
+pulled back point terms.
+Analogously to Lemma~\ref{lem:if-ex-cont}, this coherence looks as follows:
+
+\begin{lemma}[Coherence of the Point Constructor]\label{lem:if-ex-contp}
+For all point subsitutions \tqm{\IFSub{\sigma_\Pc}{\Omega}{\Delta}} and
+point terms \tqm{\Gamma \vdash_{\Omega_\Sc} t_\Pc : A : \Pc}, pulling back has the 
+same effect as the point constructor as in
+\begin{equation}
+\tqm{t_\Pc}^\CC(\IFcon{\sigma_\Pc}) = \IFcon{t_\Pc[\sigma_\Pc]} \text{.}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Repeating the strategy of the proof of Lemma~\ref{lem:if-ex-cont}, we again see
+that we can assume the substitution to be of an extended form \tqm{(\sigma_\Pc,\, s_\Pc)},
+since there are no point terms in the empty point context.
+Now, by recursion on the term we see that
+\begin{align*}
+\tqm{\var(\vz)}^\CC(\IFcon{\sigma_\Pc,\, s_\Pc})
+  &= \tqm{\var(\vz)}^\CC(\IFcon{\sigma_\Pc}, \IFcon{s_\Pc}) \\
+  &= \IFcon{s_\Pc} \\
+  &= \IFcon{\var(\vz)[\sigma_\Pc,\, s_\Pc]} \text{,} \\[.7em]
+\tqm{\var(\vs(t_\Pc))}^\CC(\IFcon{\sigma_\Pc,\, s_\Pc})
+  &= \tqm{\var(\vs(t_\Pc))}^\CC(\IFcon{\sigma_\Pc}, \IFcon{s_\Pc}) \\
+  &= \tqm{\var(t_\Pc)}^\CC(\IFcon{\sigma_\Pc}) \\
+  &= \IFcon{\var(t_\Pc)[\sigma_\Pc]} & \text{ by induction} \\
+  &= \IFcon{\var(\vs(t_\Pc))[\sigma_\Pc,\, s_\Pc]} \text{,} \\[.7em]
+\tqm{f_\Pc(t_\Pc)}^\CC(\IFcon{\sigma_\Pc})
+  &= \tqm{f_\Pc}^\CC(\IFcon{\sigma_\Pc})\left(\tqm{t_\Pc}^\CC(\IFcon{\sigma_\Pc})\right) \\
+  &= \IFcon{f_\Pc[\sigma_\Pc]}(\IFcon{t_\Pc[\sigma_\Pc]}) & \text{ by induction} \\
+  &= \IFcon{f_\Pc(t_\Pc)[\sigma_\Pc]} \text{, and} \\[.7em]
+\tqm{f_\Pc(\bltau)}^\CC(\IFcon{\sigma_\Pc})
+  &= \tqm{f_\Pc}^\CC(\IFcon{\sigma_\Pc})(\tau) \\
+  &= \IFcon{f_\Pc[\sigma_\Pc]}(\tau) & \text{ by induction} \\
+  &= \IFcon{f_\Pc(\tau)[\sigma_\Pc]} \text{.}
+\end{align*}
+\end{proof}
 
 
 
