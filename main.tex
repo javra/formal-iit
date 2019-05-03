@@ -90,6 +90,7 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \usepackage{mathtools}
 \usepackage{footnote}
 \usepackage{booktabs}
+\usepackage{xifthen}
 %\usepackage[top=1in, bottom=1.25in, left=1.25in, right=1.25in]{geometry} %TODO decide
 
 \fancyhead[LO]{\leftmark}
@@ -227,8 +228,8 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \newcommand{\conthree}[3]{\mathsf{con}(#1, #2, \grm{#3})}
 \newcommand{\IFconS}[1]{\mathsf{con_\Sc}(\tqm{#1})}
 \newcommand{\IFcon}[1]{\mathsf{con}(\tqm{#1})}
-\newcommand{\IFelimS}[2]{\mathsf{elim_\Sc}(\tqm{#1}, #2)}
-\newcommand{\IFelim}[2]{\mathsf{elim}(\tqm{#1}, #2)}
+\newcommand{\IFelimS}[2]{\ifthenelse{\isempty{#2}}{\mathsf{elim_\Sc}(\tqm{#1})}{\mathsf{elim_\Sc}(\tqm{#1}, #2)}}
+\newcommand{\IFelim}[2]{\ifthenelse{\isempty{#2}}{\mathsf{elim}(\tqm{#1})}{\mathsf{elim}(\tqm{#1}, #2)}}
 \newcommand{\elim}{\mathsf{elim}}
 \newcommand{\flatten}[1]{\blm{\mathsf{flatten}(\grm{#1})}}
 \newcommand{\annotate}[1]{\blm{\mathsf{an}(\grm{#1})}}

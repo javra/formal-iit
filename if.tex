@@ -859,7 +859,7 @@ with a sort or point substitution from \tqm{\Omega_\Sc} or \tqm{\Omega}.
 We can think of this second context as some sort of a ``sub-context'' of a fixed
 context.
 
-\begin{defn}[The Sort Constructor]
+\begin{defn}[The Sort Constructor]\label{def:if-ex-cons}
 The generalized sort constructor consists of the following data:
 \begin{equation*}
 \inferrule{\tqm{\SCon \Gamma_\Sc} \\
@@ -939,7 +939,7 @@ to the trick we did for $\IFconS{\Omega}$:
 Replace the fixed point context with a variable one, together with a substitution
 from \tqm{\Omega}, and define the constructor recursively on point types.
 
-\begin{defn}[The Point Constructor]
+\begin{defn}[The Point Constructor]\label{def:if-ex-con}
 We define operations on point contexts and point terms, resulting in algebras, in
 the form of the following:
 \begin{equation*}
@@ -963,7 +963,7 @@ then by Lemma~\ref{lem:if-ex-cont}
 \begin{equation*}
 \tqm{t_\Pc} : \IFconS{a} \equiv \IFconS{a[\id]} = \tqm{a}^\CC(\IFconS{\id_{\Omega_\Sc}}) \equiv \tqm{\El(a)}^\CC(\IFconS{\Omega}) \text{,}
 \end{equation*}
-which us to define the constructor operator by
+which allows us to define the constructor operator by
 \begin{align*}
 \IFcon{t_\Pc}
   &:\equiv \tqm{t_\Pc} & \text{ for \tqm{\Omega \vdash t_\Pc : \El(a)},} \\
@@ -1018,7 +1018,92 @@ Now, by recursion on the term we see that
 \end{align*}
 \end{proof}
 
+With the constructors defined let us move on the construction of the eliminator.
+Let us from now on fix displayed algebras $\omega_\Sc^\DD : \tqm{\Omega_\Sc}^\DD(\IFconS{\Omega})$
+and $\omega^\DD : \tqm{\Omega}^\DD(\omega_\Sc^\DD, \IFcon{\Omega})$.
+We will proceed in the same order as for the constructors and start by generalizing
+$\IFelimS{\Omega}{\omega^\DD}$ to arbitrary subcontexts of \tqm{\Omega} by giving constructions
+on sort substitutions and sort terms.
 
+\begin{defn}[The Eliminator]
+The generalized eliminator will take substitutions or sort terms to give sections
+of sort types or sort contexts, respectively:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\tqm{\SCon \Gamma_\Sc} \\ \tqm{\IFSub{\sigma}{\Omega_\Sc}{\Gamma_\Sc}}}
+  {\IFelimS{\sigma}{} : \tqm{\Gamma_\Sc}^\SS(\tqm{\sigma}^\DD(\omega_\Sc^\DD))}
+\qquad
+\inferrule{\tqm{\Omega_\Sc \SCon t : B :: \Sc}}
+  {\IFelimS{t}{} : \tqm{B}^\SS(\tqm{t}^\DD(\omega_\Sc^\DD))}
+\end{gathered}
+\end{equation*}
+The first rule is definied by recursion using the second construction as usual:
+\begin{align*}
+\IFelimS{\epsilon}{}
+  &:\equiv \star \text{ and} \\
+\IFelimS{\sigma,\,t}{}
+  &:\equiv \left(\IFelimS{\sigma}{}, \IFelimS{t}{}\right) \text{.}
+\end{align*}
+For the sort terms, we observe that, by Lemmas~\ref{lem:if-ex-cont} and \ref{lem:if-ex-contp}, for
+\tqm{\Omega_\Sc \SCon a : \UU} and \blm{\tqm{t_\Pc} : \tqm{a}^\CC(\IFconS{\Omega})} we have
+\begin{equation*}
+\begin{gathered}
+%\tqm{a}^\CC(\IFconS{\Omega})
+%  \equiv foo \text{, implying} \\
+\tqm{\UU}^\SS(\tqm{a}^\DD(\omega_\Sc^\DD), \tqm{t_\Pc}^\CC(\IFcon{\Omega}))
+  = \tqm{a}^\DD(\omega_\Sc^\DD, \tqm{t_\Pc})
+\end{gathered}
+\end{equation*}
+and thus we can set, disregarding transports,
+\begin{align*}
+\IFelimS{a}{}
+  &:\equiv \lambda \tqm{t_\Pc}.\, \tqm{t_\Pc}^\DD(\omega^\DD) & \text{ for \tqm{\Omega_\Sc \SCon a : \UU} and} \\
+\IFelimS{f}{}
+  &:\equiv \lambda \tau.\, \IFelimS{f(\bltau)}{} & \text{ for \tqm{\Omega_\Sc \SCon f : \ExtPiS{T}{B}}.}
+\end{align*}
+\end{defn}
+
+Similar to Lemma~\ref{lem:if-ex-cont}, these definitions are coherent in the following
+form:
+\begin{lemma}\label{lem:if-ex-elimt}
+Given a sort substitution \tqm{\IFSub{\sigma}{\Omega_\Sc}{\Gamma_\Sc}} and a sort
+term \tqm{\Gamma_\Sc \SCon t : B :: \Sc}, the eliminator of a pulled back term
+is the section of the term, evaluated at the eliminator on a substitution:
+\begin{equation*}
+\IFelimS{t[\sigma]}{} = \tqm{t}^\SS(\IFelimS{\sigma}{}) \text{.}
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+The proof strategy is exactly the same as for Lemma~\ref{lem:if-ex-cont}.
+\end{proof}
+
+As a last step, we still need to prove the computation rules for the eliminator,
+consisting of section of given point contexts.
+Consistent with~\ref{def:if-ex-cons}, we generalize them to arbitrary point
+substitutions and point terms.
+
+\begin{lemma}[Computation Rules]
+We prove the computation rule for our eliminator $\IFelimS{\Omega}{}$ to be a
+section of subcontexts of \tqm{\Omega} and on point terms of \tqm{\Omega}:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\tqm{\vdash_{\Omega_\Sc} \Gamma} \\ \tqm{\IFSub{\sigma_\Pc}{\Omega}{\Gamma}}}
+  {\IFelim{\sigma_\Pc}{} : \tqm{\Gamma}^\SS(\IFelimS{\Omega}{}, \tqm{\sigma_\Pc}^\DD(\omega^\DD))}
+\\[.7em]
+\inferrule{\tqm{\Omega \vdash_{\Omega_\Sc} t_\Pc : A :: \Pc}}
+  {\IFelim{t_\Pc}{} : \tqm{A}^\SS(\IFelimS{\Omega}{}, \tqm{t_\Pc}^\DD(\omega^\DD))}
+\end{gathered}
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+foo bar
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:if-ex}]
+foo
+\end{proof}
 
 
 
