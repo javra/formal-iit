@@ -1083,7 +1083,7 @@ consisting of section of given point contexts.
 Consistent with~\ref{def:if-ex-cons}, we generalize them to arbitrary point
 substitutions and point terms.
 
-\begin{lemma}[Computation Rules]
+\begin{lemma}[Computation Rules]\label{lem:if-ex-elim}
 We prove the computation rule for our eliminator $\IFelimS{\Omega}{}$ to be a
 section of subcontexts of \tqm{\Omega} and on point terms of \tqm{\Omega}:
 \begin{equation*}
@@ -1098,11 +1098,45 @@ section of subcontexts of \tqm{\Omega} and on point terms of \tqm{\Omega}:
 \end{lemma}
 
 \begin{proof}
-foo bar
+Using the second rule, the first one can be proved in a straightforward way by
+recursion on the point substitution:
+\begin{align*}
+\IFelim{\epsilon_\Pc}{}
+  &:\equiv \star \text{ and} \\
+\IFelim{\sigma_\Pc,\, t_\Pc}{}
+  &:\equiv \left( \IFelim{\sigma_\Pc}{}, \IFelim{t_\Pc}{} \right) \text{.}
+\end{align*}
+For the second rule we again need to consider the types needed for the element
+case.
+The previous lemmas tell us that for \tqm{\Omega \vdash t_\Pc : \El(a) :: \Pc} we
+the rule by
+\begin{align*}
+  & \tqm{a}^\SS\left(\IFelimS{\id_{\Omega_\Sc}}{}, \tqm{t_\Pc}^\CC(\IFcon{\Omega})\right) \\
+= & \tqm{a}^\SS(\IFelimS{\id_{\Omega_\Sc}}{}, \tqm{t_\Pc})
+  & \text { by Lemma~\ref{lem:if-ex-contp}} \\
+= & \IFelimS{a}{}(\tqm{t_\Pc})
+  & \text { by Lemma~\ref{lem:if-ex-elimt}} \\
+= & \tqm{t_\Pc}^\DD(\omega^\DD) \text{.}
+%  & \text{ for \tqm{\Omega \vdash t_\Pc : \El(a)},} \\[.7em]
+\end{align*}
+For the case of \tqm{\Omega \vdash f_\Pc : \ExtPiP{T}{A}}, we see that we
+can recursively define $\IFelim{f_\Pc}{}$ by proving $\IFelim{f_\Pc(\bltau)}{}$
+for all $\tau : T$.
+Likewise in the case of a recursive function term
+\tqm{\Omega \vdash f_\Pc : a \Rightarrow_\Pc A}, we prove
+$\IFelim{f_\Pc}{}$ recursively by $\IFelim{f_\Pc(t_\Pc)}{}$. %TODO more detail?
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:if-ex}]
-foo
+Lemma~\ref{lem:if-ex-elim} completes the construction of the eliminator and
+setting
+\begin{align*}
+\IFelimS{\Omega}{\omega^\DD}
+  &:\equiv \IFelimS{\id_{\Omega_\Sc}}{} \text{ and} \\
+\IFelim{\Omega}{\omega^\DD}
+  &:\equiv \IFelim{\id_\Omega}{}
+\end{align*}
+completes the existence proofs for our specification of inductive families.
 \end{proof}
 
 
