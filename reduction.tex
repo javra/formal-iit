@@ -180,33 +180,77 @@ This is achieved by extending the operation as follows:
 We will then be able to use this in a straight forward way to define the pullbacks:
 \begin{align*}
 \tqm{\grm{A[\sigma]}^\EE}
-  &:\equiv \tqm{\grm{A}^\EE[\sigma^\EE_\Sc]} \text{ for \grm{\Gamma \vdash A :: \Pc} and} \\
+  &:\equiv \tqm{\grm{A}^\EE[\grm{\sigma}^\EE_\Sc]}
+  & \text{ for \grm{\Gamma \vdash A :: \Pc} and} \\
 \tqm{\grm{t[\sigma]}^\EE}
-  &:\equiv \tqm{\grm{t}^\EE[\sigma^\EE_\Sc]} \text{ for \grm{\Gamma \vdash t : B :: \Sc}.}
+  &:\equiv \tqm{\grm{t}^\EE[\grm{\sigma}^\EE_\Sc]}
+  & \text{ for \grm{\Gamma \vdash t : B :: \Sc}.}
 \end{align*}
 Erasure of substitutions is built recursively, ignoring point types.
 Likewise, the first projection will ignore point types:
-\begin{align*}
+\begin{align*}\label{eq:red-e-sub}
+\tqm{\grm{\id}^\EE_\Sc}
+  &:\equiv \tqm{\id} \text{,}
+  & \\
+\tqm{\grm{(\sigma \circ \delta)}^\EE_\Sc}
+  &:\equiv \tqm{\grm{\sigma}^\EE_\Sc \circ \grm{\delta}^\EE_\Sc} \text{,}
+  & \\
 \tqm{\grm{\epsilon}^\EE_\Sc}
-  &:\equiv \tqm{\epsilon} \text{,} \\
+  &:\equiv \tqm{\epsilon} \text{,}
+  & \\
 \tqm{\grm{(\sigma,\, t)}^\EE_\Sc}
-  &:\equiv \tqm{(\grm{\epsilon}^\EE_\Sc,\, \grm{t}^\EE)} \text{ for \grm{\Gamma \vdash t : B :: \Sc}, and} \\
+  &:\equiv \tqm{(\grm{\sigma}^\EE_\Sc,\, \grm{t}^\EE)}
+  & \text{ for \grm{\Gamma \vdash t : B :: \Sc},} \\
 \tqm{\grm{(\sigma,\, t)}^\EE_\Sc}
-  &:\equiv \tqm{\grm{\epsilon}^\EE_\Sc} \text{.} \\
+  &:\equiv \tqm{\grm{\sigma}^\EE_\Sc}
+  & \text{ for \grm{\Gamma \vdash t : A :: \Pc},} \\
 \tqm{\grm{\pi_1(\sigma)}^\EE_\Sc}
-  &:\equiv \tqm{\pi_1(\grm{\sigma}^\EE_\Sc)} \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\, B :: \Sc)}},} \\
+  &:\equiv \tqm{\pi_1(\grm{\sigma}^\EE_\Sc)}
+  & \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\, B :: \Sc)}},} \\
 \tqm{\grm{\pi_1(\sigma)}^\EE_\Sc}
-  &:\equiv \tqm{\grm{\sigma}^\EE_\Sc} \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\, A :: \Pc)}}, and} \\
+  &:\equiv \tqm{\grm{\sigma}^\EE_\Sc}
+  & \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\, A :: \Pc)}}, and} \\
 \tqm{\grm{\pi_2(\sigma)}^\EE}
   &:\equiv \tqm{\pi_2(\grm{\sigma}^\EE_\Sc)} \text{.}
+  &
 \end{align*} %TODO laws
 This concludes the definition of the erasure operation.
-\end{defn}
+\end{defn} %TODO example derivations
 
 For the steps that follow it will be necessary to equip the \emph{algebras}
 of the resulting signatures with a substitution calculus that also considers
 point contexts instead of only sort contexts.
-To this end, we defined what we called lifted substitution algebras in Definition~\ref{def:if-alg-lsub}
+To this end, we extend the operation of type erasure by assigning a map between
+the types of algebras of the erasure to each substitution:
+
+\begin{defn}[Replacement for Point Substitutions]
+We define the following operation on substitutions:
+\begin{equation*}
+\inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta}}}
+  {\grm{\sigma}^\EE : \left\{\gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc}^\AA \right\}
+    \to \tqm{\grm{\Gamma}^\EE}^\AA(\gamma_\Sc)
+    \to \tqm{\grm{\Delta}^\EE}^\AA\left(\grm{\sigma}^\EE_\Sc(\gamma_\Sc)\right)}
+\end{equation*}
+While in for \tqm{\grm{\sigma}^\EE_\Sc} we ignored point constructors
+(see \ref{eq:red-e-sub} above)
+this time we will to the opposite and ignore all sort constructors:
+\begin{align*}
+\grm{\id}^\EE(\gamma)
+  &:\equiv \gamma \\
+\grm{\sigma \circ \delta}^\EE(\gamma)
+  &:\equiv \grm{\sigma}^\EE(\grm{\delta}^\EE(\gamma)) \\
+\grm{\epsilon}^\EE(\gamma)
+  &:\equiv \star \\
+\grm{(\sigma,\, t)}^\EE(\gamma)
+  &:\equiv \grm{\sigma}^\EE(\gamma) \\
+\grm{(\sigma,\, t)}^\EE(\gamma)
+  &:\equiv \left(\grm{\sigma}^\EE, \grm{t}^\EE\right) \\
+\grm{\pi_1(\sigma)}^\EE(\gamma)
+  &:\equiv \grm{\sigma}^\EE(\gamma) \\
+\grm{\pi_1(\sigma)}^\EE(\gamma, \alpha)
+  &:\equiv \grm{\sigma}^\EE(\gamma) %TODO third column
+\end{align*}
+\end{defn}
 
 \section{(OLD) -- Type Erasure}
 
