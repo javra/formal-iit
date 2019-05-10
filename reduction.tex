@@ -58,16 +58,24 @@ Let us look at what type erasure should do with our running examples:
 Since the inductive-inductive signature of the \emph{natural numbers}~\ref{ex:ii-syntax-nat} doesn't
 contain any indexed sorts, type erasure should ``do nothing'' with it.
 That is, returning the sort context and point context of the inductive family
-syntax which looks like a obvious correspondence to it (cf. Example~\ref{ex:if-natvec}):
+syntax which looks like a obvious correspondence to it (cf. Example~\ref{ex:if-natvec})
+while ignoring all entries of the other kind:
+Let
+\begin{equation*}
+\grm{\Gamma_{nat}} 
+  :\equiv \grm{(\cdot,\, \UU,\, \El(\vz),\, \Pi\left(\vs(\vz),\, \El(\vs(\vs(\vz)))\right))}
+  \text{.}
+\end{equation*}
+We want to have the following split into sort types and point types:
 \begin{align*}
-  &\tqm{\grm{(\cdot,\, \UU,\, \El(\vz),\, \Pi\left(\vs(\vz),\, \El(\vs(\vs(\vz)))\right))}^\EE_\Sc} \\
-= &\tqm{(\cdot_\Sc,\, \UU)} \text{ and} \\
-  &\tqm{\grm{(\cdot,\, \UU,\, \El(\vz),\, \Pi\left(\vs(\vz),\, \El(\vs(\vs(\vz)))\right))}^\EE} \\
-= &\tqm{(\cdot,\, \El(\var(\vz)),\, \var(\vz) \Rightarrow_\Pc \El(\var(\vz)))} \text{.}
+\tqm{\grm{\Gamma_{nat}}^\EE_\Sc}
+ &= \tqm{(\cdot_\Sc,\, \UU)} \text{ and} \\
+\tqm{\grm{\Gamma_{nat}}^\EE}
+ &= \tqm{(\cdot,\, \El(\var(\vz)),\, \var(\vz) \Rightarrow_\Pc \El(\var(\vz)))} \text{.}
 \end{align*}
 \end{example}
 
-\begin{example}[Vectors]
+\begin{example}[Vectors]\label{ex:red-e-vec}
 In the example of vectors \ref{ex:ii-syntax-vec} we need to erase the natural numbers
 index of the only sort under consideration:
 \begin{align*}
@@ -200,10 +208,10 @@ Likewise, the first projection will ignore point types:
   & \\
 \tqm{\grm{(\sigma,\, t)}^\EE_\Sc}
   &:\equiv \tqm{(\grm{\sigma}^\EE_\Sc,\, \grm{t}^\EE)}
-  & \text{ for \grm{\Gamma \vdash t : B :: \Sc},} \\
+  & \text{ for \grm{\Gamma \vdash t : B[\sigma] :: \Sc},} \\
 \tqm{\grm{(\sigma,\, t)}^\EE_\Sc}
   &:\equiv \tqm{\grm{\sigma}^\EE_\Sc}
-  & \text{ for \grm{\Gamma \vdash t : A :: \Pc},} \\
+  & \text{ for \grm{\Gamma \vdash t : A[\sigma] :: \Pc},} \\
 \tqm{\grm{\pi_1(\sigma)}^\EE_\Sc}
   &:\equiv \tqm{\pi_1(\grm{\sigma}^\EE_\Sc)}
   & \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\, B :: \Sc)}},} \\
@@ -236,324 +244,91 @@ While in for \tqm{\grm{\sigma}^\EE_\Sc} we ignored point constructors
 this time we will to the opposite and ignore all sort constructors:
 \begin{align*}
 \grm{\id}^\EE(\gamma)
-  &:\equiv \gamma \\
+  &:\equiv \gamma \text{,} \\
 \grm{\sigma \circ \delta}^\EE(\gamma)
-  &:\equiv \grm{\sigma}^\EE(\grm{\delta}^\EE(\gamma)) \\
+  &:\equiv \grm{\sigma}^\EE\left(\grm{\delta}^\EE(\gamma)\right) \text{,} \\
 \grm{\epsilon}^\EE(\gamma)
-  &:\equiv \star \\
+  &:\equiv \star \text{,} \\
 \grm{(\sigma,\, t)}^\EE(\gamma)
-  &:\equiv \grm{\sigma}^\EE(\gamma) \\
+  &:\equiv \grm{\sigma}^\EE(\gamma)
+  & \text{ for \grm{\Gamma \vdash t : B[\sigma] :: \Sc },} \\
 \grm{(\sigma,\, t)}^\EE(\gamma)
-  &:\equiv \left(\grm{\sigma}^\EE, \grm{t}^\EE\right) \\
+  &:\equiv \left(\grm{\sigma}^\EE, \grm{t}^\EE\right)
+  & \text{ for \grm{\Gamma \vdash t : A[\sigma] :: \Pc},} \\
 \grm{\pi_1(\sigma)}^\EE(\gamma)
-  &:\equiv \grm{\sigma}^\EE(\gamma) \\
+  &:\equiv \grm{\sigma}^\EE(\gamma)
+  & \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\, B :: \Sc)}},} \\
 \grm{\pi_1(\sigma)}^\EE(\gamma, \alpha)
-  &:\equiv \grm{\sigma}^\EE(\gamma) %TODO third column
+  &:\equiv \grm{\sigma}^\EE(\gamma)
+  & \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\, A :: \Pc)}}.}
 \end{align*}
 \end{defn}
 
-\section{(OLD) -- Type Erasure}
+\section{The Wellformedness Predicate}
 
-Since we cannot define type families simultaneously together with their index
-type, we will first produce a version of a given code, whose dependencies between
-sorts have been \emph{erased}.
-For this, we will use an operation on contexts, types and terms, which we will
-call \emph{flattening}.
-The resulting code will specify a type which is now a mutual definition
-of a number of plain types instead of families,
-but it will, in general, contain too many elements, because it lacks all the
-restrictions on which fiber arguments of inductively generated elements should
-lie in.
+To remove the ambiguity created by the type erasure we will now have to find
+a way to select those instances of the types which are ``wellformed'' in the
+sense that the lie in the correct fibers of dependent sorts.
+This predicate will be a proposition dependent on a realization of the erased
+signature, i.\,e. on contexts, it will be a function on the type of algebras
+of the erasure.
+It is important keep this dependencies and not only to use the initial such
+algebra, since when we will recursively define this wellformedness predicate,
+the corresponding piece of signature will not always be initial
+-- in the same way in which a projection of an initial algebra is not necessarily
+initial anymore.
 
-Note that $\flatten{}$ erases all uses of the function type in the
-specifications of sorts.
-
-\section{(OLD) -- Wellformedness Predicates}
-
-From this section onwards we will, for the code $\grm{\Gamma \equiv (\cdot, x_1 : A_1, \ldots, x_n : A_n)}$
-in consideration, assume that we have the projections $\bar{x_1} : \bar{A_1}, \ldots, \bar{x_n} : \bar{A_1}$ of
-$\con{\grm{\flatten{\Gamma}}} : \grm{\flatten{\Gamma}}^\CC$ at our disposal in the target
-language.
-
-To motivate the next step of our construction, consider the following code:
-\begin{equation*}
-\grm{
-A : \UU,\, B : A \to \UU,\, a_0, a_1 : \underline{A},\, b : \underline{B(a_0)}
-} \text{.}
-\end{equation*}
-In its flattened form
-\begin{equation*}
-\grm{
-\bar{A} : \UU,\, \bar{B} : \UU,\, \bar{a_0}, \bar{a_1} : \underline{\bar{A}},\, \bar{b} : \underline{\bar{B}}
-} \text{,}
-\end{equation*}
-there is no way to recognize, whether \grm{b} was meant to be in \grm{B(a_0)},
-in \grm{B(a_1)}.
-To reintroduce this piece of information, we will transform a given code into a
-mutually defined predicate over the flattened code, which shall indicate, in which
-fiber of a type family a given constructor (or one of its inductive arguments)
-should be located.
-
-\begin{defn}[Wellformedness]
-Like with \grm{\flatten{}}, we define a \emph{annotation}
-transformation \annotate{} on contexts, types, and
-terms by structural recursion on the syntax.
-On contexts and sort types it is defined like this:
+\begin{example}[Natural Numbers]\label{ex:red-w-nat}
+Taking up the example of \grm{\Gamma_{nat}} from \ref{ex:red-e-nat},
+we observe that algebras of \tqm{\grm{\Gamma_{nat}}^\EE_\Sc} take the form of
+$(\star, N)$ with $N : \UU$ and, given $N$, those of
+\tqm{\grm{\Gamma_{nat}}^\EE} are of the form $(\star, z, s)$ with
+$z : N$ and $s : N \to N$.
+Our wellformedness predicate in this case will encode a type family on $N$, inductively
+populated by elements ``over'' $z$ and $n$.
+The code for its sort and point constructors looks as follows:
 \begin{align*}
-\annotate{\cdot}			&:\equiv \grm{\cdot} \\
-\annotate{(\Gamma, x : A)}		&:\equiv
-	\begin{cases}
-	\grm{\annotate{\Gamma}, W_x : \blm{\bar{x}} \to \annotate{A}}	& \text{for \grm{A :: \Sc}} \\
-	\grm{\annotate{\Gamma}, w_x : \anntwo{\bar{x}}{A}}		& \text{for \grm{A :: \Pc}}
-	\end{cases} \\
-\annotate{\UU}				&:\equiv \grm{\UU} \\
-\annotate{(x : a) \to B}		&:\equiv \grm{\flatten{a} \to \annotate{B}} \text{ for \grm{B :: \Sc}} \\
-\annotate{(\blm{x : A}) \to B}		&:\equiv \grm{\blm{A} \to \annotate{B}}  \text{ for \grm{B :: \Sc}}
-\end{align*} %TODO alignment
-As we can see, on point types, the operation takes another argument, which is a
-term of the target theory.
-\begin{align*}
-\anntwo{y}{\UU}				&:\equiv \grm{\UU} \\
-\anntwo{y}{\underline{a}}		&:\equiv \grm{\underline{\anntwo{y}{a}}} \\
-\anntwo{y}{(x : a) \to B}		&:\equiv
-	\grm{(\blm{\bar{x} : \flatten{a}})(\annotate{\blm{\bar{x}}, a})}  \\
-	& \grm{\hfill{} \to \anntwo{y(\bar{x})}{B}} & \text{for \grm{B :: \Pc}} \\
-\anntwo{y}{(\blm{x : A}) \to B}	&:\equiv
-	\grm{(\blm{x : A}) \to \anntwo{y(x)}{B}} & \text{for \grm{B :: \Pc}}
-\end{align*}
-Annotate is also defined where the second argument is a term of a sort type:
-\begin{align*}
-\anntwo{y}{x}				&:\equiv \grm{W_x(\blm{y})} \text{ for variables \grm{x}} \\
-\anntwo{y}{t(u)}			&:\equiv \grm{\anntwo{y}{t}(\flatten{u})} \\
-\anntwo{y}{t(\blm{u})}			&:\equiv \grm{\anntwo{y}{t}(\blm{u})} \\
-\anntwo{y}{(\blm{x : A}) \to b}		&:\equiv \grm{(\blm{x : A}) \to \anntwo{y(x)}{b}} \\
-\anntwo{y}{t \app \blm{u}}		&:\equiv \grm{\anntwo{y}{t} \app \blm{u}}
-\end{align*}
-\end{defn}
-
-\begin{example}[Type Theory Syntax]
-Let us look at one sort and one point constructor of our prime example~\ref{ex:ttintt}.
-The sort \grm{\mathop{Ty} : \mathop{Con} \to \UU} gets transformed to the following:
-\begin{align*}
-\grm{W_{\mathop{Ty}} :} 
-&\phantom{\equiv~} \grm{\blm{\overline{Ty}} \to \annotate{\mathop{Con} \to \UU} } \\
-&\equiv \grm{\blm{\overline{Ty}} \to \flatten{\mathop{Con}} \to \annotate{\UU}} \\
-&\equiv \grm{\blm{\overline{Ty}} \to \blm{\overline{Con}} \to \UU} \text{.}
-\end{align*}
-The point constructor
-\grm{\mathop{pi} : (\Gamma : \mathop{Con})(A : \mathop{Ty}(\Gamma))(\mathop{Ty}(\mathop{ext}(\Gamma, A))) \to \underline{\mathop{Ty}(\Gamma)}}
-becomes a term \grm{w_{\mathop{pi}}} of the following type:
-\begin{align*}
-& \grm{\anntwo{\overline{x}}{(\Gamma : \mathop{Con})(A : \mathop{Ty}(\Gamma))(\mathop{Ty}(\mathop{ext}(\Gamma, A)))
-	\to \mathop{Ty}(\Gamma)}} \\
-\equiv & \grm{(\blm{\overline{\Gamma} : \overline{Con}})(\anntwo{\overline{\Gamma}}{\mathop{Con}})
-	\to \anntwo{\overline{pi}(\overline{\Gamma})}{(A : \mathop{Ty}(\Gamma))(\mathop{Ty}(\mathop{ext}(\Gamma, A))) \to \underline{\mathop{Ty}(\Gamma)}}} \\
-\equiv & \grm{
-	(\blm{\overline{\Gamma} : \overline{Con}})(W_{\mathop{Con}}(\blm{\overline{\Gamma}}))
-	(\blm{\overline{A} : \overline{Ty}})(\anntwo{\overline{A}}{\mathop{Ty}(\Gamma)}) } \\
-& \grm{
-	\to \anntwo{\overline{pi}(\overline{\Gamma}, \overline{A})}{(\mathop{Ty}(\mathop{ext}(\Gamma, A))) \to \underline{\mathop{Ty}(\Gamma)}}
-} \\
-\equiv & \grm{
-	(\blm{\overline{\Gamma} : \overline{Con}})(W_{\mathop{Con}}(\blm{\overline{\Gamma}}))
-	(\blm{\overline{A} : \overline{Ty}})(\anntwo{\overline{A}}{\mathop{Ty}}(\blm{\overline{\Gamma}}))
-	(\blm{\overline{B} : \overline{Ty}})(\anntwo{\overline{B}}{\mathop{Ty}(\mathop{ext}(\Gamma, A))}) } \\
-& \grm{
-	\to \anntwo{\overline{pi}(\overline{\Gamma}, \overline{A}, \overline{B})}{\underline{Ty(\Gamma)}}
-} \\
-\equiv & \grm{
-	(\blm{\overline{\Gamma} : \overline{Con}})(W_{\mathop{Con}}(\blm{\overline{\Gamma}}))
-	(\blm{\overline{A} : \overline{Ty}})(W_{\mathop{Ty}}(\blm{\overline{A}}, \blm{\overline{\Gamma}}))
-	(\blm{\overline{B} : \overline{Ty}})(\anntwo{\overline{B}}{\mathop{Ty}}(\blm{\overline{ext}(\overline{\Gamma}, \overline{A})}))
-} \\
-& \grm{
-	\to \underline{\anntwo{\overline{pi}(\overline{\Gamma}, \overline{A}, \overline{B})}{\mathop{Ty}(\Gamma)}}
-} \\
-\equiv & \grm{
-	(\blm{\overline{\Gamma} : \overline{Con}})(W_{\mathop{Con}}(\blm{\overline{\Gamma}}))
-	(\blm{\overline{A} : \overline{Ty}})(W_{\mathop{Ty}}(\blm{\overline{A}}, \blm{\overline{\Gamma}}))
-	(\blm{\overline{B} : \overline{Ty}})(W_{\mathop{Ty}}(\blm{\overline{B}}, \blm{\overline{ext}(\overline{\Gamma}, \overline{A})}))
-} \\
-& \grm{
-	\to \underline{\anntwo{\overline{pi}(\overline{\Gamma}, \overline{A}, \overline{B})}{\mathop{Ty}}(\blm{\overline{\Gamma}})}
-} \\
-\equiv & \grm{
-	(\blm{\overline{\Gamma} : \overline{Con}})(W_{\mathop{Con}}(\blm{\overline{\Gamma}}))
-	(\blm{\overline{A} : \overline{Ty}})(W_{\mathop{Ty}}(\blm{\overline{A}}, \blm{\overline{\Gamma}}))
-	(\blm{\overline{B} : \overline{Ty}})(W_{\mathop{Ty}}(\blm{\overline{B}}, \blm{\overline{ext}(\overline{\Gamma}, \overline{A})}))
-} \\
-& \grm{ \hspace*{0pt}\hfill
-	\to \underline{W_{\mathop{Ty}}(\blm{\overline{pi}(\overline{\Gamma}, \overline{A}, \overline{B})},\blm{\overline{\Gamma}})}
-} 
-\end{align*}
+\tqm{\grm{\Gamma_{nat}}^\WW_\Sc}(\star, z, s)
+  &= \tqm{\left( \cdot_\Sc,\, \ExtPiS{N}{\UU} \right)} \text{ and} \\
+\tqm{\grm{\Gamma_{nat}}^\WW}(\star, z, s)
+  &= \tqm{\left( \cdot,\,  \El(\var(\vz)(\blm{z})),\,
+    \ExtPiP{n : N}{\var(\vz)(\blm{n}) \Rightarrow_\Pc \El(\var(\vz)(\blm{s(n)}))} \right)}
+\end{align*} %TODO
+It's easy to see that the initial algebra of this signature is nothing more than
+the trivial (final) type family on $N$.
 \end{example}
 
-\begin{lemma}
-We have \grm{\vdash \annotate{\Gamma}} for every \grm{\vdash \Gamma}.
-\end{lemma}
-
-\begin{proof}
-We simultaneouly prove that all of the following rules are admissible:
+\begin{example}[Vectors]\label{ex:red-w-vec}
+For vectors on a type $A : \UU$, the duties of the wellformednes predicate are less trivial:
+We have to add back the length information which we erased, as described in
+\ref{ex:red-e-vec}:
+Empty vectors should have length zero and appending an element should increase its
+length by one.
+This can be achieved by, given the data from an erasure algebra in the form of
+$V : \UU$, $n: V$, and $c : A \to \N \to V \to V$,
+having a predicate encoded by
+\begin{equation*}
+\tqm{\grm{\Gamma_{vec}}^\WW_\Sc}(\star, n, c)
+  = \tqm{\left(\cdot_\Sc,\, \ExtPiS{n : \N}{\ExtPiS{v : V}{\UU}} \right)} \text{,}
+\end{equation*}
+with point constructors that ensure the correct lengh by setting $\tqm{\grm{\Gamma_{vec}}^\WW}(\star, n, c)$ to be the point context
 \begin{equation*}
 \begin{gathered}
-\inferrule{\grm{\vdash \Gamma}}{\grm{\vdash \annotate{\Gamma}}}
-\qquad
-\inferrule{\grm{\Gamma \vdash B :: \Sc}}{\grm{\annotate{\Gamma} \vdash \annotate{B} :: \Sc}}
-\\[.7em]
-\inferrule{\grm{\Gamma \vdash A :: \Pc} \\ \bar{x} : \flatten{A}}{\grm{\annotate{\Gamma} \vdash \anntwo{\bar{x}}{A} :: \Pc}}
-\\[.7em]
-\inferrule{\grm{\Gamma \vdash a : B :: \Sc} \\ \bar{x} : \flatten{a}} %TODO underline here??
-	{\grm{\annotate{\Gamma} \vdash \anntwo{\bar{x}}{a} : \annotate{B} :: \Sc}}
+\tqm{\cdot,\, \El(\var(\vz)(\blm{0}, \blm{n})),\,} \\
+\tqm{\ExtPiP{a: A}{\ExtPiP{n : \N}{\ExtPiP{v : V}{\var(\vz)(\blm{n}, \blm{v}) \Rightarrow_\Pc 
+  \El(\var(\vz)(\blm{n + 1}, \blm{c(a, n, v)}) ) } } } } \text{.}
 \end{gathered}
 \end{equation*}
-For context extension by sort constructors,
-assume that \grm{\vdash \annotate{\Gamma}} and \grm{\annotate{\Gamma} \vdash \annotate{B} :: \Sc}.
-Since \blm{\overline{x} : \overline{A} \equiv \UU}, we infer \grm{\annotate{\Gamma} \vdash \blm{\overline{x}} \to \annotate{B}},
-and thus
-\begin{equation*}
-\grm{\vdash \annotate{\Gamma}, W_x : \blm{\overline{x}} \to \annotate{B} \equiv \annotate{\Gamma, x : A}} \text{.}
-\end{equation*}
-For extension by point constructors we similarly reason that given
-\grm{\vdash \annotate{\Gamma}} and \grm{\Gamma \vdash A :: \Pc}, from which we
-can infer \grm{\annotate{\Gamma} \vdash \anntwo{\overline{x}}{A}} for \blm{\overline{x} : \overline{A}},
+\end{example}
 
-Let us next handle the case of types in \grm{\Sc}.
-Given \grm{\vdash \annotate{\Gamma}},
-we obviously have \grm{\annotate{\Gamma} \vdash \annotate{\UU} \equiv \UU}.
-To show that \grm{\annotate{\Gamma} \vdash \annotate{(x : a) \to B}}, we may assume
-that \grm{\vdash \annotate{\Gamma}} and that for \blm{\overline{x} : \overline{a}}
-we have \grm{\annotate{\Gamma} \vdash \anntwo{\overline{x}}{a} : \UU},
-and that \grm{\annotate{\Gamma, x : \underline{a}} \vdash \annotate{B}}.
-That latter reduces to
-\begin{equation*}
-\grm{\annotate{\Gamma}, w_x : \underline{\anntwo{\overline{x}}{a}} \vdash \annotate{B} :: \Sc} \text{,}
-\end{equation*}
-but since, by definition, \grm{B} cannot contain any reference to \grm{w_x},
-we conclude \grm{\annotate{\Gamma} \vdash \annotate{B}}, which, together with
-\grm{\annotate{\Gamma}} and \blm{\overline{A} : \UU}, suffices to show
-the desired result.
-The case of non-inductive functions works likewise.
+Like for the type erasure, we will no proceed to generalize this to arbitrary
+inductive-inductive types.
 
-There are three formers for \grm{\Pc}-types: Small types, inductive functions, and
-non-inductive functions:
-\begin{itemize}
-\item Assume that \grm{\Gamma \vdash a : \UU} and thus that for each
-\blm{\overline{x} : \overline{a}} we have
-\grm{\annotate{\Gamma} \vdash \anntwo{\overline{x}}{a} : \UU}.
-We know that \grm{\annotate{\Gamma} \vdash \underline{\anntwo{\overline{x}}{a}}}
-which is enough to infer \grm{\annotate{\Gamma} \vdash \underline{\anntwo{\overline{x}}{a}} \equiv \anntwo{\overline{x}}{\underline{a}}}.
-\item Given \grm{\Gamma \vdash a : \UU} and \grm{\Gamma, x : \underline{a} \vdash B :: \Pc}
-we may assume that \grm{\annotate{\Gamma} \vdash \anntwo{\overline{x}}{a} : \UU} for \blm{\overline{x} : \overline{a}}
-and that for \blm{\overline{y}:\overline{B}} we have
-\begin{equation*}
-\grm{\annotate{\Gamma}, w_x : \anntwo{\overline{x}}{a} \vdash \anntwo{\overline{y}}{B} :: \Pc} \text{.}
-\end{equation*}
-We want to show that for \blm{\overline{f} : \overline{(x : a) \to B} \equiv (\overline{x} : \overline{a}) \to \overline{B}},
-\begin{align*}
-\grm{\annotate{\Gamma}} &\vdash \grm{\anntwo{\overline{f}}{(x : a) \to B} :: \Pc} \\
-&\equiv \grm{(\blm{\overline{x} : \overline{a}})(\anntwo{\overline{x}}{a}) \to \anntwo{\overline{f}(\overline{x})}{B}} \text{.}
-\end{align*}
-To this end, we need to show that for \blm{\overline{x} : \overline{a}} we have
-\grm{\annotate{\Gamma} \vdash \anntwo{\overline{x}}{a} \to \anntwo{\overline{f}(\overline{x})}{B}},
-but this is true by induction and weakening.
-\end{itemize}
-As a last part of this proof, we need to show that \grm{\annotate{}} behave well
-on the terms of \grm{\Sc}-types: Variables and applications of inductive and
-non-inductive functions.
-\begin{itemize}
-\item Given \grm{\Gamma \vdash B :: \Sc} and assuming \grm{\annotate{\Gamma} \vdash \annotate{B}},
-we want to show that for \blm{\overline{x}:\overline{a}} we have
-\begin{equation*}
-\grm{\annotate{\Gamma, a : B} \vdash \anntwo{\overline{x}}{a} : \annotate{B}} \text{,}
-\end{equation*}
-but this reduces to
-\begin{equation*}
-\grm{\annotate{\Gamma}, W_a : \blm{\overline{a}} \to \annotate{B} \vdash W_a(\blm{\overline{x}}) : \annotate{B}} \text{,}
-\end{equation*}
-which is obviously true.
-\item Let \grm{\Gamma \vdash t : (x : a) \to B :: \Sc}, which lets us assume
-\begin{equation*}
-\grm{\annotate{\Gamma} \vdash \anntwo{\overline{f}}{t} : \blm{\overline{a}} \to \annotate{B}} \text{ for \blm{\overline{f} : \overline{t}}.}
-\end{equation*}
-For \grm{u : \underline{a}} we than have that
-\begin{align*}
-\grm{\annotate{\Gamma} \vdash} & \grm{\anntwo{\overline{f}}{t}(\overline{u}) : \annotate{B}} \\
-& \grm{\equiv \anntwo{\overline{f}}{t(u)} : \annotate{B[x \mapsto u]}} \text{,}
-\end{align*}
-since \grm{x} is turned into \grm{w_x} which \grm{\annotate{B}} doesn't depend on. %TODO make this cleaner
-\item For \blm{A : \UU}, \grm{\vdash \annotate{\Gamma}}, and
-\begin{align*}
-\grm{\annotate{\Gamma} \vdash} & \anntwo{\overline{f}}{t} : \annotate{(\blm{x : A}) \to B} \\
-& \equiv \anntwo{\overline{f}}{t} : A \to \annotate{B} \text{ for \blm{\overline{f} : \overline{t}},}
-\end{align*}
-we see that for any \blm{u : A} we have \grm{\anntwo{\overline{f}}{t}(u) \equiv \anntwo{\overline{f}}{t(u)} : \annotate{B[\blm{x} \mapsto \blm{u}]}}
-as desired.
-\end{itemize}
-\end{proof}
-
-Like \grm{\flatten{}}, \grm{\annotate{}} only produces inductive families, so
-we can assume to have $\con{\grm{\annotate{\Gamma}}} : \grm{\annotate{\Gamma}}^\CC$:
-
-\begin{lemma}
-If \grm{\vdash{\Gamma}}, then \grm{\annotate{\Gamma}} is an inductive family.
-\end{lemma}
-
-\begin{proof}
-All occurences of inductive functions in sort constructors are replaced
-by non-inductive functions.
-\end{proof}
-
-\section{Constructing the initial algebra}
-
-With \grm{\flatten{\Gamma}} and \grm{\annotate{\Gamma}} with have two inductive
-families which will suffice to construct the initial algebra for any code \grm{\Gamma}:
-We use $\Sigma$-types over the wellformedness predicates to select which ones of
-the objects in the flattened types and type families we want to include in the
-initial algebra.
-
-\begin{defn}(Initial algebra)
-Define \blm{\con{}} on contexts by:
-\begin{align*}
-\con{\cdot} &:\equiv \star : \unit \\
-\con{\Gamma, a : B :: \Sc} &:\equiv (\con{\Gamma}, \contwo{W_a}{B}) \\
-\con{\Gamma, x : A :: \Pc} &:\equiv (\con{\Gamma}, \conthree{\bar{x}}{w_x}{A}) \\
-\end{align*}
-On sort constructors we need:
-\begin{align*}
-\contwo{f}{\UU} &:\equiv
-\begin{cases}
-(x : A) \to \contwo{b}{\UU} & \text{if \blm{f \equiv (x : A) \to b : \UU},} \\
-\Sigma(f) & \text{otherwise} %TODO avoid this distinction
-\end{cases}\\
-\contwo{f}{(x : a) \to B :: \Sc} &:\equiv \lambda x : \conthree{\flatten{a}}{\annotate{a}}{\UU}. \contwo{\lambda y. f(y, \pr_1(x))}{B} \\ %TODO fix
-\contwo{f}{(\blm{x : A}) \to B :: \Sc} &:\equiv \lambda x : A. \contwo{\lambda y. f(y, x)}{B}
-\end{align*}
-On point constructor we have:
-\begin{align*}
-\conthree{f}{w}{\underline{a}} &:\equiv (f, w) \text{ for a variable \grm{a}} \\
-\conthree{f}{w}{\underline{t(u)}} &:\equiv \conthree{f}{w}{\underline{t}} \\
-\conthree{f}{w}{\underline{(\blm{x : A}) \to b}} &:\equiv \lambda x : A. \conthree{f(x)}{w(x)}{\underline{b}} \\
-\conthree{f}{w}{(x : a) \to B :: \Pc} &:\equiv
-\lambda x : \conthree{\flatten{a}}{\annotate{a}}{\UU}. \conthree{f(\pr_1(x))}{w(\pr_1(x), \pr_2(x))}{B} \\ %TODO fix
-\conthree{f}{w}{(\blm{x : A}) \to B :: \Pc} &:\equiv
-\lambda x : A. \conthree{f(x)}{w(x)}{B}
-\end{align*}
-Here, \blm{\pr_1} and \blm{\pr_2} are generalized projections, defined on universe
-terms and for $i \in {1, 2}$ as follows:
-\begin{align*}
-\pr_i(y, \grm{a}) &:\equiv \pr_i(y) \text{ for a variable \grm{a}} \\
-\pr_i(y, \grm{t(u)}) &:\equiv \pr_i(y) \\ %TODO this really seems fishy
-\pr_i(y, \grm{(\blm{x : A}) \to b}) &:\equiv \lambda x : A. \pr_i(y(x), \grm{b})
-\end{align*}
-Also we need for universe terms a way to reference them as the domain of function
-types:
-\begin{align*}
-\mathsf{ref}(\grm{a}) &:\equiv \contwo{W_a}{\UU} \text{ for a variable \grm{a}} \\
-\mathsf{ref}(\grm{t(u)}) &:\equiv \mathsf{ref}(\grm{t})(\bar{u}) \\
-\mathsf{ref}(\grm{(\blm{x : A}) \to b}) &:\equiv (x : A) \to \mathsf{ref}(\grm{b})
-\end{align*}
+\begin{defn}[Wellformedness Predicate]
+foo
 \end{defn}
 
-\section{Constructing the Eliminator}
 
-TODO: Define $r$
+
+
+
