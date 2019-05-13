@@ -358,7 +358,7 @@ Also, we need to know the interpretation of the erasure of the context the type 
   \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
   \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
   \alpha : \UU }
-  {\tqm{\SCon \grm{B}^\WW_\Sc(\blgamma, \blalpha) :: \Sc }}
+  {\tqm{\SCon \grm{B}^\WW(\blgamma, \blalpha) :: \Sc }}
 \\[.7em]
 \inferrule{\grm{\Gamma \vdash A :: \Pc} \\
   \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
@@ -367,6 +367,54 @@ Also, we need to know the interpretation of the erasure of the context the type 
   {\tqm{\grm{\Gamma}^\WW_\Sc(\blm{\gamma}) \SCon \grm{A}^\WW(\blgamma, \blalpha) :: \Pc}}
 \end{gathered}
 \end{equation*}
+The recursion of the context then looks very much like the on in the definition
+of type erasure:
+Extending the sort context whenever we encounter a sort type in the 
+inductive-inductive signature and extending the point case for each point type.
+Again, we can not leave the point context fixed ``on the nose'' when encountering
+a sort type since we need to weaken it to account for the new sort:
+\begin{align*}
+\tqm{\grm{\cdot}^\WW_\Sc(\blgamma)}
+  &:\equiv \tqm{\cdot_\Sc} \\
+\tqm{\grm{(\Gamma,\, B :: \Sc)}^\WW_\Sc\{\gamma_\Sc, \alpha\}(\blgamma)}
+  &:\equiv \tqm{\left( \grm{\Gamma}^\WW_\Sc(\blgamma)
+    ,\, \grm{B}^\WW(\blgamma, \blalpha)\right)} \\
+\tqm{\grm{(\Gamma,\, A :: \Pc)}^\WW_\Sc(\blgamma, \blalpha)}
+  &:\equiv \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma) } \\[.7em]
+\tqm{\grm{\cdot}^\WW(\blgamma)}
+  &:\equiv \tqm{\cdot} \\
+\tqm{\grm{(\Gamma,\, B :: \Sc)}^\WW(\blgamma)}
+  &:\equiv \tqm{\grm{\Gamma}^\WW(\blgamma)[\wk_\id]} \\
+\tqm{\grm{(\Gamma,\, A :: \Pc)}^\WW(\blgamma, \blalpha)}
+  &:\equiv \tqm{\left(\grm{\Gamma}^\WW(\blgamma),\, \grm{A}^\WW(\blgamma, \blalpha)\right) }
+\end{align*}
+
+Like in the definition of type erasure, recursing on \grm{\El(a)} makes it
+necessary to extend the definition at least to sort types.
+So we will also give an operation producing the following data:
+\begin{equation*}
+\inferrule{\grm{\Gamma \vdash t : B :: \Sc} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc)}
+  {\tqm{\grm{\Gamma}^\WW_\Sc(\blgamma) \SCon \grm{t}^\WW
+    : \grm{B}^\WW(\blgamma, \blm{\tqm{\grm{t}^\EE}^\CC(\gamma_\Sc)})}}
+\end{equation*}
+
+Let us now proceed to give the definition on all type formers.
+The each sort of the input signature should become a predicate.
+Since a predicate is the same as a type family with propositional values,
+we set the wellformedness on the universe to be a type family, the domain of which
+is given by the set we obtain from the algebra of the erased context.
+Not that this type family is a non-dependent, \emph{non-recursive} $\Pi$-type.
+The interpretation of \grm{\El(a)} has to make up for this shift by applying
+to the wellformedness predicate corresponding the sort term \grm{a} the
+element we get from the erasure of \grm{\El(a)}: %TODO this still reads horrible
+\begin{align*}
+\tqm{\grm{\UU}^\WW(\blgamma, \blalpha)}
+  &:\equiv \tqm{\ExtPiS{x : \blalpha}{\UU}} \text{ and} \\
+\tqm{\grm{\El(a)}^\WW(\blgamma, \blalpha)}
+  &:\equiv \tqm{\El\left(\grm{a}^\WW(\blgamma)(\blalpha)\right)} \text{.}
+\end{align*}
 
 \end{defn}
 
