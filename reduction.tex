@@ -324,9 +324,58 @@ with point constructors that ensure the correct lengh by setting $\tqm{\grm{\Gam
 Like for the type erasure, we will no proceed to generalize this to arbitrary
 inductive-inductive types.
 
-\begin{defn}[Wellformedness Predicate]
-foo
+\begin{defn}[Wellformedness Predicates]
+Again, we start by considering what the resulting type on context.
+Clearly, we want the operation to result in the sort context and the point context
+of another signature of an inductive family.
+As we have alredy seen in the previous exapmles,
+there needs to be a dependency on an erasure algebra which leads to the following
+rules:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\vdash \Gamma} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) }
+  {\tqm{\SCon \grm{\Gamma}^\WW_\Sc(\blm{\gamma})} }
+\\[.7em]
+\inferrule{\grm{\vdash \Gamma} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) }
+  {\tqm{\vdash_{\grm{\Gamma}^\WW_\Sc(\blm{\gamma})} \grm{\Gamma}^\WW(\blm{\gamma}) }}
+\end{gathered}
+\end{equation*}
+
+To be able to do recursion we will again need to provide a suitable operation
+on types.
+We need to distinguish between sort and point types.
+For sort types, note that we don't have an erasure operation of which we could take
+an algebra, but since, implicitly, every input sort turns into the inductive-family
+universe token \tqm{\UU}, we know that we can act as if its universe is a plain type.
+Also, we need to know the interpretation of the erasure of the context the type is based on.
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\Gamma \vdash B :: \Sc} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \alpha : \UU }
+  {\tqm{\SCon \grm{B}^\WW_\Sc(\blgamma, \blalpha) :: \Sc }}
+\\[.7em]
+\inferrule{\grm{\Gamma \vdash A :: \Pc} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \alpha : \tqm{\grm{A}^\EE}^\CC(\gamma_\Sc) }
+  {\tqm{\grm{\Gamma}^\WW_\Sc(\blm{\gamma}) \SCon \grm{A}^\WW(\blgamma, \blalpha) :: \Pc}}
+\end{gathered}
+\end{equation*}
+
 \end{defn}
+
+
+
+
+
+
+
 
 
 
