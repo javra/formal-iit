@@ -396,7 +396,7 @@ So we will also give an operation producing the following data:
 \inferrule{\grm{\Gamma \vdash t : B :: \Sc} \\
   \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
   \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc)}
-  {\tqm{\grm{\Gamma}^\WW_\Sc(\blgamma) \SCon \grm{t}^\WW
+  {\tqm{\grm{\Gamma}^\WW_\Sc(\blgamma) \SCon \grm{t}^\WW(\blgamma)
     : \grm{B}^\WW(\blgamma, \blm{\tqm{\grm{t}^\EE}^\CC(\gamma_\Sc)})}}
 \end{equation*}
 
@@ -433,16 +433,34 @@ The iterpretation of application terms has to follow this step accordingly:
 
 The treatment of $\Pi$-types in point constructors is arguably the trickiest part
 of the definition.
-Remember that we foo
-\begin{align*}
+A non-technical description of the effect of the wellformedness operation on
+these $\Pi$-types is the following:
+For each bit of input data from an algebra of the erasure, wellformedness of this
+input data should imply wellformedness of the result.
+\begin{equation*}
 \tqm{\grm{\Pi(a, A :: \Pc)}^\WW\{\blm{\gamma_\Sc}\}(\blgamma, \blphi)}
-  &:\equiv \tqm{\ExtPi{\blalpha : \tqm{\grm{a}^\EE}^\CC(\gamma_\Sc)}
+  :\equiv \tqm{\ExtPi{\blalpha : \tqm{\grm{a}^\EE}^\CC(\gamma_\Sc)}
     { \grm{a}^\WW(\blgamma)(\blalpha)
-      \Rightarrow_\Pc \grm{B}^\WW((\gamma, \alpha), \phi(\alpha))}} \\
-\tqm{\grm{\IIapp(f)}^\WW\{\blm{\gamma_\Sc}\}
-  \{\blgamma, \blphi\}(\blm{\gamma^\WW}, \blm{\phi^\WW}) }
-  &:\equiv \tqm{\grm{f}^\WW(\blm{\gamma^\WW})(\blphi)(\blm{\phi^\WW}) }
-  \text{ for \grm{\Gamma \vdash f : \Pi(a, A :: \Pc)}.}
+      \Rightarrow_\Pc \grm{A}^\WW((\gamma, \alpha), \phi(\alpha))}}
+%\tqm{\grm{\IIapp(f)}^\WW\{\blm{\gamma_\Sc}\}
+%  \{\blgamma, \blphi\}(\blm{\gamma^\WW}, \blm{\phi^\WW}) }
+%  &:\equiv \tqm{\grm{f}^\WW(\blm{\gamma^\WW})(\blphi)(\blm{\phi^\WW}) }
+%  \text{ for \grm{\Gamma \vdash f : \Pi(a, A :: \Pc)}.} TODO this belongs to extra constr
+\end{equation*}
+
+Let us next look at the non-recursive function types.
+Since we erased them just like the recursive ones, they are processed similar to
+the definitions above, with the difference that for point constructors, there is
+no wellformedness of the domain that we have to presuppose to infer wellformedness
+of the codomain:
+\begin{align*}
+\tqm{\grm{\ExtPi{T}{B :: \Sc}}^\WW(\blgamma, \blphi)}
+  &:\equiv \tqm{\ExtPiS{\tau : T}{\grm{B(\bltau)}^\WW(\blgamma, \blphi)}} \text{,} \\
+\tqm{\grm{\ExtPi{T}{A :: \Pc}}^\WW(\blgamma, \blphi)}
+  &:\equiv \tqm{\ExtPiP{\tau : T}{\grm{A(\bltau)}^\WW(\blgamma, \blm{\phi(\tau)})}}
+  \text{, and} \\
+\tqm{\grm{f(\bltau)}^\WW(\blgamma)}
+  &:\equiv \tqm{\grm{f}^\WW(\blgamma)(\bltau) } \text{.}
 \end{align*}
 
 \end{defn}
