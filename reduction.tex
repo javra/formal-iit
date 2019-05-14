@@ -416,6 +416,35 @@ element we get from the erasure of \grm{\El(a)}: %TODO this still reads horrible
   &:\equiv \tqm{\El\left(\grm{a}^\WW(\blgamma)(\blalpha)\right)} \text{.}
 \end{align*}
 
+For sort-kinded, recursive $\Pi$-types, we again need to remember that in the
+definition of type erasure, we turned them into instances of \tqm{\UU}, so to
+add the information back which we erased, the wellformedness has to turn them into
+non-recursive $\Pi$-types over the erasure of sort term which is the domain of the
+$\Pi$-type we started with.
+The iterpretation of application terms has to follow this step accordingly:
+\begin{align*}
+\tqm{\grm{\Pi(a, B :: \Sc)}^\WW\{\blm{\gamma_\Sc}\}(\blgamma, \blphi)}
+  &:\equiv \tqm{\ExtPiS{\blalpha : \tqm{\grm{a}^\EE}^\CC(\gamma_\Sc)}
+    {\grm{B}^\WW((\blgamma, \blalpha), \blphi)}} \text { and} \\
+\tqm{\grm{\IIapp(f)}^\WW(\blgamma, \blalpha)}
+  &:\equiv \tqm{\grm{f}^\WW(\blgamma)(\blalpha)}
+  \text{ for \grm{\Gamma \vdash f : \Pi(a, B :: \Sc)}.}
+\end{align*}
+
+The treatment of $\Pi$-types in point constructors is arguably the trickiest part
+of the definition.
+Remember that we foo
+\begin{align*}
+\tqm{\grm{\Pi(a, A :: \Pc)}^\WW\{\blm{\gamma_\Sc}\}(\blgamma, \blphi)}
+  &:\equiv \tqm{\ExtPi{\blalpha : \tqm{\grm{a}^\EE}^\CC(\gamma_\Sc)}
+    { \grm{a}^\WW(\blgamma)(\blalpha)
+      \Rightarrow_\Pc \grm{B}^\WW((\gamma, \alpha), \phi(\alpha))}} \\
+\tqm{\grm{\IIapp(f)}^\WW\{\blm{\gamma_\Sc}\}
+  \{\blgamma, \blphi\}(\blm{\gamma^\WW}, \blm{\phi^\WW}) }
+  &:\equiv \tqm{\grm{f}^\WW(\blm{\gamma^\WW})(\blphi)(\blm{\phi^\WW}) }
+  \text{ for \grm{\Gamma \vdash f : \Pi(a, A :: \Pc)}.}
+\end{align*}
+
 \end{defn}
 
 
