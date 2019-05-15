@@ -170,8 +170,10 @@ is just erasure of its $\Pi$-type term:
 \tqm{\grm{\IIapp(f)}^\EE}
   &:\equiv \tqm{\grm{f}^\EE} \text{ for \grm{\Gamma \vdash t : \Pi(a, B) :: \Sc}.}
 \end{align*}
-External $\Pi$-types and their applications convert directly into their
-respective counterparts in the syntax of inductive families:
+External $\Pi$-types convert directly into their
+respective counterparts in the syntax of inductive families.
+For application of terms of sort-kinded $\Pi$-types we need to erase the argument
+since we erased the $\Pi$-type itself.
 \begin{align*}
 \tqm{\grm{\ExtPi{T}{A}}^\EE}
   &:\equiv \tqm{\ExtPiP{T}{\blm{\lambda \tau.\, }\grm{A(\bltau)}^\EE}} \text{, and} \\
@@ -231,7 +233,7 @@ point contexts instead of only sort contexts.
 To this end, we extend the operation of type erasure by assigning a map between
 the types of algebras of the erasure to each substitution:
 
-\begin{defn}[Replacement for Point Substitutions]
+\begin{defn}[Replacement for Point Substitutions]\label{def:red-e-points}
 We define the following operation on substitutions:
 \begin{equation*}
 \inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta}}}
@@ -461,6 +463,38 @@ of the codomain:
   \text{, and} \\
 \tqm{\grm{f(\bltau)}^\WW(\blgamma)}
   &:\equiv \tqm{\grm{f}^\WW(\blgamma)(\bltau) } \text{.}
+\end{align*}
+
+Again, we need to extend the definition to substitutions to be able to specify
+it on pulled back types and terms:
+\begin{equation*}
+\inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta}}\\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc)}
+  {\tqm{\IFSub{\grm{\sigma}^\WW_\Sc(\blgamma)}{\grm{\Gamma}^\WW_\Sc(\blgamma)}
+    {\grm{\Delta}^\WW_\Sc(\blgamma)}}}
+\end{equation*}
+Their category structure is a direct translation to the sort substitutions of
+the inductive family syntax.
+Note that here, we need to refer to \ref{def:red-e-points} to carry the
+algebra of the erase point context along the substitution:
+\begin{align*}
+\tqm{\grm{\id}^\WW_\Sc(\blgamma)}
+  &:\equiv \tqm{\id} \text{ and} \\
+\tqm{\grm{(\sigma \circ \delta)}^\WW_\Sc(\blgamma)}
+  &:\equiv \tqm{\grm{\sigma}^\WW_\Sc(\blm{\grm{\delta}^\EE(\gamma)})
+    \circ \grm{\delta}^\WW_\Sc(\blgamma)} \text{.}
+\end{align*}
+The pullback operations can afterwards defined by
+\begin{align*}
+\tqm{\grm{B[\sigma]}^\WW(\blgamma, \blalpha)}
+  &:\equiv \tqm{\grm{B}^\WW(\blm{\grm{\sigma}^\EE(\gamma)}, \blalpha)} \text{,} \\
+\tqm{\grm{A[\sigma]}^\WW(\blgamma)}
+  &:\equiv \tqm{\grm{A}^\WW(\blgamma, \blalpha)
+    [\grm{\sigma}^\WW_\Sc(\blgamma)]} \text{, and} \\
+\tqm{\grm{t[\sigma]}^\WW(\blgamma)}
+  &:\equiv \tqm{\grm{t}^\WW_\Sc(\blm{\grm{\sigma}^\EE(\gamma)})
+    [\grm{\sigma}^\WW_\Sc(\blgamma)] } \text{ for \grm{\Gamma \vdash t : B :: \Sc}.}
 \end{align*}
 
 \end{defn}
