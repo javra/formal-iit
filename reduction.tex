@@ -496,6 +496,29 @@ The pullback operations can afterwards defined by
   &:\equiv \tqm{\grm{t}^\WW_\Sc(\blm{\grm{\sigma}^\EE(\gamma)})
     [\grm{\sigma}^\WW_\Sc(\blgamma)] } \text{ for \grm{\Gamma \vdash t : B :: \Sc}.}
 \end{align*}
+The remaining pieces of substitutional calculus are straightforward and look the
+same as for the type erasure:
+\begin{align*}
+\tqm{\grm{\epsilon}^\WW_\Sc(\blgamma)}
+  &:\equiv \tqm{\epsilon} \text{,} \\
+\tqm{\grm{(\sigma,\, t)}^\WW_\Sc(\blgamma)}
+  &:\equiv \tqm{\left( \grm{\sigma}^\WW_\Sc(\blgamma),\,\grm{t}^\WW(\blgamma)\right)}
+  \text{ for \grm{t : B :: \Sc},} \\
+\tqm{\grm{(\sigma,\, t)}^\WW_\Sc(\blgamma)}
+  &:\equiv \tqm{\grm{\sigma}^\WW_\Sc(\blgamma)} \\
+\tqm{\grm{\pi_1(\sigma)}^\WW_\Sc(\blgamma)}
+  &:\equiv \tqm{\pi_1(\grm{\sigma}^\WW_\Sc(\blgamma))}
+  \text{ for \grm{\IISub{\sigma}{\Gamma}{\Delta,\, B :: \Sc}},} \\
+\tqm{\grm{\pi_1(\sigma)}^\WW_\Sc(\blgamma)}
+  &:\equiv \tqm{\grm{\sigma}^\WW_\Sc(\blgamma)}
+  \text{ for \grm{\IISub{\sigma}{\Gamma}{\Delta,\, A :: \Pc}},} \\
+\tqm{\grm{\pi_2(\sigma)}^\WW_\Sc(\blgamma)}
+  &:\equiv \tqm{\pi_2(\grm{\sigma}^\WW_\Sc(\blgamma))}
+  \text{ for \grm{\IISub{\sigma}{\Gamma}{\Delta,\, B :: \Sc}},} \\
+\tqm{\grm{\pi_2(\sigma)}^\WW_\Sc(\blgamma)}
+  &:\equiv \tqm{\grm{\sigma}^\WW_\Sc(\blgamma)}
+  \text{ for \grm{\IISub{\sigma}{\Gamma}{\Delta,\, A :: \Pc}},}
+\end{align*}
 
 \end{defn}
 
