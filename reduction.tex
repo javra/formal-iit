@@ -80,6 +80,54 @@ pi(\Gamma, A, B) &:\equiv \left(pi'(\pr_1(\Gamma), \pr_1(A), \pr_1(B)),
    w_{pi}(\pr_2(\Gamma), \pr_2(A), \pr_2(B)) \right) \text{.}
 \end{align*}
 
+This definition clearly has the correct type signature but for it to be the correct
+replacement for the intended inductive-inductive type,
+we also need to construct its eliminator:
+For any given $C : \UU$ and $T : C \to \UU$ with
+\begin{align*}
+n &: C \text{,} \\
+e &: (\gamma : C) \to T(\gamma) \to C \text{,} \\
+u &: (\gamma : C) \to T(\gamma) \text{, and} \\
+p &: (\gamma : C) (a : T(\gamma)) \to T(e(\gamma, a)) \to T(\gamma) \text{,}
+\end{align*}
+we need to construct functions $\rec^{Con} : Con \to C$ and 
+$\rec^{Ty} : \{\Gamma : Con\} \to Ty(\Gamma) \to T(\rec^{Con}(\Gamma))$ such
+that the preservation of the point constructors is manifested in the
+following $\beta$-rules:
+\begin{align*}
+\rec^{Con}(nil)
+  &= n \text{,} \\
+\rec^{Con}(ext(\Gamma, A))
+  &= e(\rec^{Con}(\Gamma), \rec^{Ty}(A)) \text{,} \\
+\rec^{Ty}(unit(\Gamma))
+  &= u(\rec^{Con}(\Gamma)) \text{, and} \\
+\rec^{Ty}(pi(\Gamma, A, B))
+  &= p(\rec^{Con}(\Gamma), \rec^{Ty}(A), \rec^{Ty}(B)) \text{.}
+\end{align*}
+
+It is difficult to define these functions straight away, but it turns out that
+we will be able to define an \emph{eliminator relation} between the presyntax
+$(Con', Ty')$ and the motive $(C, T)$ which we can show restricts to the graph
+of a function on the wellformed parts of the syntax.
+Just like the wellformedness predicate, this relation is defined inductively
+as a type family over the presyntax.
+The signature of this relation is $R_{Con} : Con' \to C \to \UU$ for contexts
+and $R_{Ty} : (\Gamma : Ty') \{\gamma : C\} \to T(\gamma) \to \UU$ and the
+constructors for the relation state that relatedness is preserved by each
+constructor of the presyntax:
+\begin{align*}
+r_{nil} 
+  &: R_{Con}(nil', n) \text{,} \\
+r_{ext}(\Gamma, A, \gamma, a) 
+  &: R_{Con}(\Gamma, \gamma) \to R_{Ty}(A, a)
+    \to R_{Con}(ext'(\Gamma, A), e(\gamma, a)) \text{,}\\
+r_{unit}(\Gamma, \gamma)
+  &: R_{Con}(\Gamma, \gamma) \to R_{Ty}(unit'(\Gamma), u(\gamma)) \text{, and} \\
+r_{pi}(\Gamma, A, B, \gamma, a, b)
+  &: R_{Con}(\Gamma, \gamma) \to R_{Ty}(A, a) \to R_{Ty}(B, b) \\
+  & \qquad \to R_{Ty}(pi'(\Gamma, A, B), p(\gamma, a, b)) \text{.}
+\end{align*}
+
 
 \section{(OLD) -- Fragments of Inductive-Inductive Types}
 
