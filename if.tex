@@ -44,7 +44,7 @@ de Bruijn indices for bound variables and an application operation for type fami
 \qquad
 \inferrule{\tqm{\Gamma_\Sc \SCon \var(v) : B}}{\tqm{\Gamma_\Sc, B' \SCon \var(\vs(v)) : B}}
 \\[.7em]
-\inferrule{\tqm{\Gamma_\Sc \SCon t : \Pi_\Sc(\blm{T}, B)} \\ \blm{\tau : T}}
+\inferrule{\tqm{\Gamma_\Sc \SCon t : \ExtPiS{T}{B}} \\ \blm{\tau : T}}
   {\tqm{\Gamma_\Sc \SCon t(\blm{\tau}) : B(\blm{\tau})}}
 \end{gathered}
 \end{equation*}
