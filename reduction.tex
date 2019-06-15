@@ -689,6 +689,50 @@ What distinguishes this algebra from others is that we will in the later section
 demonstrate how to show that, besides constructors, it also admits a dependent
 \emph{eliminator}, or, equivalently, that it is initial among all algebras.
 
+The construction of the initial object obviously presupposes the existence of
+initial algebras of inductive families.
+Nevertheless, we need to apply the same strategy as in the definition of the
+wellformedness predicate:
+The construction will depend on arbitrary algebras of type erasure and wellformedness
+instead of just relying on the initial on.
+This allows us to descend recursively and still refer to the correct algebra
+of the respective inductive families.
+
+Like in the last two steps of the construction, let us again start off by taking
+a look at our set of running examples:
+
+\begin{example}[Natural Numbers]\label{ex:red-init-nat}
+Continuing from Example \ref{ex:red-w-nat}, we again assume %TODO fix red-w-nat
+sort and point algebras $(\star, N')$ and $(\star, z', s')$ of the erasure of
+natural numbers \tqm{\grm{\Gamma_{nat}}^\EE_\Sc} and \tqm{\grm{\Gamma_{nat}}^\EE}.
+Given this data,
+the algebras of the wellformedness predicate take the form of
+$(\star, W_N)$ and $(\star, w_z, w_s)$ with types
+\begin{align*}
+W_N &: N' \to \UU \text{,} \\
+w_z &: W(z') \text{, and} \\
+w_s &: (n' : N') \to W_N(n') \to W_N(s'(n')) \text{.}
+\end{align*}
+Then, we want the inductive-inductive algebra
+$\grm{\Gamma_{nat}}^\Sg : \grm{\Gamma_{nat}}^\CC$ to consist of the subsets of
+erased types which (in this case trivially) fulfil the wellformedness condition,
+with the point constructors lifted to these subsets:
+$\grm{\Gamma_{nat}}^\Sg = (\star, N, z, s)$ with
+\begin{align*}
+N &= (n' : N') \times W_N(n') \text{,} \\
+z &= (z', w_z) \text{, and} \\
+s &= \lambda ((n', w_n) : N).\, (s'(n'), w_s(n', w_n)) \text{.}
+\end{align*}
+\end{example}
+
+\begin{example}[Vectors]
+bar
+\end{example}
+
+\begin{example}[Type Theory Syntax]
+baz
+\end{example}
+
 \section{The Eliminator Relation}
 
 \end{defn}
