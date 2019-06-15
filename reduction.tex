@@ -726,7 +726,25 @@ s &= \lambda ((n', w_n) : N).\, (s'(n'), w_s(n', w_n)) \text{.}
 \end{example}
 
 \begin{example}[Vectors]
-bar
+Let us next consider the type of vectors on a type $A : \UU$.
+The assumed algebras of the type erasure give us $V'$, $n'$, and $c'$ as in
+\ref{ex:red-w-vec}.
+With those as input, algebras of the sort and point part of the 
+wellformedness predicate \tqm{\grm{\Gamma_{vec}}^\WW_\Sc} and
+\tqm{\grm{\Gamma_{vec}}^\WW} look like
+$(\star, W_V)$ and $(\star, w_n, w_c)$ with
+\begin{align*}
+W_V &: \N \to V' \to \UU \text{,} \\
+w_n &: W_V(0, n') \text{, and} \\
+w_c &: (a : A)(m : \N)(v' : V) \to W_V(m, v') \to W_V(m + 1, c'(a, m, v')) \text{.}
+\end{align*}
+This suggests that we will have an algebra $\Gamma_{vec}^\Sg : \Gamma_{vec}^\CC$
+defined by $\Gamma_{vec}^\Sg = (\star, V, n, c)$ with
+\begin{align*}
+V &= \lambda (n : \N).\, (v' : V') \times W_V(n, v') \text{,} \\
+n &= (n', w_n) \text{, and} \\
+c &= \lambda (a : A)(m : \N)((v', w_{v'}) : V).\, (c'(a, m, v'), w_c(a, m, v', w_{v'})) \text{.}
+\end{align*}
 \end{example}
 
 \begin{example}[Type Theory Syntax]
