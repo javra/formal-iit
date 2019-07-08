@@ -141,7 +141,23 @@ we have $a = a'$.
 \end{lemma}
 
 \begin{proof}
-foo
+Let us first apply induction on the presyntactic variables $\Gamma$ and $A$,
+respectively.
+This leaves us to consider the cases of the four constructors of $Con'$ and $Ty'$.
+For the case of $nil'$, we observe that the only constructor resulting in
+$R_{Con}(nil', \gamma)$ for some $\gamma$ is $r_{nil} : R_{Con}(nil, n)$ and we
+can conclude that both $\gamma$ and $\gamma'$ must be equal to $n$.
+The reasoning analogously applies to the other cases as well:
+There is only one relatedness constructor for each of the constructors of the
+presyntax, so we can always obtain the right-uniqueness for all arguments via
+the induction hypothesis and, by congruence, infer that the uniqueness carries
+over to the constructor in consideration.
+As an example, in the case of $\delta$ and $\delta'$ with $R_{Con}(ext'(\Gamma, A), \delta)$
+and $R_{Con}(ext'(\Gamma, A), \delta')$, we first conclude that
+$\delta = e(\gamma, a)$ and $\delta' = e(\gamma', a')$ for some $\gamma$, $\gamma'$,
+$a$, and $a'$, we see that for these $R_{Con}(\Gamma, \gamma)$, $R_{Con}(\Gamma, \gamma')$,
+$R_{Ty}(A, a)$, and $R_{Ty}(A, a')$ have to hold and from this we infer
+that $\gamma = \gamma'$ as well as $a = a'$ and thus $\delta = \delta'$.
 \end{proof}
 
 \begin{lemma}
