@@ -160,7 +160,7 @@ $R_{Ty}(A, a)$, and $R_{Ty}(A, a')$ have to hold and from this we infer
 that $\gamma = \gamma'$ as well as $a = a'$ and thus $\delta = \delta'$.
 \end{proof}
 
-\begin{lemma}
+\begin{lemma}\label{lem:red-ex-total}
 The eliminator relation is left-total on wellformed presyntax:
 For $\Gamma : Con'$ with $W_{Con}(\Gamma)$ there is $\gamma : C$
 such that $R_{Con}(\Gamma, \gamma)$.
@@ -183,6 +183,19 @@ $a : T(\gamma)$ with $R_{Ty}(A, a)$.
 But this is all the input to use $r_{ext}$ to obtain $R_{Con}(ext'(\Gamma, A), e(\gamma, a))$.
 The other two cases can be proved analogously.
 \end{proof}
+
+The left-totality will suffice to define the recursor functions by simply setting
+$\rec^{Con}(\Gamma)$ and $\rec^{Ty}(A)$ to be the respective witnesses gained from
+Lemma~\ref{lem:red-ex-total}.
+This means that the $\beta$-rule for the non-recursive constructor $nil$ will be
+definitional, while to prove $\beta$-rules for the recursive constructors will
+require the use of Lemma~\ref{lem:red-ex-right-unique}:
+
+To prove, for example, that $\rec^{Con}(ext(\Gamma, A))
+= e(\rec^{Con}(\Gamma), \rec^{Ty}(A))$ holds, we observe that both the left-hand side
+and the right-hand side provide elements in $C$ which by $R_{Con}$ are related
+to $ext'(\Gamma, A)$, so the lemma give us the desired equality.
+
 
 \section{(OLD) -- Fragments of Inductive-Inductive Types}
 
