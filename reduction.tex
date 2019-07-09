@@ -132,7 +132,7 @@ Since we want a morphism to the model $(C, T, n, e, u, p)$ instead of a relation
 we now need to prove that the relation is in fact the graph of a function --
 i.\,e. it is right-unique and left-total.
 
-\begin{lemma}
+\begin{lemma}\label{lem:red-ex-right-unique}
 The relation is right-unique on contexts and types. That is, for
 $\gamma, \gamma' : C$ with $R_{Con}(\Gamma, \gamma)$ and $R_{Con}(\Gamma, \gamma')$,
 we have $\gamma = \gamma'$, and, regarding types, for $\gamma : C$ and
@@ -161,14 +161,27 @@ that $\gamma = \gamma'$ as well as $a = a'$ and thus $\delta = \delta'$.
 \end{proof}
 
 \begin{lemma}
-The eliminator relation is left-total: For $\Gamma : Con$ there is a $\gamma : C$
-such that $R_{Con}(\pr_1(\Gamma), \gamma)$.
-Furthermore, for $A : Ty(\Gamma)$ there are $\gamma : C$ and $a : T(\gamma)$
-with $R_{Ty}(\pr_1(A), a)$.
+The eliminator relation is left-total on wellformed presyntax:
+For $\Gamma : Con'$ with $W_{Con}(\Gamma)$ there is $\gamma : C$
+such that $R_{Con}(\Gamma, \gamma)$.
+Analogously, for $A : Ty'(\Gamma)$ with $W_{Ty}(\Gamma, A)$
+and $\gamma : C$ with $R_{Con}(\Gamma, \gamma)$
+there is $a : T(\gamma)$
+such that $R_{Ty}(A, a)$.
 \end{lemma}
 
 \begin{proof}
-foo
+Again, we first perform induction on the presyntactic argument to the statement
+-- that is, $\Gamma$ or $A$.
+The case of $nil'$ is trivial by providing $n$ and $r_{nil}$.
+So let us look at the case of $ext'(\Gamma, A)$.
+From the induction hypothesis, we get witnesses for the wellformedness of the
+arguments in the form of $W_{Con}(\Gamma)$ and $W_{Ty}(\Gamma, A)$,
+as well as related data from the algebra:
+$\gamma : C$ with $R_{Con}(\Gamma, \gamma)$, and
+$a : T(\gamma)$ with $R_{Ty}(A, a)$.
+But this is all the input to use $r_{ext}$ to obtain $R_{Con}(ext'(\Gamma, A), e(\gamma, a))$.
+The other two cases can be proved analogously.
 \end{proof}
 
 \section{(OLD) -- Fragments of Inductive-Inductive Types}
