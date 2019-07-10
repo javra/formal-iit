@@ -859,6 +859,33 @@ as we have seen in the previous constructions:
 \end{align*}
 \end{defn}
 
+Again, the necessity to define $\grm{\El(a)}^\Sg$ forces us to extend the definition
+on terms as well.
+The treatment for sort and point terms differs because type erasure and
+wellformedness predicate are defined as maps between algebras of
+inductive family syntax instead of syntax itself:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\Gamma \vdash t : B :: \Sc} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
+  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC }
+  {\grm{t}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta)\right)
+    = \grm{B}^\Sg\left(\gamma, \delta,
+      \tqm{\grm{t}^\EE }^\CC(\gamma_\Sc),
+      \tqm{\grm{t}^\WW(\blgamma)}^\CC(\delta_\Sc) \right) }
+\\[.7em]
+\inferrule{\grm{\Gamma \vdash t : A :: \Pc} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
+  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC }
+  {\grm{t}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta)\right)
+    = \grm{A}^\Sg\left(\gamma, \delta, \grm{t}^\EE(\gamma), \grm{t}^\WW(\delta) \right)  }
+\end{gathered}
+\end{equation*}
+
 \section{The Eliminator Relation}
 
 \end{defn}
