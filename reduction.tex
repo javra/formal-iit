@@ -756,10 +756,10 @@ w_z &: W(z') \text{, and} \\
 w_s &: (n' : N') \to W_N(n') \to W_N(s'(n')) \text{.}
 \end{align*}
 Then, we want the inductive-inductive algebra
-$\grm{\Gamma_{nat}}^\Sg : \grm{\Gamma_{nat}}^\CC$ to consist of the subsets of
+$\con{\Gamma_{nat}} : \grm{\Gamma_{nat}}^\CC$ to consist of the subsets of
 erased types which (in this case trivially) fulfil the wellformedness condition,
 with the point constructors lifted to these subsets:
-$\grm{\Gamma_{nat}}^\Sg = (\star, N, z, s)$ with
+$\con{\Gamma_{nat}} = (\star, N, z, s)$ with
 \begin{align*}
 N &= (n' : N') \times W_N(n') \text{,} \\
 z &= (z', w_z) \text{, and} \\
@@ -780,8 +780,8 @@ W_V &: \N \to V' \to \UU \text{,} \\
 w_n &: W_V(0, n') \text{, and} \\
 w_c &: (a : A)(m : \N)(v' : V) \to W_V(m, v') \to W_V(m + 1, c'(a, m, v')) \text{.}
 \end{align*}
-This suggests that we will have an algebra $\Gamma_{vec}^\Sg : \Gamma_{vec}^\CC$
-defined by $\Gamma_{vec}^\Sg = (\star, V, n, c)$ with
+This suggests that we will have an algebra $\con{\Gamma_{vec}} : \Gamma_{vec}^\CC$
+defined by $\con{\Gamma_{vec}} = (\star, V, n, c)$ with
 \begin{align*}
 V &= \lambda (n : \N).\, (v' : V') \times W_V(n, v') \text{,} \\
 n &= (n', w_n) \text{, and} \\
@@ -792,6 +792,72 @@ c &= \lambda (a : A)(m : \N)((v', w_{v'}) : V).\, (c'(a, m, v'), w_c(a, m, v', w
 \begin{example}[Type Theory Syntax]
 baz
 \end{example}
+
+Let us now consider the case of an arbitrary signature \grm{\vdash \Gamma}.
+The form which our operation will take is clear -- for each signature we need
+to return an algebra of that signature:
+\begin{equation*}
+\inferrule{\grm{\vdash \Gamma}}
+  {\con{\Gamma} : \grm{\Gamma}^\CC}
+\end{equation*}
+But as we saw before, recursion is easier when we make the dependent on arbitrary
+algebras of the previous steps -- that is, arbitrary algebras over type erasure
+and the wellformedness predicate.
+After we succeed in defining this more general construction $\grm{\Gamma}^\Sg$,
+we will eliminate this dependency by fixing these algebras to be the initial ones
+which we assume to exist in this chapter.
+
+\begin{defn}[Sigma Construction]
+As mentioned, the more general construction will depend on both the type erasure
+and the wellformedness, so that the operation will take the following form:
+\begin{equation*}
+\inferrule{\grm{\vdash \Gamma} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
+  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC }
+  {\grm{\Gamma}^\Sg(\gamma, \delta) : \grm{\Gamma}^\CC }
+\end{equation*}
+
+To recurse on the contexts, we again need to extend the operations to types,
+distinguishing between sort and point constructors, resulting in the following
+two rules:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\Gamma \vdash B :: \Sc} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
+  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC \\
+  \alpha : \UU \\
+  \omega : \tqm{\grm{B}^\WW(\blgamma, \blalpha)}^\CC }
+  {\grm{B}^\Sg(\gamma, \delta, \omega) 
+   : \grm{B}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta) \right) }
+\\[.7em]
+\inferrule{\grm{\Gamma \vdash A :: \Pc} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
+  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC \\
+  \alpha : \tqm{\grm{A}^\EE}^\CC(\gamma_\Sc) \\
+  \omega : \tqm{\grm{A}^\WW(\blgamma, \blalpha) }^\CC(\delta_\Sc) }
+  {\grm{A}^\Sg(\gamma, \delta, \omega)
+     : \grm{A}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta) \right) }
+\end{gathered}
+\end{equation*}
+These operations allow us two define the sigma construction as straightforward
+as we have seen in the previous constructions:
+\begin{align*}
+\grm{\cdot}^\Sg(\gamma, \delta)
+  &:\equiv \star \\
+\grm{(\Gamma,\,B :: \Sc)}^\Sg(\gamma)\{\delta_\Sc, \omega\}( \delta)
+  &:\equiv \left( \grm{\Gamma}^\Sg(\gamma,\delta) ,
+    \grm{B}^\Sg(\gamma, \delta, \omega)\right) \\
+\grm{(\Gamma,\,A :: \Pc)}^\Sg((\gamma, \alpha), (\delta, \omega))
+  &:\equiv \left( \grm{\Gamma}^\Sg(\gamma, \delta) ,
+    \grm{A}^\Sg(\gamma, \delta, \omega)\right)
+\end{align*}
+\end{defn}
 
 \section{The Eliminator Relation}
 
