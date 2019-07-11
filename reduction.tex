@@ -935,6 +935,14 @@ identity proofs:
     \end{cases}
 \end{align*}
 
+The case for non-recursive $\Pi$-types is a rather straightforward descent,
+compared to the recursive ones:
+\begin{align*}
+\grm{\Pi(a, B)}^\Sg(\gamma, \delta, \phi, \tau)
+  &:\equiv \grm{B}^\Sg(\gamma, \delta, \phi(\tau)) \text{ and}\\
+\grm{f(\bltau)}^\Sg(\gamma, \delta)
+  &:\equiv \happly\left(\grm{f}^\Sg(\gamma, \delta), \tau\right)
+\end{align*}
 
 \section{The Eliminator Relation}
 
