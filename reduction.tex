@@ -873,8 +873,8 @@ inductive family syntax instead of syntax itself:
   \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC }
   {\grm{t}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta)\right)
     = \grm{B}^\Sg\left(\gamma, \delta,
-      \tqm{\grm{t}^\EE }^\CC(\gamma_\Sc),
-      \tqm{\grm{t}^\WW(\blgamma)}^\CC(\delta_\Sc) \right) }
+      \tqm{\grm{t}^\EE }^\CC(\gamma_\Sc)
+      \left(\tqm{\grm{t}^\WW(\blgamma)}^\CC(\delta_\Sc)\right) \right)}
 \\[.7em]
 \inferrule{\grm{\Gamma \vdash t : A :: \Pc} \\
   \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
@@ -882,9 +882,59 @@ inductive family syntax instead of syntax itself:
   \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
   \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC }
   {\grm{t}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta)\right)
-    = \grm{A}^\Sg\left(\gamma, \delta, \grm{t}^\EE(\gamma), \grm{t}^\WW(\delta) \right)  }
+    = \grm{A}^\Sg\left(\gamma, \delta, \grm{t}^\EE(\gamma)\left(\grm{t}^\WW(\delta)\right)\right)}
 \end{gathered}
 \end{equation*}
+
+We will now go all the type formers in order, starting the universe.
+It justifies the name of the construction, producing a sigma type of the erasure and
+its wellformedness.
+For the element operator, we need the above equation for terms to be able to
+give to populate these sigma types accordingly:
+\begin{align*}
+\grm{\UU}^\Sg(\gamma, \delta, \omega)
+  &:\equiv (x : \alpha) \times \omega(x) \text{ and} \\
+\grm{\El(a)}^\Sg(\gamma, \delta, \omega)
+  &:\equiv \left(\grm{a}^\Sg(\gamma, \delta)\inv\right)^*(\alpha, \omega)
+\end{align*}
+
+Let us next look at the recursive $\Pi$-types and their application:
+Let $(\alpha, \omega)$ be the result of
+$\left(\grm{a}^\Sg(\gamma, \delta)\right)^*(\xi)$, then
+we can set
+\begin{align*}
+\grm{\Pi(a, B :: \Sc)}^\Sg(\gamma, \delta, \phi, \xi)
+  &:\equiv p^*\left(\grm{B}^\Sg((\gamma, \alpha), (\delta, \omega), \phi(\alpha))\right)
+    \text{ and} \\
+\grm{\Pi(a, A :: \Pc)}^\Sg(\gamma, \delta, \phi, \xi)
+  &:\equiv p^*\left(\grm{B}^\Sg((\gamma, \alpha), (\delta, \omega), \phi(\alpha, \omega))\right)
+    \text{,}
+\end{align*}
+where $p$ is an equation providing proof for
+\begin{equation*}
+\grm{B}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta), \left(\grm{a}^\Sg(\gamma, \delta)\inv\right)^*(\alpha, \omega) \right)
+  = \grm{B}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta), \xi \right) \text{.}
+\end{equation*}
+For the application we provide 
+$\grm{\IIapp(f)}^\Sg((\gamma, \alpha), (\delta, \omega))$ for
+\grm{\Gamma \vdash f : \Pi(a, B)} by the following
+identity proofs:
+\begin{align*}
+  & \grm{\IIapp(f)}^\CC\left(\grm{(\Gamma,\,\El(a))}^\Sg((\gamma, \alpha), (\delta, \omega))\right) \\
+  &\equiv \grm{f}^\CC\left(\grm{\Gamma}^\Sg(\gamma), \left(\grm{a}^\Sg(\gamma, \delta)\inv\right)^*(\alpha, \omega)\right) \\
+  &= \grm{\Pi(a, B)}^\Sg\left(\gamma, \delta, \left(\grm{a}^\Sg(\gamma, \delta)\inv\right)^*(\alpha, \omega)\right) \text{ by $\grm{f}^\Sg$}\\
+  &\equiv 
+    \begin{cases}
+    \grm{B}^\Sg\left((\gamma, \alpha), (\delta, \omega),
+    \tqm{\grm{f}^\EE }^\CC(\gamma_\Sc)
+      \left(\tqm{\grm{f}^\WW(\blgamma)}^\CC(\delta_\Sc)\right)\right)
+     & \text{for \grm{B :: \Sc} and} \\
+    \grm{B}^\Sg\left((\gamma, \alpha), (\delta, \omega),
+     \grm{f}^\EE(\gamma)\left(\grm{f}^\WW(\delta)\right)\right)
+     & \text{for \grm{B :: \Pc}.}
+    \end{cases}
+\end{align*}
+
 
 \section{The Eliminator Relation}
 
