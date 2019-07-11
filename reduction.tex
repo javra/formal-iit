@@ -944,10 +944,57 @@ compared to the recursive ones:
   &:\equiv \happly\left(\grm{f}^\Sg(\gamma, \delta), \tau\right)
 \end{align*}
 
-\section{The Eliminator Relation}
+This concludes all type formers, though we still need to have a definition on
+types which are the result of pullback along a substitution, and thus need
+to extend the operation to substitution with the following rule, which introduces
+equalities similar to the ones that we already saw for terms:
+\begin{equation*}
+\inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta}} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
+  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC  }
+  {\grm{\sigma}^\Sg(\gamma, \delta) :
+    \grm{\sigma}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta)\right)
+    = \grm{\Delta}^\Sg\left(\grm{\sigma}^\EE(\gamma), \grm{\sigma}^\WW(\delta) \right) }
+\end{equation*}
+With this rule we can set the provide the correct operations on pulled back types
+and terms:
+\begin{align*}
+\grm{B[\sigma]}^\Sg(\gamma, \delta, \omega)
+  &:\equiv \left(\grm{\sigma}^\Sg(\gamma, \delta)\inv\right)^*
+    \left(\grm{B}^\Sg(\grm{\sigma}^\EE(\gamma), \grm{\sigma}^\WW(\delta), \omega ) \right)
+\end{align*}
+for \grm{\Gamma \vdash B :: k}, and for a term \grm{\Gamma \vdash t[\sigma] : B[\sigma]}, we
+use $\grm{\sigma}^\Sg$ in the proof of the equality $\grm{t[\sigma]}^\Sg$:
+\begin{align*}
+  & \grm{t[\sigma]}^\CC(\grm{\Gamma}^\Sg(\gamma, \delta)) \\
+  &\equiv \grm{t}^\CC(\grm{\sigma}^\CC(\grm{\Gamma}^\Sg(\gamma, \delta))) \\
+  &= \left(\grm{\sigma}^\Sg(\gamma, \delta)\inv\right)^*
+    \left(\grm{t}^\CC(\grm{\Delta}^\Sg(\grm{\sigma}^\EE(\gamma), \grm{\sigma}^\WW(\delta)))\right) \\
+  &= \left(\grm{\sigma}^\Sg(\gamma, \delta)\inv\right)^*
+     \left(\grm{B}^\Sg(\grm{\sigma}^\EE(\gamma), \grm{\sigma}^\WW(\gamma, \delta), 
+       \tqm{\grm{t}^\WW(\gamma)}^\CC(\tqm{\grm{\sigma}^\WW_\Sc(\gamma)}^\CC(\delta_\Sc)  )
+       )\right) \\
+  &\equiv \grm{B[\sigma]}^\Sg(\gamma, \delta, foo )
+\end{align*}
+
+
+The substitutional calculus for this rule is easily defined 
+
 
 \end{defn}
 
+\begin{defn}[Initial Object]
+Using the generalized sigma construction we are now able to define the initial
+object by plugging in the respective initial objects of the inductive families:
+\begin{equation*}
+\con{\Gamma} :\equiv \grm{\Gamma}^\Sg(\IFcon{\grm{\Gamma}^\EE}, \IFcon{\grm{\Gamma}^\WW(\blm{\IFcon{\grm{\Gamma}^\EE}})})
+  : \grm{\Gamma}^\CC
+\end{equation*}
+\end{defn}
+
+\section{The Eliminator Relation}
 
 
 
