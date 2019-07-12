@@ -1,4 +1,4 @@
-\section{Example: Type Theory Syntax}
+\section{Example: Type Theory Syntax}\label{sec:red-ex}
 
 Before we explain the reduction in the general case, it is useful to first
 look at how it works in a special case.
@@ -1002,11 +1002,13 @@ $\grm{\sigma}^\Sg(\gamma, \delta)$ and $\grm{t}^\Sg(\gamma, \delta)$
 simultaneously to obtain the required equation (the variant for point terms follows
 in similar fashion):
 \begin{align*}
-  &\left( \grm{\sigma}^\CC(\grm{\Delta}^\Sg(\gamma, \delta)) ,\,
-    \grm{t}^\CC(\grm{\Delta}^\Sg(\gamma, \delta))   \right) \\
+  & \grm{(\sigma,\,t)}^\CC(\grm{\Gamma}^\Sg(\gamma, \delta)) \\
+  \equiv &\left( \grm{\sigma}^\CC(\grm{\Gamma}^\Sg(\gamma, \delta)) ,\,
+    \grm{t}^\CC(\grm{\Gamma}^\Sg(\gamma, \delta))   \right) \\
   = &\left( \grm{\Delta}^\Sg(\grm{\sigma}^\EE(\gamma), \grm{\sigma}^\WW(\gamma, \delta) ) ,
     \grm{B}^\Sg(\grm{\sigma}^\EE(\gamma), \grm{\sigma}^\WW(\gamma, \delta),
-      \tqm{\grm{t}^\WW(\blgamma)}^\CC(\delta_\Sc) ) \right) \text{.}
+      \tqm{\grm{t}^\WW(\blgamma)}^\CC(\delta_\Sc))\right) \\
+  \equiv & \grm{(\Gamma,\,B)}^\Sg(\grm{\sigma}^\EE(\gamma), \grm{\sigma}^\WW(\gamma, \delta)) \text{.}
 \end{align*}
 The remaining equations follow in similarly obvious way.
 
@@ -1024,7 +1026,60 @@ object by plugging in the respective initial objects of the inductive families:
 
 \section{The Eliminator Relation}
 
+Now that we have defined a candidate for the initial object in the category of
+algebras,
+the obvious next step is to prove its initiality.
+The strategy for this is, as we have seen in Chapter~\ref{sec:red-ex},
+to first define a \emph{relation} for the non-dependent eliminator, before showing
+that this relation is right-unique and left-total and as such, a function.
+Like the wellformedness predicate, the construction of this relation
+relies on the fact that we are provided with an initial algebra for the type
+erasure.
 
+Again, we start by taking on the running examples of natural numbers, vectors,
+and type theoretic syntax, to get a feeling for what the construction is supposed
+to look like.
+
+\begin{example}[Natural Numbers]
+Continuing the construction from Example~\ref{ex:red-e-nat} and parallel to 
+Example~\ref{ex:red-w-nat}, we assume sort and point algebras
+$(\star,N') : \grm{\Gamma_{nat}}^\CC $ and $(\star,z',s') : \grm{\Gamma_{nat}}^\CC(\star, N)$.
+Furthermore, our relation should relate these algebras to an arbitray algebra
+of \grm{\Gamma_{nat}}, so we assume that we are given
+\begin{align*}
+(\star, N, z, s) &: \grm{\Gamma_{nat}}^\CC \text{ with} \\ %TODO think about these names 🙄️
+N &: \UU \text{,}\\
+z &: N \text{, and} \\
+s &: N \to N \text{.}
+\end{align*}
+Since, as we observed in Example~\ref{ex:red-e-nat}, no erasure takes place, this
+algebra already contains the same amount of information as $((\star, N'), (\star, z', s'))$.
+Like type erasure and wellformedness predicate, the eliminator relation will come
+in the form of the sort and point context of an inductive family.
+The sort context simply describes the one of a type family indexed both over $N$
+and $N'$ (we will use variable names instead of de-Bruijn indices):
+\begin{equation*}
+\tqm{\grm{\Gamma_{nat}}^\RR_\Sc}
+  = \tqm{(\cdot_\Sc ,\, R_N : \ExtPiS{N}{\ExtPiS{N'}{\UU}})} \text{.}
+\end{equation*}
+The point context will now populate this relation by witnesses for the fact
+that the corresponding point constructors are related, or, for $s$, that they
+preserve relatedness:
+\begin{align*}
+\tqm{\grm{\Gamma_{nat}}^\RR}
+  =& \tqm{\Bigl(\cdot ,\, r_z : \El(R_N(\blm{z})(\blm{z'}) ,\, } \\
+   & \tqm{ \phantom{\Bigl(}
+    \ExtPiP{n : N}{\ExtPiP{n' : N'}{R_N(\blm{n})(\blm{n'}) \Rightarrow_\Pc
+      \El(R_N(\blm{s(n)})(\blm{s'(n')}))}} \Bigr)} \text{.}
+\end{align*}
+Since, as we remarked earlier, the type erasure on \grm{\Gamma_{nat}} is without
+effect, we can expect this relation to be the same as the graph of the
+non-dependent eliminator on $N'$ already.
+\end{example}
+
+\begin{example}[Vectors]
+foo
+\end{example}
 
 
 
