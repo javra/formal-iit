@@ -873,8 +873,7 @@ inductive family syntax instead of syntax itself:
   \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC }
   {\grm{t}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta)\right)
     = \grm{B}^\Sg\left(\gamma, \delta,
-      \tqm{\grm{t}^\EE }^\CC(\gamma_\Sc)
-      \left(\tqm{\grm{t}^\WW(\blgamma)}^\CC(\delta_\Sc)\right) \right)}
+      \tqm{\grm{t}^\WW(\blgamma)}^\CC(\delta_\Sc) \right)}
 \\[.7em]
 \inferrule{\grm{\Gamma \vdash t : A :: \Pc} \\
   \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
@@ -882,11 +881,11 @@ inductive family syntax instead of syntax itself:
   \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
   \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC }
   {\grm{t}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta)\right)
-    = \grm{A}^\Sg\left(\gamma, \delta, \grm{t}^\EE(\gamma)\left(\grm{t}^\WW(\delta)\right)\right)}
+    = \grm{A}^\Sg\left(\gamma, \delta, \grm{t}^\WW(\delta)\right)}
 \end{gathered}
 \end{equation*}
 
-We will now go all the type formers in order, starting the universe.
+We will now go all the type formers in order, starting with the universe.
 It justifies the name of the construction, producing a sigma type of the erasure and
 its wellformedness.
 For the element operator, we need the above equation for terms to be able to
@@ -965,7 +964,7 @@ and terms:
   &:\equiv \left(\grm{\sigma}^\Sg(\gamma, \delta)\inv\right)^*
     \left(\grm{B}^\Sg(\grm{\sigma}^\EE(\gamma), \grm{\sigma}^\WW(\delta), \omega ) \right)
 \end{align*}
-for \grm{\Gamma \vdash B :: k}, and for a term \grm{\Gamma \vdash t[\sigma] : B[\sigma]}, we
+for \grm{\Gamma \vdash B :: \Sc}, and for a term \grm{\Gamma \vdash t[\sigma] : B[\sigma]}, we
 use $\grm{\sigma}^\Sg$ in the proof of the equality $\grm{t[\sigma]}^\Sg$:
 \begin{align*}
   & \grm{t[\sigma]}^\CC(\grm{\Gamma}^\Sg(\gamma, \delta)) \\
@@ -976,11 +975,25 @@ use $\grm{\sigma}^\Sg$ in the proof of the equality $\grm{t[\sigma]}^\Sg$:
      \left(\grm{B}^\Sg(\grm{\sigma}^\EE(\gamma), \grm{\sigma}^\WW(\gamma, \delta), 
        \tqm{\grm{t}^\WW(\gamma)}^\CC(\tqm{\grm{\sigma}^\WW_\Sc(\gamma)}^\CC(\delta_\Sc)  )
        )\right) \\
-  &\equiv \grm{B[\sigma]}^\Sg(\gamma, \delta, foo )
+  &\equiv \grm{B[\sigma]}^\Sg(\gamma, \delta, \tqm{\grm{t}^\WW[\grm{\sigma}^\WW_\Sc(\gamma) ]  }^\CC(\delta_\Sc) ) %TODO re-check all this
 \end{align*}
+and similarly for \grm{\Gamma \vdash A :: \Pc}.
 
 
-The substitutional calculus for this rule is easily defined 
+The substitutional calculus for this rule is easily defined since
+$\grm{\id}^\Sg(\gamma, \delta)$ and $\grm{\epsilon}^\Sg(\gamma, \delta)$ hold
+definitionally,
+the composition rule $\grm{\sigma \circ \delta}^\Sg(\gamma, \delta')$
+for foo is justified
+by
+\begin{align*}
+\grm{\sigma}^\CC\left(\grm{\delta}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta')\right)\right)
+  &= \grm{\sigma}^\CC\left(\grm{\Delta}^\Sg(\grm{\delta}^\EE(\gamma), \grm{\delta}^\WW(\gamma, \delta') ) \right)
+  & \text{by $\grm{\delta}^\Sg(\gamma, \delta') $} \\
+  & = \grm{\Sigma}^\Sg(\grm{\sigma}^\EE(\grm{\delta}^\EE(\gamma)),
+     \grm{\sigma}^\WW(\grm{\delta}^\EE(\gamma),\grm{\delta}^\WW(\gamma, \delta') ) )
+  & \text{by $\grm{\sigma}^\Sg(\ldots) $.}
+\end{align*}
 
 
 \end{defn}
