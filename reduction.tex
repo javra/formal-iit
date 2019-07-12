@@ -1078,7 +1078,34 @@ non-dependent eliminator on $N'$ already.
 \end{example}
 
 \begin{example}[Vectors]
-foo
+To move on to an example where on the one hand no real induction-induction is
+happening, but we still have a non-trivial effect by type erasure, let us
+consider the type of vectors over an external type $A : \UU$.
+Again, we assume that we already have constructed point and sort algebras
+$(\star, V')$ and $(\star, n', c')$ as in Example~\ref{ex:red-w-vec}.
+We also assume an arbitrary algebra of the vectors in \grm{\Gamma_{vec}}, which
+comes in the form of $(\star, V, n, c)$ where
+\begin{align*}
+V &: \N \to \UU \text{,} \\
+n &: V(0) \text{, and} \\
+c &: (a : A)(n : \N) \to V(n) \to V(n + 1) \text{.}
+\end{align*}
+Since $V$ is a type family, the relation will also need to be indexed by its codomain
+and so we obtain the following for the sort context describing the relation:
+\begin{equation*}
+\tqm{\grm{\Gamma_{vec}}^\RR(...)} =
+  \tqm{\Bigl( \cdot_\Sc ,\, R_V : \ExtPiS{n : \N}{\ExtPiS{V(n)}{\ExtPiS{V'}{\UU}}} \Bigr)} \text{.}
+\end{equation*}
+The point context again describes that relatedness is preserved by all point
+constructors:
+\begin{equation*}
+\begin{gathered}
+\tqm{\grm{\Gamma_{vec}}^\RR}
+  = \tqm{ \Bigl( \cdot ,\,} \tqm{ \El(R_V(\blm{0})(\blm{n})(\blm{n'})) ,\, } \\
+ \tqm{ \ExtPiP{a : A}{\ExtPiP{n : \N}{\ExtPiP{v : V}{\ExtPiP{v' : V'}{R_V(\blm{n})(\blm{v})(\blm{v'})
+     \Rightarrow_\Pc R_V(\blm{n+1})(\blm{c(a,v)})(\blm{c'(a,v')})}}}} \Bigr) } \text{.} %TODO formatting
+\end{gathered}
+\end{equation*}
 \end{example}
 
 
