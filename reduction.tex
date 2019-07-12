@@ -984,7 +984,8 @@ The substitutional calculus for this rule is easily defined since
 $\grm{\id}^\Sg(\gamma, \delta)$ and $\grm{\epsilon}^\Sg(\gamma, \delta)$ hold
 definitionally,
 the composition rule $\grm{\sigma \circ \delta}^\Sg(\gamma, \delta')$
-for foo is justified
+for \grm{\IISub{\sigma}{\Delta}{\Sigma}} and
+\grm{\IISub{\delta}{\Gamma}{\Delta}} is justified
 by
 \begin{align*}
 \grm{\sigma}^\CC\left(\grm{\delta}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta')\right)\right)
@@ -994,6 +995,20 @@ by
      \grm{\sigma}^\WW(\grm{\delta}^\EE(\gamma),\grm{\delta}^\WW(\gamma, \delta') ) )
   & \text{by $\grm{\sigma}^\Sg(\ldots) $.}
 \end{align*}
+To prove the coherence of a substitution extended by a term
+$\grm{(\sigma,\,t)}$ with \grm{\IISub{\sigma}{\Gamma}{\Delta}} and
+\grm{\Gamma \vdash B[\sigma] :: \Sc}, we use
+$\grm{\sigma}^\Sg(\gamma, \delta)$ and $\grm{t}^\Sg(\gamma, \delta)$
+simultaneously to obtain the required equation (the variant for point terms follows
+in similar fashion):
+\begin{align*}
+  &\left( \grm{\sigma}^\CC(\grm{\Delta}^\Sg(\gamma, \delta)) ,\,
+    \grm{t}^\CC(\grm{\Delta}^\Sg(\gamma, \delta))   \right) \\
+  = &\left( \grm{\Delta}^\Sg(\grm{\sigma}^\EE(\gamma), \grm{\sigma}^\WW(\gamma, \delta) ) ,
+    \grm{B}^\Sg(\grm{\sigma}^\EE(\gamma), \grm{\sigma}^\WW(\gamma, \delta),
+      \tqm{\grm{t}^\WW(\blgamma)}^\CC(\delta_\Sc) ) \right) \text{.}
+\end{align*}
+The remaining equations follow in similarly obvious way.
 
 
 \end{defn}
