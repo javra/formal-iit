@@ -696,7 +696,7 @@ The pullback operations can afterwards defined by
     [\grm{\sigma}^\WW_\Sc(\blgamma)] } \text{ for \grm{\Gamma \vdash t : B :: \Sc}.}
 \end{align*}
 The remaining pieces of substitutional calculus are straightforward and look the
-same as for the type erasure:
+same as for the type erasure: %TODO add rule for point terms!!!	😮️
 \begin{align*}
 \tqm{\grm{\epsilon}^\WW_\Sc(\blgamma)}
   &:\equiv \tqm{\epsilon} \text{,} \\
@@ -1173,6 +1173,28 @@ definition on types, ignoring extensions by types of the respective other kind:
   &:\equiv \tqm{\grm{\Gamma}^\RR(\blgamma, \blgammaCC)[\wk_\id]} \\
 \tqm{\grm{(\Gamma,\, A :: \Pc)}^\RR((\blgamma, \blalpha), \blm{(\blgammaCC, \blalphaCC)}) }
   &:\equiv \tqm{\left( \grm{\Gamma}^\RR(\blgamma, \blgammaCC) ,\, \grm{A}^\RR(\blgamma, \blalpha, \blalphaCC) \right)}
+\end{align*}
+
+Before giving the definition on type formers, we need again care about how to handle
+at least sort terms.
+For those, we introduce the a construction of the following type:
+\begin{equation*}
+\inferrule{\grm{\Gamma \vdash t : B :: \Sc} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \gamma^\CC : \grm{\Gamma}^\CC }
+  {\tqm{\grm{\Gamma}^\RR_\Sc(\blgamma, \blgammaCC) \SCon \grm{t}^\RR(\blgamma, \blgammaCC)
+    : \grm{B}^\RR(\blm{\tqm{\grm{t}^\EE}^\CC(\gamma_\Sc)}, \blm{\grm{t}^\CC(\blgammaCC)})}}
+\end{equation*}
+
+Using this we can give the definition on the universe -- producing the relation
+itself -- and the element operator, populating the relation via the following
+definitions:
+\begin{align*}
+\tqm{\grm{\UU}^\RR(\blalpha, \blalphaCC)}
+  &:\equiv \tqm{\ExtPiS{\blalphaCC}{\ExtPiS{\blalpha}{\UU}}} \\
+\tqm{\grm{\El(a)}^\RR(\blgamma, \blalpha, \blalphaCC)}
+  &:\equiv \tqm{\El(\grm{a}^\RR(\blgamma, \blgammaCC)(\blalphaCC)(\blalpha))}
 \end{align*}
 
 \end{defn}
