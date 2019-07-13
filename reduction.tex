@@ -522,7 +522,7 @@ with point constructors that ensure the correct lengh by setting $\tqm{\grm{\Gam
 \end{equation*}
 \end{example}
 
-Like for the type erasure, we will no proceed to generalize this to arbitrary
+Like for the type erasure, we will now proceed to generalize this to arbitrary
 inductive-inductive types.
 
 \begin{defn}[Wellformedness Predicates]
@@ -1107,6 +1107,70 @@ constructors:
 \end{gathered}
 \end{equation*}
 \end{example}
+
+\begin{example}[Type Theory Syntax]
+For an example involving non-trivial dependency between the sorts, let us
+at last consider the example of contexts and types:
+foo
+\end{example}
+
+\begin{defn}[Eliminator Relation]
+As we have noticed before, the specification of the eliminator relation bears
+many similarities with the one of the wellformedness predicate,
+with the difference that we now also depend on an arbitrary algebra over the
+inductive-inductive signature under consideration.
+The definition on contexts again produces both a sort and a point context:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\vdash \Gamma} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \gamma^\CC : \grm{\Gamma}^\CC }
+  {\tqm{\SCon \grm{\Gamma}^\RR_\Sc(\blm{\gamma}, \blm{\gamma^\CC})} }
+\\[.7em]
+\inferrule{\grm{\vdash \Gamma} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \gamma^\CC : \grm{\Gamma}^\CC }
+  {\tqm{\vdash_{\grm{\Gamma}^\RR_\Sc(\blm{\gamma}, \blm{\gamma^\CC})} \grm{\Gamma}^\RR(\blm{\gamma}, \blm{\gamma^\CC}) }}
+\end{gathered}
+\end{equation*}
+
+For the definition on types, we can make a a big simplification on sort types:
+The definition does not depend on the erasure of the remaining context, but only
+on the erasure of the type itself.
+For point types, we are not able to make this simplification.
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\Gamma \vdash B :: \Sc} \\
+  \gamma^\CC : \grm{\Gamma}^\CC \\
+  \alpha : \UU \\
+  \alpha^\CC : \grm{B}^\CC(\gamma^\CC) }
+  {\tqm{\grm{B}^\RR(\blalpha, \blalphaCC) :: \Sc} }
+\\[.7em]
+\inferrule{\grm{\Gamma \vdash A :: \Pc} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \gamma^\CC : \grm{\Gamma}^\CC \\
+  \alpha : \grm{A}^\EE(\gamma_\Sc) \\
+  \alpha^\CC : \grm{A}^\CC(\gamma^\CC) }
+  {\tqm{\grm{\Gamma}^\RR_\Sc(\blgamma, \blgammaCC) \SCon \grm{A}^\RR(\blgamma, \blalpha, \blalphaCC) }}
+\end{gathered}
+\end{equation*}
+
+\end{defn}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
