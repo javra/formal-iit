@@ -1158,6 +1158,23 @@ For point types, we are not able to make this simplification.
 \end{gathered}
 \end{equation*}
 
+As usual, we define the operation on contexts by a simple recursion, using the
+definition on types, ignoring extensions by types of the respective other kind:
+\begin{align*}
+\tqm{\grm{\cdot}^\RR_\Sc(\blgamma, \blgammaCC)}
+  &:\equiv \tqm{\cdot_\Sc} \\
+\tqm{\grm{(\Gamma,\, B :: \Sc)}^\RR_\Sc\{\blm{\gamma_\Sc, \alpha}\}(\blgamma, \blm{(\blgammaCC, \blalphaCC)})}
+  &:\equiv \tqm{\left(\grm{\Gamma}^\RR_\Sc(\blgamma, \blgammaCC) ,\, \grm{B}^\RR(\blalpha, \blalphaCC)\right)} \\
+\tqm{\grm{(\Gamma,\, A :: \Pc)}^\RR_\Sc((\blgamma, \blalpha), \blm{(\blgammaCC, \blalphaCC)}) }
+  &:\equiv \tqm{\grm{\Gamma}^\RR_\Sc(\blgamma, \blgammaCC)} \\[.7em]
+\tqm{\grm{\cdot}^\RR(\blgamma, \blgammaCC)}
+  &:\equiv \tqm{\cdot} \\
+\tqm{\grm{(\Gamma,\, B :: \Sc)}^\RR\{\blm{\gamma_\Sc, \alpha}\}(\blgamma, \blm{(\blgammaCC, \blalphaCC)})}
+  &:\equiv \tqm{\grm{\Gamma}^\RR(\blgamma, \blgammaCC)[\wk_\id]} \\
+\tqm{\grm{(\Gamma,\, A :: \Pc)}^\RR((\blgamma, \blalpha), \blm{(\blgammaCC, \blalphaCC)}) }
+  &:\equiv \tqm{\left( \grm{\Gamma}^\RR(\blgamma, \blgammaCC) ,\, \grm{A}^\RR(\blgamma, \blalpha, \blalphaCC) \right)}
+\end{align*}
+
 \end{defn}
 
 
