@@ -1197,6 +1197,24 @@ definitions:
   &:\equiv \tqm{\El(\grm{a}^\RR(\blgamma, \blgammaCC)(\blalphaCC)(\blalpha))}
 \end{align*}
 
+To continue to recursive $\Pi$-types, we observe that we need sort-kinded
+$\Pi$-types to be translated $\Pi$-types which the generated relation is
+indexed over, including the appropriate application,
+while point-kinded $\Pi$-types are translated to the fact that
+relatedness is preserved for all point constructors.
+\begin{align*}
+\tqm{\grm{\Pi(a, B :: \Sc)}^\RR(\blphi, \blphiCC)}
+  &:\equiv \tqm{\ExtPiS{\blalphaCC : \grm{a}^\CC(\blgammaCC)}
+    {\grm{B}^\RR(\blphi, \blm{\blphiCC(\blalphaCC)})}} \\
+\tqm{\grm{\Pi(a, A :: \Pc)}^\RR(\blgamma, \blphi, \blphiCC)}
+  &:\equiv \tqm{\ExtPiP{\blalphaCC : \grm{a}^\CC(\blgammaCC)}
+    {\ExtPiP{\blalpha : \tqm{\grm{a}^\EE}^\CC(\gamma_\Sc)}
+    {\grm{a}^\RR(\blgamma,\blgammaCC)(\blalphaCC)(\blalpha)
+    \Rightarrow_\Pc \grm{B}^\RR(\blm{(\gamma, \alpha)}, \blm{\phi(\alpha)}, \blm{\blphiCC(\blalphaCC)}) }}  } \\[.7em]
+\tqm{\grm{(\IIapp(f) : B :: \Sc)}^\RR(\blm{(\gamma, \alpha)},\blm{(\blgammaCC,\blalphaCC)})}
+  &:\equiv \tqm{\grm{f}^\RR(\blgamma, \blgammaCC)(\blalphaCC) }
+\end{align*}
+
 \end{defn}
 
 
