@@ -1215,6 +1215,18 @@ relatedness is preserved for all point constructors.
   &:\equiv \tqm{\grm{f}^\RR(\blgamma, \blgammaCC)(\blalphaCC) }
 \end{align*}
 
+The treatment of external $\Pi$-types is a simple one-to-one translation
+using the respective external $\Pi$-types in the generated inductive-family:
+\begin{align*}
+\tqm{\grm{\ExtPi{T}{B :: \Sc}}^\RR(\blphi, \blphiCC)}
+  &:\equiv \tqm{\ExtPiS{\tau : T}{\grm{B(\bltau)}^\RR(\blphi, \blm{\phi^\CC(\tau)})}} \\
+\tqm{\grm{\ExtPi{T}{A :: \Pc}}^\RR(\blphi, \blphiCC)}
+  &:\equiv \tqm{\ExtPiP{\tau : T}{\grm{A(\bltau)}^\RR(\blm{\phi(\tau)}, \blm{\phi^\CC(\tau)})}} \\
+\tqm{\grm{f(\bltau)}^\RR(\blphi, \blphiCC)}
+  &:\equiv \tqm{\grm{f}^\RR(\blphi, \blphiCC)(\bltau)}
+\end{align*}
+
+
 \end{defn}
 
 
