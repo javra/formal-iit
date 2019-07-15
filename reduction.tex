@@ -1222,11 +1222,62 @@ using the respective external $\Pi$-types in the generated inductive-family:
   &:\equiv \tqm{\ExtPiS{\tau : T}{\grm{B(\bltau)}^\RR(\blphi, \blm{\phi^\CC(\tau)})}} \\
 \tqm{\grm{\ExtPi{T}{A :: \Pc}}^\RR(\blphi, \blphiCC)}
   &:\equiv \tqm{\ExtPiP{\tau : T}{\grm{A(\bltau)}^\RR(\blm{\phi(\tau)}, \blm{\phi^\CC(\tau)})}} \\
-\tqm{\grm{f(\bltau)}^\RR(\blphi, \blphiCC)}
-  &:\equiv \tqm{\grm{f}^\RR(\blphi, \blphiCC)(\bltau)}
+\tqm{\grm{f(\bltau)}^\RR(\blgamma, \blgammaCC)}
+  &:\equiv \tqm{\grm{f}^\RR(\blgamma, \blgammaCC)(\bltau)}
 \end{align*}
 
-
+To provide the relation for types pulled along substitutions,
+we again have to provide data for substitutions,
+in the form of sort substitutions:
+\begin{equation*}
+\inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta}} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \gamma^\CC : \grm{\Gamma}^\CC }
+  {\tqm{\IFSub{\grm{\sigma}^\RR_\Sc(\blgamma, \blgammaCC)}
+    {\grm{\Gamma}^\RR_\Sc(\blgamma, \blgammaCC)}
+    {\grm{\Delta}^\RR_\Sc(\blm{\grm{\sigma}^\EE(\blgamma)}, \blm{\grm{\sigma}^\CC(\blgammaCC)})}}}
+\end{equation*}
+As the sort substitutions of inductive families, these follow the categorical
+structure trivially:
+\begin{align*}
+\tqm{\grm{\id}^\RR_\Sc(\blgamma, \blgammaCC)}
+  &:\equiv \tqm{\id} \text{ and} \\
+\tqm{\grm{\sigma \circ \delta}^\RR_\Sc(\blgamma, \blgammaCC)}
+  &:\equiv \tqm{\grm{\sigma}^\RR_\Sc(\blm{\grm{\delta}^\EE(\gamma)}, \blm{\grm{\delta}^\CC(\blgammaCC)})
+    \circ \grm{\delta}^\RR_\Sc(\blgamma, \blgammaCC)} \text{.}
+\end{align*}
+Pulled back sort types are invariant under pullback while point types and sort terms
+are pulled back with the operation we gave in Definition~\ref{def:if-sort-subs}:
+\begin{align*}
+\tqm{\grm{B[\sigma]}^\RR(\blalpha, \blalphaCC)}
+  &:\equiv \tqm{\grm{B}^\RR(\blalpha, \blalphaCC)} \text{ for \grm{\Gamma \vdash B :: \Sc},} \\
+\tqm{\grm{A[\sigma]}^\RR(\blgamma, \blalpha, \blalphaCC)}
+  &:\equiv \tqm{\grm{A}^\RR(\blm{\grm{\sigma}^\EE(\gamma)}, \blalpha, \blalphaCC)[\grm{\sigma}^\RR_\Sc(\blgamma, \blgammaCC)]}
+    \text{ for \grm{\Gamma \vdash A :: \Pc}, and} \\
+\tqm{\grm{t[\sigma]}^\RR(\blgamma, \blgammaCC)}
+  &:\equiv \tqm{\grm{t}^\RR(\blm{\grm{\sigma}^\EE(\gamma)}, \blm{\grm{\sigma}^\CC(\blgammaCC)})
+    [\grm{\sigma}^\RR_\Sc(\blgamma, \blgammaCC)] } \text{.}
+\end{align*}
+The remaining parts of the substitutional calculus are given by their counterparts
+in the sort substitutions of inductive families as they were defined in
+Definition~\ref{def:if-sort-subs}:
+\begin{align*}
+\tqm{\grm{\epsilon}^\RR_\Sc(\blgamma, \blgammaCC)}
+  &:\equiv \tqm{\epsilon} \text{,} \\
+\tqm{\grm{(\sigma,\,t)}^\RR_\Sc(\blgamma, \blgammaCC)}
+  &:\equiv \tqm{(\grm{\sigma}^\RR_\Sc(\blgamma, \blgammaCC) , \grm{t}^\RR(\blgamma, \blgammaCC))}
+    \text{ for \grm{\Gamma \vdash t : B :: \Sc},} \\
+\tqm{\grm{(\sigma,\,t)}^\RR_\Sc(\blgamma, \blgammaCC)}
+  &:\equiv \tqm{\grm{\sigma}^\RR_\Sc(\blgamma, \blgammaCC)} \text{ for \grm{\Gamma \vdash t : A :: \Pc},} \\
+\tqm{\grm{\pi_1(\sigma)}^\RR_\Sc(\blgamma, \blgammaCC)}
+  &:\equiv \tqm{\pi_1(\grm{\sigma}^\RR_\Sc(\blgamma, \blgammaCC))} \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\, B :: \Sc)}},} \\
+\tqm{\grm{\pi_1(\sigma)}^\RR_\Sc(\blgamma, \blgammaCC)}
+  &:\equiv \tqm{\grm{\sigma}^\RR_\Sc(\blgamma, \blgammaCC)} \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\, A :: \Pc)}},} \\
+\tqm{\grm{\pi_2(\sigma)}^\RR_\Sc(\blgamma, \blgammaCC)}
+  &:\equiv \tqm{\pi_2(\grm{\sigma}^\RR_\Sc(\blgamma, \blgammaCC))} \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta ,\, B :: \Sc)}} .}
+\end{align*}
+This concludes our definition of the eliminator relation.
 \end{defn}
 
 
