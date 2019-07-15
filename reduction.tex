@@ -430,18 +430,26 @@ For the steps that follow it will be necessary to equip the \emph{algebras}
 of the resulting signatures with a substitution calculus that also considers
 point contexts instead of only sort contexts.
 To this end, we extend the operation of type erasure by assigning a map between
-the types of algebras of the erasure to each substitution:
+the types of algebras of the erasure to each substitution.
+To be able to build these maps, we furthermore need to find a way how to get an
+element of the algebra of point type for any given term of this type.
 
-\begin{defn}[Replacement for Point Substitutions]\label{def:red-e-points}
-We define the following operation on substitutions:
+\begin{defn}[Erasure for Point Substitutions]\label{def:red-e-points}
+We define the following operation on substitutions and terms of point types:
 \begin{equation*}
-\inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta}}}
-  {\grm{\sigma}^\EE : \left\{\gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc}^\AA \right\}
-    \to \tqm{\grm{\Gamma}^\EE}^\AA(\gamma_\Sc)
-    \to \tqm{\grm{\Delta}^\EE}^\AA\left(\grm{\sigma}^\EE_\Sc(\gamma_\Sc)\right)}
+\begin{gathered}
+\inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta}} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc}^\AA \\
+  \gamma : \tqm{\grm{\Gamma}^\EE}^\AA(\gamma_\Sc) }
+  {\grm{\sigma}^\EE(\blgamma) : \tqm{\grm{\Delta}^\EE}^\AA\left(\grm{\sigma}^\EE_\Sc(\gamma_\Sc)\right)}
+\\[.7em]
+\inferrule{\grm{\Gamma \vdash t : A :: \Pc} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc}^\AA \\
+  \gamma : \tqm{\grm{\Gamma}^\EE}^\AA(\gamma_\Sc) }
+  {\grm{t}^\EE(\blgamma) : \tqm{\grm{A}^\EE}^\CC(\gamma_\Sc)}
+\end{gathered}
 \end{equation*}
-While in for \tqm{\grm{\sigma}^\EE_\Sc} we ignored point constructors
-(see \ref{eq:red-e-sub} above)
+While in for \tqm{\grm{\sigma}^\EE_\Sc} we ignored point constructors,
 this time we will to the opposite and ignore all sort constructors:
 \begin{align*}
 \grm{\id}^\EE(\gamma)
@@ -454,13 +462,29 @@ this time we will to the opposite and ignore all sort constructors:
   &:\equiv \grm{\sigma}^\EE(\gamma)
   & \text{ for \grm{\Gamma \vdash t : B[\sigma] :: \Sc },} \\
 \grm{(\sigma,\, t)}^\EE(\gamma)
-  &:\equiv \left(\grm{\sigma}^\EE, \grm{t}^\EE\right)
+  &:\equiv \left(\grm{\sigma}^\EE(\gamma), \grm{t}^\EE(\gamma)\right)
   & \text{ for \grm{\Gamma \vdash t : A[\sigma] :: \Pc},} \\
 \grm{\pi_1(\sigma)}^\EE(\gamma)
   &:\equiv \grm{\sigma}^\EE(\gamma)
   & \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\, B :: \Sc)}},} \\
 \grm{\pi_1(\sigma)}^\EE(\gamma, \alpha)
   &:\equiv \grm{\sigma}^\EE(\gamma)
+  & \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\, A :: \Pc)}}.}
+\end{align*}
+On point constructors we descend recursively by following the structure of the
+respective algebra:
+\begin{align*}
+\grm{\IIapp(f)}^\EE(\gamma, \alpha)
+  &:\equiv \grm{f}^\EE(\gamma)(\alpha)
+  & \text{ for \grm{\Gamma \vdash f : \Pi(a, A :: \Pc)},} \\
+\grm{f(\bltau)}^\EE(\gamma)
+  &:\equiv \grm{f}^\EE(\gamma)(\tau)
+  & \text{ for \grm{\Gamma \vdash f : \ExtPiP{T}{A}},} \\
+\grm{t[\sigma]}^\EE(\gamma)
+  &:\equiv \grm{t}^\EE(\grm{\sigma}^\EE(\gamma))
+  & \text{ for \grm{\IISub{\sigma}{\Gamma}{\Delta}}, and} \\
+\grm{\pi_2(\sigma)}(\gamma)
+  &:\equiv \pr_2(\grm{\sigma}^\EE(\gamma))
   & \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\, A :: \Pc)}}.}
 \end{align*}
 \end{defn}
@@ -696,7 +720,7 @@ The pullback operations can afterwards defined by
     [\grm{\sigma}^\WW_\Sc(\blgamma)] } \text{ for \grm{\Gamma \vdash t : B :: \Sc}.}
 \end{align*}
 The remaining pieces of substitutional calculus are straightforward and look the
-same as for the type erasure: %TODO add rule for point terms!!!	😮️
+same as for the type erasure:
 \begin{align*}
 \tqm{\grm{\epsilon}^\WW_\Sc(\blgamma)}
   &:\equiv \tqm{\epsilon} \text{,} \\
@@ -718,6 +742,73 @@ same as for the type erasure: %TODO add rule for point terms!!!	😮️
   &:\equiv \tqm{\grm{\sigma}^\WW_\Sc(\blgamma)}
   \text{ for \grm{\IISub{\sigma}{\Gamma}{\Delta,\, A :: \Pc}},}
 \end{align*}
+
+For the next step -- using the wellformedness predicate to define the initial
+object itself -- we will need data which provides evidence that the point contexts
+of the wellformedness predicate behave as well as the sort substitutions.
+Since we don't have point substitutions as part of the syntax of inductive
+families, we will proceed like in Definition~\ref{def:red-e-points} and work
+directly on algebras.
+To be able to give the definition we will also need a corresponding operation
+on the terms of point types.
+
+\begin{defn}[Wellformedness for Point Substitutions]
+We give a wellformedness predicate operation on substitutions and point terms
+in the following form:
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta}} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC }
+  {\grm{\sigma}^\WW(\gamma)
+    : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC(\delta_\Sc)
+    \to \tqm{\grm{\Delta}^\WW(\grm{\sigma}^\EE(\blgamma))}^\CC\left(\tqm{\grm{\sigma}^\WW_\Sc(\blgamma)}^\CC(\delta_\Sc)\right)}
+\\[.7em]
+\inferrule{\grm{\Gamma \vdash t : A :: \Pc} \\
+   \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
+  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC(\delta_\Sc) }
+  {\grm{t}^\WW(\gamma, \delta)
+    : \tqm{\grm{A}^\WW(\blgamma, \blm{\grm{t}^\EE(\gamma)})}^\CC(\delta_\Sc) }
+\end{gathered}
+\end{equation*}
+The definition will follow the structure of the algebra, ignoring the occurence
+of sort terms:
+\begin{align*}
+\grm{\id}^\WW(\gamma, \delta)
+  &:\equiv \delta \text{,} \\
+\grm{\sigma \circ \delta}^\WW(\gamma, \delta')
+  &:\equiv \grm{\sigma}^\WW(\grm{\delta}^\EE(\gamma), \grm{\delta}^\WW(\gamma, \delta')) \text{,} \\
+\grm{\epsilon}^\WW(\gamma, \delta)
+  &:\equiv \star \text{,} \\
+\grm{(\sigma ,\, t)}^\WW(\gamma, \delta)
+  &:\equiv \grm{\sigma}^\WW(\gamma, \delta)
+  & \text{ for \grm{\Gamma \vdash t : B[\sigma] :: \Sc},} \\
+\grm{(\sigma ,\, t)}^\WW(\gamma, \delta)
+  &:\equiv \left(\grm{\sigma}^\WW(\gamma, \delta) , \grm{t}^\WW(\delta)\right)
+  & \text{ for \grm{\Gamma \vdash t : A[\sigma] :: \Pc},} \\
+\grm{\pi_1(\sigma)}^\WW(\gamma, \delta)
+  &:\equiv \grm{\sigma}^\WW(\gamma, \delta)
+  & \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\,B :: \Sc)}}, and} \\
+\grm{\pi_1(\sigma)}^\WW(\gamma, \delta)
+  &:\equiv \pr_1(\grm{\sigma}^\WW(\gamma, \delta))
+  & \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\,A :: \Pc)}},} \\[.7em]
+\grm{\IIapp(f)}^\WW(\gamma, \alpha)(\delta, \omega)
+  &:\equiv \grm{f}^\WW(\delta)(\alpha)(\omega)
+  & \text{ for \grm{\Gamma \vdash f : \Pi(a, A :: \Pc)},} \\
+\grm{f(\bltau)}^\WW(\gamma, \delta)
+  &:\equiv \grm{f}^\WW(\gamma, \delta)(\tau)
+  & \text{ for \grm{\Gamma \vdash f : \ExtPiP{T}{A}},} \\
+\grm{f[\sigma]}^\WW(\gamma, \delta)
+  &:\equiv \grm{f}^\WW(\grm{\sigma}^\EE(\gamma), \grm{\sigma}^\WW(\gamma, \delta))
+  & \text{ for \grm{\IISub{\sigma}{\Gamma}{\Delta}}, and} \\
+\grm{\pi_2(\sigma)}^\WW(\gamma, \delta)
+  &:\equiv \pr_2(\grm{\sigma}^\WW(\gamma, \delta))
+  & \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta,\,A :: \Pc)}}.}
+\end{align*}
+\end{defn}
 
 \section{The Initial Object}
 
@@ -815,7 +906,7 @@ and the wellformedness, so that the operation will take the following form:
   \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
   \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
   \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
-  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC }
+  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC(\delta_\Sc) }
   {\grm{\Gamma}^\Sg(\gamma, \delta) : \grm{\Gamma}^\CC }
 \end{equation*}
 
@@ -828,7 +919,7 @@ two rules:
   \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
   \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
   \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
-  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC \\
+  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC(\delta_\Sc) \\
   \alpha : \UU \\
   \omega : \tqm{\grm{B}^\WW(\blgamma, \blalpha)}^\CC }
   {\grm{B}^\Sg(\gamma, \delta, \omega) 
@@ -838,7 +929,7 @@ two rules:
   \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
   \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
   \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
-  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC \\
+  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC(\delta_\Sc) \\
   \alpha : \tqm{\grm{A}^\EE}^\CC(\gamma_\Sc) \\
   \omega : \tqm{\grm{A}^\WW(\blgamma, \blalpha) }^\CC(\delta_\Sc) }
   {\grm{A}^\Sg(\gamma, \delta, \omega)
@@ -870,7 +961,7 @@ inductive family syntax instead of syntax itself:
   \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
   \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
   \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
-  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC }
+  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC(\delta_\Sc) }
   {\grm{t}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta)\right)
     = \grm{B}^\Sg\left(\gamma, \delta,
       \tqm{\grm{t}^\WW(\blgamma)}^\CC(\delta_\Sc) \right)}
@@ -879,7 +970,7 @@ inductive family syntax instead of syntax itself:
   \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
   \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
   \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
-  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC }
+  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC(\delta_\Sc) }
   {\grm{t}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta)\right)
     = \grm{A}^\Sg\left(\gamma, \delta, \grm{t}^\WW(\delta)\right)}
 \end{gathered}
