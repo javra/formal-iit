@@ -936,34 +936,34 @@ W_{Sub_\Pc}(\Gamma)
 where the respective indices for the indexed W-types are given in Table~\ref{tbl:if-iws}.
 \end{defn}
 
-\begin{table}\label{tbl:if-iws}
+\begin{sidewaystable}\label{tbl:if-iws}
 \centering
-$\begin{array}{r|lllll}
+{$\begin{array}{r|lllll}
 i & I_i : \UU & A_i : \UU & B_i : A_i \to \UU & o_i : A_i \to I_i & r_i : (a : A_i) \to B_i(a) \to I_i \\
 \hline
 Ty_\Sc
   & \unit
   & \makecell[cl]{\unit \\ + \UU}
-  & fooB
-  & fooo
+  & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(T) \mapsto T}
+  & \_ \mapsto \star
   & foor \\
 Con_\Sc
   & \unit
   & \makecell[cl]{\unit \\ + W_{Ty_\Sc}}
-  & fooB
-  & fooo
+  & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(B) \mapsto \unit}
+  & \_ \mapsto \star
   & foor \\
 Var_\Sc
   & W_{Con_\Sc}(\star)
   & \makecell[cl]{W_{Con_\Sc} \\ + W_{Con_\Sc} \times W_{Ty_{\Sc}} }
-  & fooB
-  & fooo
+  & \makecell[cl]{\inl(\Gamma_\Sc) \mapsto \emptytype \\ \inr(\Gamma_\Sc, B') \mapsto \unit}
+  & \makecell[cl]{\inl(\Gamma_\Sc) \mapsto \tqm{(\Gamma_\Sc,\,B)} \\ \inr(\Gamma_\Sc, B') \mapsto \tqm{(\Gamma_\Sc,\,B')} }
   & foor \\
 Tm_\Sc(\Gamma_\Sc)
   & W_{Ty_\Sc}(\star)
   & \makecell[cl]{W_{Ty_\Sc} \\ + (T : \UU) \times (T \to W_{Ty_\Sc}) \times T }
-  & fooB
-  & fooo
+  & \makecell[cl]{\inl(B) \mapsto \emptytype \\ \inr(\_) \mapsto \unit}
+  & \makecell[cl]{\inl(B) \mapsto \emptytype \\ \inr(T, B, \tau) \mapsto B(\tau) }
   & foor \\
 Sub_\Sc(\Gamma_\Sc)
   & \unit
@@ -974,26 +974,26 @@ Sub_\Sc(\Gamma_\Sc)
 Ty_\Pc(\Gamma_\Sc)
   & \unit
   & \makecell[cl]{W_{Tm_\Sc}(\Gamma, \tqm{\UU}) \\ + \UU \\ + W_{Tm_\Sc}(\Gamma, \tqm{\UU})}
-  & fooB
-  & fooo
+  & \makecell[cl]{\inl(a) \mapsto \emptytype \\ \inr(\inl(\tau)) \mapsto T \\ \inr(\inr(a)) \mapsto \unit }
+  & \_ \mapsto \star
   & foor \\
 Con_\Pc(\Gamma_\Sc)
   & \unit
   & \makecell[cl]{\unit \\ + W_{Ty_{\Pc}(\Gamma_\Sc)} }
-  & fooB
-  & fooo
+  & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(A) \mapsto \unit}
+  & \_ \mapsto \star
   & foor \\
-Var_\Pc\{\Gamma_\Sc\}(A)
+Var_\Pc(A)
   & W_{Con_\Pc}(\Gamma_\Sc)
   & \makecell[cl]{W_{Con_\Pc}(\Gamma_\Sc) \\ + W_{Con_\Pc}(\Gamma_\Sc) \times W_{Ty_\Pc}(\Gamma_\Sc)}
-  & fooB
-  & fooo
+  & \makecell[cl]{\inl(\Gamma) \mapsto \emptytype \\ \inr(\Gamma, A') \mapsto \unit}
+  & \makecell[cl]{\inl(\Gamma) \mapsto \tqm{(\Gamma,\,A)} \\ \inr(\Gamma,A') \mapsto \tqm{(\Gamma,\,A')}}
   & foor \\
 Tm_\Pc(\Gamma)
   & W_{Ty_\Pc}(\Gamma_\Sc)
   & \makecell[cl]{(A : W_{Ty_\Pc}(\Gamma_\Sc)) \times W_{Var_\Pc}(\Gamma, A)}
-  & fooB
-  & fooo
+  & \makecell[cl]{\inl(A, v) \mapsto \emptytype \\ \inr(\inl(\_)) \mapsto \twotype \\ \inr(\inr(\_)) \mapsto \unit }
+  & \makecell[cl]{\inl(A, v) \mapsto A          \\ \inr(\inl(A, a)) \mapsto A      \\ \inr(\inr(T, a, \tau)) \mapsto A(\tau)}
   & foor \\
 Sub_\Pc(\Gamma)
   & \unit
@@ -1001,10 +1001,10 @@ Sub_\Pc(\Gamma)
   & fooB
   & fooo
   & foor
-\end{array}$
+\end{array}$}
 \caption{The input data for the indexed W-types representing the internalized
 syntax for inductive families.}\label{tbl:if-iws}
-\end{table}
+\end{sidewaystable}
 
 For the remainder of this section, let us fix the sort context \tqm{\SCon \Omega_\Sc}
 and the point context \tqm{\vdash_{\Omega_\Sc} \Omega} which we want to construct
