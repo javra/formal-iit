@@ -95,44 +95,6 @@ constructor leaves the sort context fixed:
 \end{gathered}
 \end{equation*}
 
-\begin{remark}
-While for the signatures of inductive-inductive types, contexts, types, and terms
-depend on each other we can here define sort types, sort contexts, terms, point
-types, and contexts in the presented order without referring to later constructions.
-This means that unlike mentioned in Remark~\ref{rmk:iit-syntax}, we  can %TODO cite remark
-internalize this syntax just using inductive families.
-
-An Agda formalization of the syntax looks as follows, with variables and terms
-separated:
-\begin{agdacode}
-data TyS : Set₁ where
-  U  : TyS
-  Π̂S : (T : Set) → (T → TyS) → TyS
-
-data SCon : Set₁ where
-  ∙c   : SCon
-  _▶c_ : SCon → TyS → SCon
-
-data Var : SCon → TyS → Set₁ where
-  vvz : ∀{Γc B} → Var (Γc ▶c B) B
-  vvs : ∀{Γc B B'} → Var Γc B → Var (Γc ▶c B') B
-
-data Tm (Γc : SCon) : TyS → Set₁ where
-  var  : ∀{A} → Var Γc A → Tm Γc A
-  _\$S_ : ∀{T B} → Tm Γc (Π̂S T B) → (α : T) → Tm Γc (B α)
-
-data TyP (Γc : SCon) : Set₁ where
-  El   : Tm Γc U → TyP Γc
-  Π̂P   : (T : Set) → (T → TyP Γc) → TyP Γc
-  _⇒P_ : Tm Γc U → TyP Γc → TyP Γc
-
-data Con (Γc : SCon) : Set₁ where
-  ∙    : Con Γc
-  _▶P_ : Con Γc → (B : TyP Γc) → Con Γc
-\end{agdacode}
-%TODO remove backslash
-\end{remark}
-
 \begin{example}[Natural numbers, Vectors]\label{ex:if-natvec}
 A common example for inductive types, the natural numbers, with one constructor for
 zero and one for the successor function, are represented by the sort context
@@ -850,6 +812,67 @@ Again, substitution rules analogous to the ones in \ref{def:if-ex-psub-a} hold:
 \begin{defn}[Sections of Point Terms \& Substitutions]
 I'm not sure if we need these...
 \end{defn}
+
+As a next step after having extended our syntax and defined the semantics of this
+extension, we will show that any type theory with indexed W-types is able
+to represent the whole syntax internally.
+
+\begin{remark}
+While for the signatures of inductive-inductive types, contexts, types, and terms
+depend on each other, we can here define sort types, sort contexts, terms, point
+types, and contexts in the presented order without referring to later constructions.
+This means that unlike mentioned in Remark~\ref{rmk:iit-syntax}, we  can %TODO cite remark
+internalize this syntax just using inductive families, as shown in the
+following agda implementation:
+\begin{agdacode}
+data TyS : Set₁ where
+  U  : TyS
+  Π̂S : (T : Set) → (T → TyS) → TyS
+
+data SCon : Set₁ where
+  ∙c   : SCon
+  _▶c_ : SCon → TyS → SCon
+
+data Var : SCon → TyS → Set₁ where
+  vvz : ∀{Γc B} → Var (Γc ▶c B) B
+  vvs : ∀{Γc B B'} → Var Γc B → Var (Γc ▶c B') B
+
+data Tm (Γc : SCon) : TyS → Set₁ where
+  var  : ∀{A} → Var Γc A → Tm Γc A
+  _@S_ : ∀{T B} → Tm Γc (Π̂S T B) → (τ : T) → Tm Γc (B τ)
+
+data TyP (Γc : SCon) : Set₁ where
+  El   : Tm Γc U → TyP Γc
+  Π̂P   : (T : Set) → (T → TyP Γc) → TyP Γc
+  _⇒P_ : Tm Γc U → TyP Γc → TyP Γc
+
+data Con (Γc : SCon) : Set₁ where
+  ∙    : Con Γc
+  _▶P_ : Con Γc → TyP Γc → Con Γc
+\end{agdacode}
+Note, that in the implementaion, variables and terms are defined in separate
+types to allow for \tqm{\var(v)} to appear as a premise for the introduction rule
+for \tqm{\vs(v)}.
+The extension of the syntax by point terms and point substitutions as presented in
+Definition~\ref{def:if-ex-subp} is implementable as well:
+\begin{agdacode}
+data VarP {Γc} : Con Γc → TyP Γc → Set₁ where
+  vvzP : ∀{Γ A} → VarP (Γ ▶P A) A
+  vvsP : ∀{Γ A B} → VarP Γ A → VarP (Γ ▶P B) A
+
+data TmP {Γc}(Γ : Con Γc) : TyP Γc → Set₁ where
+  varP : ∀{A} → VarP Γ A → TmP Γ A
+  _@P_ : ∀{a A} → TmP Γ (a ⇒P A) → TmP Γ (El a) → TmP Γ A
+  _^@P_ : ∀{T A} → TmP Γ (Π̂P T A) → (τ : T) → TmP Γ (A τ)
+
+data SubP {Γc} : Con Γc → Con Γc → Set₁ where
+  εP   : ∀{Γ} → SubP Γ ∙
+  _,P_ : ∀{Γ Δ A} → SubP Γ Δ → TmP Γ A → SubP Γ (Δ ▶P A)
+\end{agdacode}
+\end{remark}
+
+To make this proof of internalizability formal, we will present the exact definition
+of all the parts of the extended syntax as indexed W-types.
 
 For the remainder of this section, let us fix the sort context \tqm{\SCon \Omega_\Sc}
 and the point context \tqm{\vdash_{\Omega_\Sc} \Omega} which we want to construct
