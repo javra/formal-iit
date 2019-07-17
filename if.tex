@@ -853,9 +853,14 @@ data Con (Γc : SCon) : Set₁ where
 Note, that in the implementaion, variables and terms are defined in separate
 types to allow for \tqm{\var(v)} to appear as a premise for the introduction rule
 for \tqm{\vs(v)}.
-The extension of the syntax by point terms and point substitutions as presented in
+The extension of the syntax by sort subtitutions of Definition~\ref{def:if-sort-subs}
+as well as the subsequent extension by point terms and point substitutions as presented in
 Definition~\ref{def:if-ex-subp} is implementable as well:
 \begin{agdacode}
+data Sub : SCon → SCon → Set₁ where
+  ε   : ∀{Γc} → Sub Γc ∙c
+  _,_ : ∀{Γc Δc B} → Sub Γc Δc → Tm Γc B → Sub Γc (Δc ▶c B)
+
 data VarP {Γc} : Con Γc → TyP Γc → Set₁ where
   vvzP : ∀{Γ A} → VarP (Γ ▶P A) A
   vvsP : ∀{Γ A B} → VarP Γ A → VarP (Γ ▶P B) A
@@ -873,6 +878,29 @@ data SubP {Γc} : Con Γc → Con Γc → Set₁ where
 
 To make this proof of internalizability formal, we will present the exact definition
 of all the parts of the extended syntax as indexed W-types.
+This means giving a type $W_{Con_\Sc} : \UU$ of sort contexts,
+a type $W_{Ty_\Sc} : \UU$ of sort types,
+a family $W_{Var_\Sc} : W_{Con_\Sc} \to W_{Ty_\Sc} \to \UU$ of variables of a given
+sort context and sort type,
+extending the latter, a family $W_{Tm_\Sc} : W_{Con_\Sc} \to W_{Ty_\Sc} \to \UU$
+of sort terms,
+a family $W_{Ty_\Pc} : W_{Con_\Sc} \to \UU$ of point types in a given sort context,
+and finally a type $W_{Con_\Pc} : W_{Con_\Sc} \to \UU$ of point contexts over a
+given sort context.
+Afterwards, we will give the same treatment to the extensions with
+sort substitutions between two sort contexts, with variables
+of a point type, terms of a point type and point substitution between two point
+contexts over the same sort context in the form of
+\begin{align*}
+W_{Sub_\Sc}
+  &: W_{Con_\Sc} \to W_{Con_\Sc} \to \UU \text{,} \\
+W_{Var_\Pc}
+  &: \{\Gamma_\Sc : W_{Con_\Sc}\} \to W_{Con_\Pc}(\Gamma_\Sc) \to W_{Ty_\Pc}(\Gamma_\Sc) \to \UU \text{,}\\
+W_{Tm_\Pc}
+  &: \{\Gamma_\Sc : W_{Con_\Sc}\} \to W_{Con_\Pc}(\Gamma_\Sc) \to W_{Ty_\Pc}(\Gamma_\Sc) \to \UU \text{, and}\\
+W_{Sub_\Pc}
+  &: \{\Gamma_\Sc : W_{Con_\Sc}\} \to W_{Con_\Pc}(\Gamma_\Sc) \to W_{Con_\Pc}(\Gamma_\Sc) \to \UU \text{.}
+\end{align*}
 
 For the remainder of this section, let us fix the sort context \tqm{\SCon \Omega_\Sc}
 and the point context \tqm{\vdash_{\Omega_\Sc} \Omega} which we want to construct
