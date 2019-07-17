@@ -901,6 +901,41 @@ W_{Tm_\Pc}
 W_{Sub_\Pc}
   &: \{\Gamma_\Sc : W_{Con_\Sc}\} \to W_{Con_\Pc}(\Gamma_\Sc) \to W_{Con_\Pc}(\Gamma_\Sc) \to \UU \text{.}
 \end{align*}
+In the following definition we will give all of these ten types and type families
+in general by giving the respective input data for indexed W-types as described
+in Chapter~\ref{sec:tt-w}.
+
+\begin{defn}[IF-Syntax as W-Types]
+We define the types mentioned above as follows:
+\begin{align*}
+\begin{split}
+W_{Ty_\Sc}
+  &:\equiv \IW{A_{Ty_\Sc}}{B_{Ty_\Sc}}{o_{Ty_\Sc}}{r_{Ty_\Sc}}(\star) \text{,} \\
+W_{Con_\Sc}
+  &:\equiv \IW{A_{Con_\Sc}}{B_{Con_\Sc}}{o_{Con_\Sc}}{r_{Con_\Sc}}(\star) \text{,} \\
+W_{Var_\Sc}(\_, B)
+  &:\equiv \IW{A_{Var_\Sc}(B)}{B_{Var_\Sc}(B)}{o_{Var_\Sc}(B)}{r_{Var_\Sc}(B)} \text{,} \\
+W_{Tm_\Sc}(\Gamma_\Sc)
+  &:\equiv \IW{A_{Tm_\Sc}(\Gamma_\Sc)}{B_{Tm_\Sc}(\Gamma_\Sc)}{o_{Tm_\Sc}(\Gamma_\Sc)}{r_{Tm_\Sc}(\Gamma_\Sc)} \text{,} \\
+W_{Sub_\Sc}(\Gamma_\Sc)
+  &:\equiv \IW{A_{Sub_\Sc}(\Gamma_\Sc)}{B_{Sub_\Sc}(\Gamma_\Sc)}{o_{Sub_\Sc}(\Gamma_\Sc)}{r_{Sub_\Sc}(\Gamma_\Sc)} \text{,}
+\end{split}
+\em
+\begin{split}
+W_{Ty_\Pc}(\Gamma_\Sc)
+  &:\equiv \IW{A_{Ty_\Pc}}{B_{Ty_\Pc}}{o_{Ty_\Pc}}{r_{Ty_\Pc}}(\star) \text{,} \\
+W_{Con_\Pc}(\Gamma_\Sc)
+  &:\equiv \IW{A_{Con_\Pc}}{B_{Con_\Pc}}{o_{Con_\Pc}}{r_{Con_\Pc}}(\star) \text{,} \\
+W_{Var_\Pc}(\_, A)
+  &:\equiv \IW{A_{Var_\Pc}(A)}{B_{Var_\Pc}(A)}{o_{Var_\Pc}(A)}{r_{Var_\Pc}(A)} \text{,} \\
+W_{Tm_\Pc}(\Gamma)
+  &:\equiv \IW{A_{Tm_\Pc}(\Gamma)}{B_{Tm_\Pc}(\Gamma)}{o_{Tm_\Pc}(\Gamma)}{r_{Tm_\Pc}(\Gamma)} \text{,} \\
+W_{Sub_\Pc}(\Gamma)
+  &:\equiv \IW{A_{Sub_\Pc}(\Gamma)}{B_{Sub_\Pc}(\Gamma)}{o_{Sub_\Pc}(\Gamma)}{r_{Sub_\Pc}(\Gamma)} \text{,}
+\end{split}
+\end{align*}
+where the respective indices for the indexed W-types are given in Table~\ref{tbl:if-iws}.
+\end{defn}
 
 For the remainder of this section, let us fix the sort context \tqm{\SCon \Omega_\Sc}
 and the point context \tqm{\vdash_{\Omega_\Sc} \Omega} which we want to construct
