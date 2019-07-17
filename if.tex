@@ -946,61 +946,61 @@ Ty_\Sc
   & \makecell[cl]{\unit \\ + \UU}
   & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(T) \mapsto T}
   & \_ \mapsto \star
-  & foor \\
+  & \_ \mapsto \star \\
 Con_\Sc
   & \unit
   & \makecell[cl]{\unit \\ + W_{Ty_\Sc}}
   & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(B) \mapsto \unit}
   & \_ \mapsto \star
-  & foor \\
+  & \_ \mapsto \star \\
 Var_\Sc
   & W_{Con_\Sc}(\star)
   & \makecell[cl]{W_{Con_\Sc} \\ + W_{Con_\Sc} \times W_{Ty_{\Sc}} }
   & \makecell[cl]{\inl(\Gamma_\Sc) \mapsto \emptytype \\ \inr(\Gamma_\Sc, B') \mapsto \unit}
   & \makecell[cl]{\inl(\Gamma_\Sc) \mapsto \tqm{(\Gamma_\Sc,\,B)} \\ \inr(\Gamma_\Sc, B') \mapsto \tqm{(\Gamma_\Sc,\,B')} }
-  & foor \\
+  & \makecell[cl]{ - \\ \inr(\Gamma_\Sc, B')(\star) \mapsto \Gamma_\Sc } \\
 Tm_\Sc(\Gamma_\Sc)
   & W_{Ty_\Sc}(\star)
   & \makecell[cl]{W_{Ty_\Sc} \\ + (T : \UU) \times (T \to W_{Ty_\Sc}) \times T }
   & \makecell[cl]{\inl(B) \mapsto \emptytype \\ \inr(\_) \mapsto \unit}
   & \makecell[cl]{\inl(B) \mapsto \emptytype \\ \inr(T, B, \tau) \mapsto B(\tau) }
-  & foor \\
+  & \makecell[cl]{ - \\ \inr(T, B, \tau)(\star) \mapsto \tqm{\ExtPiS{T}{B}} } \\
 Sub_\Sc(\Gamma_\Sc)
   & \unit
-  & fooA
-  & fooB
-  & fooo
-  & foor \\
+  & \makecell[cl]{\unit \\ + (B : W_{Ty_\Sc}) \times W_{Tm_\Sc}(\Gamma_\Sc, B) }
+  & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(B, t) \mapsto \unit }
+  & \_ \mapsto \star
+  & \_ \mapsto \star \\
 Ty_\Pc(\Gamma_\Sc)
   & \unit
   & \makecell[cl]{W_{Tm_\Sc}(\Gamma, \tqm{\UU}) \\ + \UU \\ + W_{Tm_\Sc}(\Gamma, \tqm{\UU})}
   & \makecell[cl]{\inl(a) \mapsto \emptytype \\ \inr(\inl(\tau)) \mapsto T \\ \inr(\inr(a)) \mapsto \unit }
   & \_ \mapsto \star
-  & foor \\
+  & \_ \mapsto \star \\
 Con_\Pc(\Gamma_\Sc)
   & \unit
   & \makecell[cl]{\unit \\ + W_{Ty_{\Pc}(\Gamma_\Sc)} }
   & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(A) \mapsto \unit}
   & \_ \mapsto \star
-  & foor \\
+  & \_ \mapsto \star \\
 Var_\Pc(A)
   & W_{Con_\Pc}(\Gamma_\Sc)
   & \makecell[cl]{W_{Con_\Pc}(\Gamma_\Sc) \\ + W_{Con_\Pc}(\Gamma_\Sc) \times W_{Ty_\Pc}(\Gamma_\Sc)}
   & \makecell[cl]{\inl(\Gamma) \mapsto \emptytype \\ \inr(\Gamma, A') \mapsto \unit}
   & \makecell[cl]{\inl(\Gamma) \mapsto \tqm{(\Gamma,\,A)} \\ \inr(\Gamma,A') \mapsto \tqm{(\Gamma,\,A')}}
-  & foor \\
+  & \makecell[cl]{ - \\ \inr(\Gamma, A')(\star) \mapsto \Gamma} \\
 Tm_\Pc(\Gamma)
   & W_{Ty_\Pc}(\Gamma_\Sc)
   & \makecell[cl]{(A : W_{Ty_\Pc}(\Gamma_\Sc)) \times W_{Var_\Pc}(\Gamma, A)}
-  & \makecell[cl]{\inl(A, v) \mapsto \emptytype \\ \inr(\inl(\_)) \mapsto \twotype \\ \inr(\inr(\_)) \mapsto \unit }
-  & \makecell[cl]{\inl(A, v) \mapsto A          \\ \inr(\inl(A, a)) \mapsto A      \\ \inr(\inr(T, a, \tau)) \mapsto A(\tau)}
-  & foor \\
+  & \makecell[cl]{\inl(A, v) \mapsto \emptytype \\ \inr(\inl(\_)) \mapsto \twotype \\ \\ \inr(\inr(\_)) \mapsto \unit }
+  & \makecell[cl]{\inl(A, v) \mapsto A          \\ \inr(\inl(A, a)) \mapsto A      \\ \\ \inr(\inr(T, A, \tau)) \mapsto A(\tau)}
+  & \makecell[cl]{ -                            \\ \inr(\inl(A,a))(0) \mapsto \tqm{(a \Rightarrow_\Pc A)} \\ \inr(\inl(A,a))(1) \mapsto \tqm{\El(a)}  \\ \inr(\inr(T, A, \tau))(\star) \mapsto \tqm{\ExtPiP{T}{A}} } \\
 Sub_\Pc(\Gamma)
   & \unit
-  & fooA
-  & fooB
-  & fooo
-  & foor
+  & \makecell[cl]{\unit \\ + (A : W_{Ty_\Pc}(\Gamma_\Sc)) \times W_{Tm_\Pc}(\Gamma, A) }
+  & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(A, t) \mapsto \unit }
+  & \_ \mapsto \star
+  & \_ \mapsto \star
 \end{array}$}
 \caption{The input data for the indexed W-types representing the internalized
 syntax for inductive families.}\label{tbl:if-iws}
