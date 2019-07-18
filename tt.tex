@@ -89,6 +89,25 @@ To keep type checking decidable it is easy to see that it is important
 to keep the question whether two terms are what we call \textbf{definitionally equal}
 decidable itself.
 
+We said above that each piece of data, so each term,
+has a unique type (up to definitional equality).
+This statement also holds true for types itself.
+Types which themselves contain types, are called \textbf{universes} and we will
+denote them using $\UU$.
+The universe itself also needs a type, but
+assuming $\UU : \UU$ is inconsistent (this is often referred to as
+``Girard's paradox'' (\cite{girard72,hurkens95}) which can be seen as the type theoretic equivalent
+to Russell's paradox).
+So the solution we apply for the remainder of this text is
+to assume that we have an infinte chain of universes
+\begin{equation*}
+\UU_0 : \UU_1,~~ \UU_1 : \UU_2,~~ \UU_2 : \UU_3,~~ \ldots \text{,}
+\end{equation*}
+each contained in the next one.
+Most often, we will chose to leave the index implicit and regard our constructions
+as being \emph{universe polymorphic}, meaning that they are valid in any chosen
+universe.
+
 \section{Homotopy Type Theory}\label{sec:tt-hott}
 
 \section{Theorem Provers Based on Type Theory}\label{sec:tt-provers}
