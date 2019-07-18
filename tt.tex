@@ -78,6 +78,8 @@ As mentioned, we will, whenever we talk about a certain piece of type theoretic
 data, accompany it with its type,
 we need a notation for this kind of \textbf{type judgment}:
 We write $t : A$ to state that the term $t$ is of type $A$.
+This is similar to elements in a set, but it also represents the fact
+that $t$ is a proof for a proposition $A$.
 Sometimes, we want to express that two terms $s$ and $t$ of the same type $A$
 only differ an unfolding or folding of a definition, or that the application of
 a reduction rule to $s$ results in $t$.
@@ -148,6 +150,9 @@ Additional to these rules we also have $\eta$-conversion and $\beta$-reduction:
 \end{equation*}
 In type theory, these functions are used to represent
 both functions between sets as well as implications between propositions.
+A special kind of function are those of the form $A \to \UU$.
+These so called \textbf{type families} are used to represent set-valued
+functions as well as propositions with a free variable in $A$.
 
 \begin{remark}\label{rmk:tt-syntax}
 When giving inference rules as the ones above, we always assume an arbitray
@@ -160,6 +165,66 @@ We will choose to be immplicit about the variable context in this chapter, while
 being more explicit about them when we introduce other syntaxes in later chapter,
 for which a more formal treatment is appropriate.
 \end{remark}
+
+Since we want a representation of logics in type theory, and so far the only logical
+connective we introduced are implications, we might next ask for types representing
+the propositions ``true'' and ``false''.
+Since the elements of this type should correspond to the proofs of ``true'' and
+``false'', we can conclude that the type corresponding to ``true'' should contain
+one canonical element, while the one corresponding to ``false'' should contain
+none.
+Thus, we will call these two types the \textbf{empty type} and the \textbf{unit type},
+respectively and denote them with $\emptytype$ and $\unit$.
+The formation and introduction rules for these are not very surprising:
+\begin{equation*}
+\begin{gathered}
+\inferrule*[left=$\emptytype$-Form]{ }{\emptytype : \UU} \qquad
+\inferrule*[left=$\unit$-Form]{ }{\unit : \UU} \qquad
+\inferrule*[left=$\unit$-Intro]{ }{\star : \unit} \\[.7em]
+\end{gathered}
+\end{equation*}
+The elimination rule for $\emptytype$ says the we can derive a proof for any statement,
+given a proof of ``false'' (``ex falso quodlibet''), while the elimination rule
+for $\unit$ specifies that when showing a statement about the elements of the
+unit type, it suffices to consider its canonical element $\star$:
+\begin{equation*}
+\inferrule*[left=$\emptytype$-Elim]{C : \emptytype \to \UU \\ x : \emptytype}
+	{\elim_\emptytype(C,x) : C(x)} \qquad
+\inferrule*[left=$\unit$-Elim]{C : \unit \to \UU \\ p : C(\star) \\ x : \unit}
+	{\elim_\unit(C,p,x) : C(x)}
+\end{equation*}
+
+To give an example for a type which contains more than just one element, we can
+consider the type of booleans $\twotype$, containing elements $0$ and $1$.
+This time, we have more than just one constructor, and the elimination rule
+requires us to give proofs for both of the two elements:
+\begin{equation*}
+\begin{gathered}
+\inferrule*[left=$\twotype$-Form]{ }{\twotype : \UU} \qquad
+\inferrule*[left=$\twotype$-Intro1]{ }{0_\twotype : \twotype} \qquad
+\inferrule*[left=$\twotype$-Intro2]{ }{1_\twotype : \twotype} \\[.7em]
+\inferrule*[left=$\twotype$-Elim]{C : \twotype \to \UU \\ p_0 : C(0_\twotype) \\ p_1 : C(1_\twotype) \\ x : \twotype}
+  {\elim_\twotype(C, p_0, p_1, x) : C(x) }
+\end{gathered}
+\end{equation*}
+
+As a minimal example of an infinite type, the set theoretic equivalent of which
+would be introduced axiomatically, we can take a look at the type of
+natural numbers.
+It is generated inductively by the zero element and the successor function.
+The eliminator provides the principle of induction on the natural numbers, which
+also makes that we can assume that every element of the natural numbers is a
+result of repeatedy applying the successor function to zero:
+\begin{equation*}
+\begin{gathered}
+\inferrule*[left=$\N$-Form]{ }{\N : \UU} \qquad
+\inferrule*[left=$\N$-Intro]{ }{0 : \UU \\ S : \N \to \N} \\[.7em]
+\inferrule*[left=$\N$-Elim]
+	{C : \N \to \UU \\ p : C(0) \\ q : \textstyle{\prod_{(n : \N)}} C(n) \to C(S(n)) \\
+		x : \N}
+	{\ind_\N(C, p, q, x) : C(x)}
+\end{gathered}
+\end{equation*}
 
 \section{Homotopy Type Theory}\label{sec:tt-hott}
 
