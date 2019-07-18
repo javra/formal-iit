@@ -1,0 +1,72 @@
+This chapter shall serve to introduce the basic notions of type theory which
+we will need for the subsequent content of this thesis.
+At first (Chapter~\ref{sec:tt-dtt}), we will have a general look on dependent type theory, its use and
+how it differs from a set theoretic foundation,
+then (Chapter~\ref{sec:tt-hott}) we will explain how homotopy type theory was created to have a suitable
+language to reason about higher equalities and provides a synthetic way to
+formalize topological insights.
+Finally, in Chapter~\ref{sec:tt-provers}, we will give examples of two theorem
+provers based on dependent types, Agda and Lean, and point out some of their differences.
+
+\section{Dependent Type Theory}\label{sec:tt-dtt}
+
+While the term ``type theory'' stems from the early nineteenth centry, when
+Bertrand Russell sought to lay out an alternative to set theory which did
+suffer from the paradox which Russell discovered,
+todays versions of type theory have little in common with Russell's attempts
+but rather rely on the considerations of Per Martin-Löf (\cite{martin-lof2, martin-lof1})
+who, starting in the 1970's, built a new mathematical foundation based on the
+$\lambda$-calculus, himself drawing inspiration from previous logicians and
+mathematicians like Alonzo Church and Haskell Curry.
+Often, dependent type theory is also referred to as Martin-Löf type theory.
+
+Based on a phenomenon knows as the ``Curry-Howard correspondence'', type theory
+can serve both as a theoretical foundation for a formal representation of mathematics,
+as well as the principle for  the specification for strongly typed functional
+programming languages.
+It was implemented in computer languages for programming and theorem proving which
+are used massively in the field of formal verification and in the formalization of
+mathematics.
+Among the most commonly used implementations are the theorem prover Coq (\cite{coq})
+which notably has a lot of users in the field of hardware verification,
+the prover Agda (\cite{agda}), which is popular amongst type theorists themselves,
+and the Microsoft Research based project Lean(\cite{mouracade}), which has
+drawn considerable attention from researching mathematicians as a tool to
+formally verify their proofs.
+
+Type theory differs from a set theoretic mathematical foundation (let us, as a
+point of reference, consider set theories based on (higher-order) propositional logic
+like Zermelo-Fraenkel set theory) in several
+important aspects:
+\begin{itemize}
+\item Type theory follows a paradigm called \emph{``propositions-as-types''}.
+This means that statements like theorems and conjectures are represented
+using the same class of objects as other data like sets or (algebraic) structures.
+In contrast to this, most set theoretic foundations are built on a \emph{dichotomy between
+the propositions and the objects} they describe:
+They first start out with a logical frame work on which axiomatically a theory
+of sets is introduced.
+The coherence between these two levels must then be created using an axiom like
+the excision axiom in Zermelo-Fraenkel set theory.
+\item Type theory is \emph{typed} while set theory is \emph{untyped}.
+While in set theory, objects can be an element of different sets --
+consider the number two which is an element both of the set of even integers
+as well as the set of all integers --
+type theory is based on the principle that every piece of data (every term)
+is assigned a unique type which is known at the point of the creation of the data.
+Since this assignment, called typing, is decidable, we consider it a judgment
+rather than a provable proposition that a given term $t$ has type $A$.
+\end{itemize}
+
+
+\section{Homotopy Type Theory}\label{sec:tt-hott}
+
+\section{Theorem Provers Based on Type Theory}\label{sec:tt-provers}
+
+
+
+
+
+
+
+

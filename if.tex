@@ -1,8 +1,6 @@
 \section{Signatures for Inductive Families}
 
 %TODO's as per thorsten july 9
-%* comprehension erklaeren oder ersetzen
-%* chapter 6 W-types
 %* code snippet besser teasern 
 
 Previous specifications of mutual inductive families have taken different approaches:
@@ -938,7 +936,7 @@ where the respective indices for the indexed W-types are given in Table~\ref{tbl
 
 \begin{sidewaystable}\label{tbl:if-iws}
 \centering
-{$\begin{array}{r|lllll}
+{\footnotesize$\begin{array}{r|lllll}
 i & I_i : \UU & A_i : \UU & B_i : A_i \to \UU & o_i : A_i \to I_i & r_i : (a : A_i) \to B_i(a) \to I_i \\
 \hline
 Ty_\Sc
@@ -954,13 +952,13 @@ Con_\Sc
   & \_ \mapsto \star
   & \_ \mapsto \star \\
 Var_\Sc
-  & W_{Con_\Sc}(\star)
+  & W_{Con_\Sc}
   & \makecell[cl]{W_{Con_\Sc} \\ + W_{Con_\Sc} \times W_{Ty_{\Sc}} }
   & \makecell[cl]{\inl(\Gamma_\Sc) \mapsto \emptytype \\ \inr(\Gamma_\Sc, B') \mapsto \unit}
   & \makecell[cl]{\inl(\Gamma_\Sc) \mapsto \tqm{(\Gamma_\Sc,\,B)} \\ \inr(\Gamma_\Sc, B') \mapsto \tqm{(\Gamma_\Sc,\,B')} }
   & \makecell[cl]{ - \\ \inr(\Gamma_\Sc, B')(\star) \mapsto \Gamma_\Sc } \\
 Tm_\Sc(\Gamma_\Sc)
-  & W_{Ty_\Sc}(\star)
+  & W_{Ty_\Sc}
   & \makecell[cl]{W_{Ty_\Sc} \\ + (T : \UU) \times (T \to W_{Ty_\Sc}) \times T }
   & \makecell[cl]{\inl(B) \mapsto \emptytype \\ \inr(\_) \mapsto \unit}
   & \makecell[cl]{\inl(B) \mapsto \emptytype \\ \inr(T, B, \tau) \mapsto B(\tau) }
@@ -1044,7 +1042,7 @@ on external sort functions, it will return a function with constructor of the ap
 term: %TODO formulation
 \begin{align*}
 \IFconS{a}
-  &:\equiv \left\{ \tqm{t_\Pc} \,\middle|\, \tqm{\Omega \vdash_{\Omega_\Sc} t_\Pc : \El(a) :: \Pc}  \right\}
+  &:\equiv W_{Tm_\Pc}(\tqm{\Omega}, \tqm{\El(a)})
   & \text{ for \tqm{\Omega_\Sc \SCon a : \UU :: \Sc} and} \\
 \IFconS{f}
   &:\equiv \lambda \tau.\, \IFconS{f(\bltau)}
