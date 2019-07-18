@@ -56,8 +56,38 @@ type theory is based on the principle that every piece of data (every term)
 is assigned a unique type which is known at the point of the creation of the data.
 Since this assignment, called typing, is decidable, we consider it a judgment
 rather than a provable proposition that a given term $t$ has type $A$.
-\end{itemize}
+\item Type theory is inherently \emph{constructive} while most of the most
+well-known set theoretic foundations are \emph{non-construcitve}.
+This has great consequences for the computational use of represented mathematics:
+Every type theoretic function the domain of which are the natural numbers, can compute a
+numeral for any given input.
+\item While in set theory, \emph{sets ar the only primitives}, type theory
+provides often-used objects like \emph{functions and inductively defined types
+as primitives}.
+This means that we can use these without having to care about how to assemble them
+from other primitives. 
+It also offers modularity in the follwowing sense: %TODO find a better word than modularity
+In constrast to a function in set theory, a function in type theory only reveals
+its constituing information:
+What is the resulting output for a given input?
+\end{itemize} %TODO maybe say something about sizes
 
+Let us now fix some notation and some basic constructions which will occur
+throughout this text.
+As mentioned, we will, whenever we talk about a certain piece of type theoretic
+data, accompany it with its type,
+we need a notation for this kind of \textbf{type judgment}:
+We write $t : A$ to state that the term $t$ is of type $A$.
+Sometimes, we want to express that two terms $s$ and $t$ of the same type $A$
+only differ an unfolding or folding of a definition, or that the application of
+a reduction rule to $s$ results in $t$.
+We will notate this by $s \equiv t$.
+Our type theory will then make no distinction between $s$ and $t$.
+This means that if $A$ and $B$ are types with $A \equiv B$, then
+$s : A$ implies $s : B$.
+To keep type checking decidable it is easy to see that it is important
+to keep the question whether two terms are what we call \textbf{definitionally equal}
+decidable itself.
 
 \section{Homotopy Type Theory}\label{sec:tt-hott}
 
