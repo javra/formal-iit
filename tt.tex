@@ -193,6 +193,7 @@ unit type, it suffices to consider its canonical element $\star$:
 \inferrule*[left=$\unit$-Elim]{C : \unit \to \UU \\ p : C(\star) \\ x : \unit}
 	{\elim_\unit(C,p,x) : C(x)}
 \end{equation*}
+with the reduction rule $\elim_\unit(C,p,\star) \equiv p$.
 
 To give an example for a type which contains more than just one element, we can
 consider the type of booleans $\twotype$, containing elements $0$ and $1$.
@@ -207,6 +208,8 @@ requires us to give proofs for both of the two elements:
   {\elim_\twotype(C, p_0, p_1, x) : C(x) }
 \end{gathered}
 \end{equation*}
+with the reduction rules $\elim_\twotype(C, p_0, p_1, 0_\twotype) \equiv p_0$
+and $\elim_\twotype(C, p_0, p_1, 1_\twotype) \equiv p_1$.
 
 As a minimal example of an infinite type, the set theoretic equivalent of which
 would be introduced axiomatically, we can take a look at the type of
@@ -222,7 +225,118 @@ result of repeatedy applying the successor function to zero:
 \inferrule*[left=$\N$-Elim]
 	{C : \N \to \UU \\ p : C(0) \\ q : \textstyle{\prod_{(n : \N)}} C(n) \to C(S(n)) \\
 		x : \N}
-	{\ind_\N(C, p, q, x) : C(x)}
+	{\elim_\N(C, p, q, x) : C(x)}
+\end{gathered}
+\end{equation*}
+with the reduction rules
+\begin{align*}
+\elim_\N(C, p, q, 0) &\equiv p \text{ and} \\
+\elim_\N(C, p, q, S(x)) &\equiv q(x, \ind_\N(C, p, q, x)) \text{.}
+\end{align*}
+Note that we regain, by restricting $\elim_N$ to the \emph{non-dependent
+eliminator}, the usual way to recursively define functions $f : \N \to A$ for
+a type $A : \UU$ by providing the value $f(0)$ and, for each $n : \N$ the
+recursive definition $f(n) \to f(S(n))$.
+
+So far we haven't done the word ``dependent'' in the title of this chapter
+much justice,
+but now we will move on to introduce some dependent type formers.
+The first of these will be \textbf{$\Pi$-types} or \text{dependent function types}.
+When considering non-dependent functions, the codomain was a fixed type $B$
+such that for all inputs $a : A$, the output $f(a)$ is an element of $B$.
+For dependent functions, however, the codomain is a type family $B : A \to \UU$,
+and for each input $a : A$ the output $f(a)$ is of type $B(a)$.
+Considering we want to use type families to represent propositions depending on
+a free variable, these functions represent the universal quantification over this
+free variable!
+While for application and $\lambda$-abstraction we don't introduce new notation
+for dependent functions, we will denote the type of all dependent functions
+on a type family $B : A \to \UU$ as $\prod_{(a : A)} B(a)$, or, alternatively,
+as $\Pi(B)$ (as a shorter variant) or $(a : A) \to B(a)$ (often called
+``Agda-notation'' in referral to the theorem prover of that name).
+The rules to form the type of $\Pi$-types and to introduce and apply dependent
+functions generalize the rules for non-dependent functions as follows:
+\begin{equation*}
+\begin{gathered}
+\inferrule*[left=$\Pi$-Form]{A : \UU_i \\ B : A \to \UU_j}
+	{\textstyle{(\prod_{(a : A)} B(a))} : \UU_{\max\{i,j\}}} \qquad
+\inferrule*[left=$\Pi$-Intro]{a : A \vdash \Phi[a/x] : B(a)}
+	{(\lambda x. \Phi) : \textstyle{\prod_{(a : A)} B(a)}} \\[.7em]
+\inferrule*[left=$\Pi$-Elim]{f : \textstyle{\prod_{(a : A)} B(a)} \\ a : A}
+	{f(a) : B(a)}
+\end{gathered}
+\end{equation*}
+Again, we have the rules for $\beta$-reduction and $\eta$-conversion like in
+the non-dependent case, yielding judgmental equalities
+$(\lambda x. f (x)) \equiv f$ and $(\lambda x. \Phi)(a) \equiv \Phi[a/x]$.
+Having $\Pi$-types at our disposal allows us to state the rules governing
+a couple of further essential type formers.
+
+Two important logical connectives are still missing:
+Conjunction and disjunction. In type theory these coincide with
+the product and disjoint union (sum) of types.
+The rules for the product type are as follows:
+\begin{equation*}
+\begin{gathered}
+\inferrule*[left=$\times$-Form]{A, B : \UU}{A \times B : \UU} \qquad
+\inferrule*[left=$\times$-Intro]{a : A \\ b : B}{(a, b) : A \times B} \\[.7em]
+\inferrule*[left=$\times$-Elim]{C : A \times B \to \UU \\
+	p: (a : A)(b : B) \to C(a,b) \\ x : A \times B}
+	{\elim_{A \times B}(C, p, x) : C(x)}
+\end{gathered}
+\end{equation*}
+with the reduction rule $\elim_{A \times B}(C, p, (a, b)) \equiv p(a, b)$.
+The projections of an instance $x : A \times B$ are then
+defined by induction:
+\begin{align*}
+\pr_1(x) &:\equiv \elim_{A \times B}((\lambda y. A), (\lambda a. \lambda b. a), x) : A \text{ and}\\
+\pr_2(x) &:\equiv \elim_{A \times B}((\lambda y. A), (\lambda a. \lambda b. b), x) : B \text{,}
+\end{align*}
+yielding $\pr_1((a, b)) \equiv a$ and $\pr_2((a, b)) \equiv b$ judgmentally.
+The type representing disjunction has two constructors determining whether
+we provide proof for its left or its right type:
+\begin{equation*}
+\begin{gathered}
+\inferrule*[left=$+$-Form]{A : \UU \\ B : \UU}{A + B : \UU} \\[.7em]
+\inferrule*[left=$+$-Intro1]{a : A}{\inl(a) : A + B \\ \inr(b) : A + B} \\[.7em]
+\inferrule*[left=$+$-Elim]
+	{C : (A + B) \to \UU \\  p : (a : A) \to C(\inl(a))
+		\\ q : (b : B) \to C(\inr(b)) \\ x : A + B}
+	{\elim_{A + B}(C, p, q, x) : C(x)}
+\end{gathered}
+\end{equation*}
+For the sum type, we have the reduction rules
+\begin{align*}
+\elim_{A + B}(C, p, q, \inl(a)) &\equiv p(a) \text{ and} \\
+\elim_{A + B}(C, p, q, \inr(b)) &\equiv q(b) \text{.}
+\end{align*}
+
+Looking at the sum type, we can find a slight generalization which is very useful
+when we want to model existential quantification of a type family $B : A \to \UU$
+in type theory:
+A version of the sum type where the type of the second component of a pair $(a, b)$
+may depend on $a : A$ via the type family, i.\,e. $b : B(a)$.
+The type holding this kind of pair for a fixed type family $B : A \to \UU$
+is called the \textbf{dependent sum type} or \textbf{$\Sigma$-type} over $B$.
+We will again three different notations for this type, of which in this text
+we will mostly prefer the latter one:
+The type is usually (e.\,g. in \cite{hottbook}) denoted by
+$\sum_{(a : A)} B(a)$, mimicing mathematical notation for sums.
+Furthermore there is the short variant of writing $\Sigma(B)$ and
+an Agda-inspired notation $(a : A) \times B(a)$.
+The inference rules for this type are just a slight generalization of the
+rules we have already seen for the non-dependent sum type:
+\begin{equation*}
+\begin{gathered}
+\inferrule*[left=$\Sigma$-Form]{A : \UU \\ B : A \to \UU}
+	{(a : A) \times  B(a) : \UU} \qquad
+\inferrule*[left=$\Sigma$-Intro]{a : A \\ b : B(a)}
+	{(a, b) : (a : A) \times  B(a)} \\[.7em]
+\inferrule*[left=$\Sigma$-Elim]
+	{C : (a : A) \times  B(a) \to \UU \\
+		p : (a : A)(b : B(a)) \to C((a,b)) \\
+		x :  (a : A) \times B(a) }
+	{\elim_{(a : A) \times B(a)}(C, p, x) : C(x)}
 \end{gathered}
 \end{equation*}
 
