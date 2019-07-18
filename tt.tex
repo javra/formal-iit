@@ -107,6 +107,59 @@ each contained in the next one.
 Most often, we will chose to leave the index implicit and regard our constructions
 as being \emph{universe polymorphic}, meaning that they are valid in any chosen
 universe.
+Some type theories are constructed to be \emph{cumulative} in the sense that whenever
+we have a type $A : \UU_i$, it is a type in the succeeding universe, so $A : \UU_{i+1}$.
+Our constructions will not rely on cumulativity and they are formalized in
+non-cumulative type theories.
+
+Until now, we have not talked about any way to form types.
+In the following we will get to know the non-dependent version of some basic types,
+some of which will later be generalized to a dependent form.
+These type formers will be presented in a very similar way:
+We will give a rule on how to form the type itself (called formation rule),
+rules on how to construct elements of the type (called introduction rules),
+rules on how to use the elements of the type (called elimination rules),
+and some of them will be followed by some reduction rules offering definition
+equalities used to simplify terms.
+As we have mentioned in the comparison to set theory, functions are basic building
+blocks in type theory.
+The non-dependent functions form what is known as \emph{simply typed $\lambda$-calculus}.
+The formation, introduction, and elimination rules correspond to the fact that
+we can form the function type of any type for its domain and any type for its
+codomain, the fact that we can build a function by
+specifying its output for any given input, and the fact that we can apply
+a function to any term of its domain:
+\begin{equation*}
+\begin{gathered}
+\inferrule*[left=$\to$-Form]{A,B : \UU}{A \to B : \UU} \qquad
+\inferrule*[left=$\to$-Intro]{a : A \vdash \Phi[a/x] : B}{(\lambda x. \Phi) : A \to B} \\[.7em]
+\inferrule*[left=$\to$-Elim]{f : A \to B \\ a : A}{f(a) : B}
+\end{gathered}
+\end{equation*}
+Here, $\Phi$ is a term that may have $x$ as a free variable.
+$\Phi[a/x]$ denotes the replacement by every appearance of $x$ by $a$.
+Additional to these rules we also have $\eta$-conversion and $\beta$-reduction:
+\begin{equation*} \label{eq:eta-beta}
+\begin{aligned}
+\inferrule*[left=$\eta$]{f : A \to B}{(\lambda x. f(x)) \equiv f} \qquad
+\inferrule*[left=$\beta$]{(\lambda x. \Phi) : A \to B \\ a : A}
+	{(\lambda x. \Phi)(a) \equiv \Phi[a/x]}
+\end{aligned}
+\end{equation*}
+In type theory, these functions are used to represent
+both functions between sets as well as implications between propositions.
+
+\begin{remark}\label{rmk:tt-syntax}
+When giving inference rules as the ones above, we always assume an arbitray
+\emph{context} of variables for their premises as well as their conclusion.
+Often, when presenting the syntax of a type theory, rules on how
+to form these contexts $\vdash \Gamma$ are given together with rules for the
+formation of types $\Gamma \vdash A$ in a given context $\Gamma$ and the
+treatment of terms $\Gamma \vdash t : A$ of a given type $A$ in context $\Gamma$.
+We will choose to be immplicit about the variable context in this chapter, while
+being more explicit about them when we introduce other syntaxes in later chapter,
+for which a more formal treatment is appropriate.
+\end{remark}
 
 \section{Homotopy Type Theory}\label{sec:tt-hott}
 
