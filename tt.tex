@@ -485,10 +485,14 @@ under the hypothesis that it holds for all recursive input data $c(b)$.
 Assuming that we already have $\emptytype$, $\unit$, sum and $\Sigma$-type,
 indexed W-types live up to our expectations of capturing
 all previously mentioned inductive types.
-To provide a translation of these, we will provide all the
+To provide a translation of these, including indexed inductive types still to
+define in the next chapter, we will provide all the
 arguments for the respective indexed W-types in Table~\ref{tbl:tt-iws},
 while often, in the case of $I \equiv \unit$ describe
 $\unit \to A$ in place of a type $A$ itself.
+
+In Chapters~\ref{chp:iit} and \ref{chp:if} we will introduce two more calculi to
+replace indexed W-types.
 
 \begin{sidewaystable}\label{tbl:tt-iws}
 \centering
@@ -519,6 +523,31 @@ given in Chapter~\ref{sec:tt-dtt}.}\label{tbl:if-iws}
 \end{sidewaystable}
 
 \section{Homotopy Type Theory}\label{sec:tt-hott}
+
+Until now, the only equations we encountered were judgmental equalities which
+aren't ``visible'' internally in the type theory.
+But since we want to follow the paradigm of propositions-as-types, we also want to
+have a way to represent the statement that two terms of a type $A : \UU$ are
+equal \emph{inside} the type theory.
+To correct this,
+we introduce what is usually called \textbf{propositional equality} or
+\textbf{typal equality}.
+For each type $A : \UU$ and each two elements $a, b : A$ we want to have
+a type $(x =_A y) : \UU$ of proofs that $a$ and $b$ are equal.
+We can define this by induction, giving only the witness for this relation
+to be reflexive as a constructor:
+\begin{equation*}
+\begin{gathered}
+\inferrule*[left={$=$-Form}]{A : \UU \\ a, b : A}{a =_A b : \UU} \qquad
+\inferrule*[left={$=$-Intro}]{A : \UU \\ a : A}{\refl_a : a =_A a} \\[.7em]
+\inferrule*[left={$=$-Elim}]
+	{C : \textstyle{\prod_{(a,b : A)} (a =_A b) \to \UU} \\
+		c : \textstyle{\prod_{(a : A)}} C (a, a, \refl_a) \\
+		a, b : A \\ p : a =_A b}
+	{\elim_{=_A}(C, c, a, b, p) : C(x, y, p)}
+\end{gathered}
+\end{equation*}
+It can be defined as an indexed W-type as per Table~\ref{tbl:tt-iws}.
 
 \section{Theorem Provers Based on Type Theory}\label{sec:tt-provers}
 
