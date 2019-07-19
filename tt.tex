@@ -457,10 +457,10 @@ rules:
   c : (b : B(a)) \to \IW{A}{B}{o}{r}(r(a, b))}
   {\IWsup{a}{b} : \IW{A}{B}{o}{r}(o(a))} \\[.7em]
 \inferrule*[left=IW-Elim]{C : \{i : I\} \to \IW{A}{B}{o}{r}(i) \to \UU \\
-  p : (a : A)
-      \left (c : (b : B(a)) \to \IW{A}{B}{o}{r}(r(a, b))\right) %children
-      \to \Bigl((b : B(a)) \to  C(c(b))\Bigr)
-      \to C(\IWsup{a}{c}) }
+  p : \makecell{ (a : A)
+      \left (c : (b : B(a)) \to \IW{A}{B}{o}{r}(r(a, b))\right) \\
+      \qquad \to \Bigl((b : B(a)) \to  C(c(b))\Bigr)
+      \to C(\IWsup{a}{c})  } }
   {\elim_\mathsf{IW}(C, p) : (i : I)(w : \IW{A}{B}{o}{r}(i)) \to C(w) }
 \end{gathered}
 \end{equation*}
@@ -470,6 +470,24 @@ We furthermore assume that we are provided the reduction rule
   \equiv p(a, c, \lambda b : B(a).\, \elim_\mathsf{IW}(C, p, r(a,b), c(b))) \text{.}
 \end{equation*}
 \end{defn}
+
+This definition may seem very confusing and overly complicated, but this is necessary
+to capture all possible indexed inductive types in full generality.
+In words, the constructor describes that we chose a constructor and giving possible
+non-recursive input data by providing $a : A$,
+and then, based on this data, give data for all recursive occurences of the type
+in a constructor in the form of $c$, we get a new element $\IWsup{a}{c}$
+which is reminiscent of the \emph{supremum} of the given data.
+Conversely the elimination rule describes that to proof a statement $C$ about this
+tree like structure it is enough to prove $C$ for $\IWsup{a}{c}$
+under the hypothesis that it holds for all recursive input data $c(b)$.
+
+We will now show that indexed W-types live up to our expectations of capturing
+all previously mentioned inductive types, from $\emptytype$ to $\vecty$.
+To provide a succinct translation of all of these, we will provide all the
+arguments for the respective indexed W-types in Table~\ref{tbl:tt-iw},
+while often, in the case of $I \equiv \unit$ describe
+$\unit \to A$ in place of a type $A$ itself.
 
 \section{Homotopy Type Theory}\label{sec:tt-hott}
 
