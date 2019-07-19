@@ -118,14 +118,7 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \defthm{example}{Example}{Examples}
 \defthm{remark}{Remark}{Remarks}
 
-\newcommand{\upperf}{\partial^-_1}
-\newcommand{\lowerf}{\partial^+_1}
-\newcommand{\leftf}{\partial^-_2}
-\newcommand{\rightf}{\partial^+_2}
 \newcommand{\inv}{^{-1}}
-\newcommand{\DCat}{\mathbf{DCat}}
-\newcommand{\DGpd}{\mathbf{DGpd}}
-\newcommand{\XMod}{\mathbf{XMod}}
 \newcommand{\twotype}{\mathbf{2}}
 \newcommand{\unit}{\mathbf{1}}
 \newcommand{\emptytype}{\mathbf{0}}
@@ -189,7 +182,7 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \newcommand{\Sbase}{\mathsf{base}}
 \newcommand{\Sloop}{\mathsf{loop}}
 \newcommand{\Smerid}{\mathsf{merid}}
-\newcommand{\vecty}{\mathsf{vec}}
+\newcommand{\vecty}{\mathsf{Vec}}
 \newcommand{\nil}{\mathsf{nil}}
 \newcommand{\cons}{\mathsf{cons}}
 \newcommand{\ct}{
@@ -247,6 +240,7 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \newcommand{\vs}{\mathsf{vs}}
 \newcommand{\El}{\mathsf{El}} %TODO change to operator?
 \newcommand{\IW}[4]{\mathsf{IW}_{#1, #2}^{#3,#4}}
+\newcommand{\IWsup}[2]{\mathsf{sup}(#1,#2)}
 \newcommand{\LSub}[3]{\mathsf{LSub}_{\tqm{#1}}(\tqm{#2}, \tqm{#3})}
 \newcommand{\wk}{\mathsf{wk}}
 \newcommand{\IFSub}[3]{#2 \overset{#1}{\longrightarrow} #3}
@@ -294,8 +288,6 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \chapter{Basic Type Theory}
 
 \input{tt.tex}
-
-\section{Indexed W-Types}\label{sec:tt-w}
 
 \chapter{Higher Inductive Types}
 

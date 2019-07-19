@@ -2,7 +2,9 @@ This chapter shall serve to introduce the basic notions of type theory which
 we will need for the subsequent content of this thesis.
 At first (Chapter~\ref{sec:tt-dtt}), we will have a general look on dependent type theory, its use and
 how it differs from a set theoretic foundation,
-then (Chapter~\ref{sec:tt-hott}) we will explain how homotopy type theory was created to have a suitable
+afterwards (Chapter~\ref{sec:tt-w}) we want to unify the notion of an inductive
+type using the concept of indexed W-types.
+Then (Chapter~\ref{sec:tt-hott}), we will explain how homotopy type theory was created to have a suitable
 language to reason about higher equalities and provides a synthetic way to
 formalize topological insights.
 Finally, in Chapter~\ref{sec:tt-provers}, we will give examples of two theorem
@@ -234,9 +236,14 @@ with the reduction rules
 \elim_\N(C, p, q, S(x)) &\equiv q(x, \ind_\N(C, p, q, x)) \text{.}
 \end{align*}
 Note that we regain, by restricting $\elim_N$ to the \emph{non-dependent
-eliminator}, the usual way to recursively define functions $f : \N \to A$ for
+eliminator} or \emph{recursor},
+the usual way to recursively define functions $f : \N \to A$ for
 a type $A : \UU$ by providing the value $f(0)$ and, for each $n : \N$ the
 recursive definition $f(n) \to f(S(n))$.
+It has the following type:
+\begin{equation*}
+\rec_\N(A) \equiv \ind(\lambda x. A) : A \to (\N \to A \to A) \to \N \to A \text{.}
+\end{equation*}
 
 So far we haven't done the word ``dependent'' in the title of this chapter
 much justice,
@@ -271,6 +278,9 @@ the non-dependent case, yielding judgmental equalities
 $(\lambda x. f (x)) \equiv f$ and $(\lambda x. \Phi)(a) \equiv \Phi[a/x]$.
 Having $\Pi$-types at our disposal allows us to state the rules governing
 a couple of further essential type formers.
+Note that, once we have added dependent functions, we can rediscover
+non-dependent functions as the special case of dependent functions over
+a constant type family.
 
 Two important logical connectives are still missing:
 Conjunction and disjunction. In type theory these coincide with
@@ -339,6 +349,118 @@ rules we have already seen for the non-dependent sum type:
 	{\elim_{(a : A) \times B(a)}(C, p, x) : C(x)}
 \end{gathered}
 \end{equation*}
+
+With the type formers we met so far, we can already represent a lot of mathematical
+definitions and knowledge.
+For example, if we wanted to define what it means for a natural number to be odd,
+we could set
+\begin{equation*}
+\isodd :\equiv \rec_\N(\UU, \emptytype, (\lambda n. \lambda A. A \to \emptytype)) : \N \to \UU \text{.}
+\end{equation*}
+For example, this gives us the statement that the number one is odd, witnessed by
+the following term:
+\begin{align*}
+(\lambda x. x) :~ & \emptytype \to \emptytype \\
+ &\equiv \elim_\N((\lambda x. \UU), \emptytype, (\lambda n. \lambda A. A \to \emptytype), 0)
+  \to \emptytype\\
+ &\equiv \elim_\N((\lambda x. \UU), \emptytype, (\lambda n. \lambda A. A \to \emptytype), S(0))\\
+ &\equiv \isodd(S(0)) \text{.}
+\end{align*}
+
+\section{Inductive Types}\label{sec:tt-w}
+
+So far, the presented type formers may seem like a wild zoo of unrelated,
+random examples.
+Some are generalization of others (like $\Sigma$-types generalize sums),
+but the question one might ask is if there is any overarching principle behind
+the choice of those type formers.
+The feature that all of them have in common is that, rather than by an enumeration
+of their elements,
+they are defined by their formation, introduction, and elimination rules -- their
+elements are those which are generated \emph{inductively} by their introduction
+rules, also called \emph{constructors}.
+
+Some of the type formers we have seen were \emph{parameterized} by other types,
+but more than that, dependently types allow us to specify \emph{indexed} inductive
+types.
+One example for this is the type of \emph{vectors} of a type $A$.
+Vectors are a variant of lists, where we use the typing to keep track of the
+length of its elements:
+The type of vectors on $A$, is not a type but a type family:
+\begin{equation*}
+\vecty_{A} : \N \to \UU \text{.}
+\end{equation*}
+It has two constructors and eliminators of the following form:
+\begin{equation*}
+\begin{gathered}
+\inferrule{ }
+  {\nil : \vecty(0)}
+\qquad
+\inferrule{n : \N \\ a : A \\ v : \vecty(n)}
+  {\cons(a, v) : \vecty(n + 1)} \\[.7em]
+\inferrule{C : \{n : \N\} \to \vecty(n) \to \UU \\
+  p_\nil : C(\nil) \\
+  p_\cons : \{n : \N\}(a : A)(v : \vecty(n)) \to C(v) \to C(\cons(a,v)) \\
+  n : \N \\ v : \vecty(n)}
+  {\elim_\vecty(C, p_\nil, p_\cons, v) : C(v)}
+\end{gathered}
+\end{equation*}
+with two reduction rules
+\begin{align*}
+\elim_\vecty(C, p_\nil, p_\cons, \nil) &\equiv p_\nil \text{ and} \\
+\elim_\vecty(C, p_\nil, p_\cons, \cons(a, v)) &\equiv p_\cons(a, v, \elim_\vecty(C, p_\nil, p_\cons, v)) \text{.}
+\end{align*}
+In natural language, the eliminator says that to show a statement about vectors
+it is sufficient to prove it about the empty vector and that the statement is stable
+under extending an arbitrary vector.
+Note that the natural number in the conclusion of both introduction rules
+is not a variable, and the $\cons$ even modifies the natural number.
+As such, we don't call the dependency on the natural numbers in the type of vectors
+an \emph{index} instead of a parameter.
+
+While dependent and non-dependent functions were primitives needed to even talk
+about other type formers,
+all other examples which we have seen, can be captured by the concept of
+\emph{indexed inductive type}.
+But since it is not formally strict to just assume the presence of indexed
+inductive types based on giving examples,
+different attempts have been made to make precise a definition of what
+an indexed inductive type is.
+One schematic approach was made by \cite{dybjer94}, while the approach which
+we want to introduce here requires an encoding of the constructors in a very specific
+way to be able to present the inductive type as an instance of a very general
+form of a \emph{tree}.
+The types covered by this approach are called \emph{indexed W-Types}, and they
+cover a bigger fragment of inductive types than the non-indexed version of
+\emph{W-Types} which were introduced by foo, and which were,
+in a topos theoretic setting, discussed by \cite{moerdijkwellfounded}.
+The generalization to indexed W-Types, as presented here,
+was found by \cite{indexedcontainers}.
+
+\begin{defn}
+Assume that we are given the following data:
+\begin{itemize}
+\item A type $I : \UU$ of \emph{indices},
+\item a type $A : \UU$ encoding the number and non-recursive input \emph{data} or \emph{shapes} for contructors,
+\item a function $o : A \to I$ assigning to each piece of input data the corresponding \emph{output index} of
+the constructor,
+\item a type $B : A \to \UU$ of \emph{recursive occurences} or \emph{positions} for each
+bit of input data, and
+\item a function $r : (a : A) \to B(a) \to I$ of indices of \emph{recursive occurences}.
+\end{itemize}
+Then, we assume that we have
+a type $\IW{A}{B}{o}{r} : I \to \UU$ with the following introduction and elimination
+rules:
+\begin{equation*}
+\begin{gathered}
+\inferrule*[left=IW-Intro]{a : A \\
+  b : B(a) \to \IW{A}{B}{o}{r}(r(a, b))}
+  {\IWsup{a}{b} : \IW{A}{B}{o}{r}(o(a))} \\[.7em]
+\inferrule*[left=IW-Elim]{foo}
+  {bar}
+\end{gathered}
+\end{equation*}
+\end{defn}
 
 \section{Homotopy Type Theory}\label{sec:tt-hott}
 
