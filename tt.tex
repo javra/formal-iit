@@ -541,13 +541,53 @@ to be reflexive as a constructor:
 \inferrule*[left={$=$-Form}]{A : \UU \\ a, b : A}{a =_A b : \UU} \qquad
 \inferrule*[left={$=$-Intro}]{A : \UU \\ a : A}{\refl_a : a =_A a} \\[.7em]
 \inferrule*[left={$=$-Elim}]
-	{C : \textstyle{\prod_{(a,b : A)} (a =_A b) \to \UU} \\
-		c : \textstyle{\prod_{(a : A)}} C (a, a, \refl_a) \\
-		a, b : A \\ p : a =_A b}
-	{\elim_{=_A}(C, c, a, b, p) : C(x, y, p)}
+	{a : A \\ C : (b : A) \to a =_A b \to \UU \\
+		c : C(a, \refl_a) \\
+		b : A \\ p : a =_A b}
+	{\elim_{=_A}(a, C, c, b, p) : C(b, p)}
 \end{gathered}
 \end{equation*}
+with the reduction rule $\elim_{=_A}(C, c, a, p, \refl_a) \equiv c(a)$.
 It can be defined as an indexed W-type as per Table~\ref{tbl:tt-iws}.
+The elimination rule says that to prove a statement indexed over the right
+hand sides of an equality and corresponding equality proofs,
+we can assume it to be the reflexivity witness $\refl$.
+
+\begin{remark}\label{rmk:tt-k}
+Apart from the above elimination rule, which is sometimes referred to as
+\textbf{J-rule}, some type theories also assume the so called
+\textbf{K-rule}, which in proofs also allows us to simplify a given equality proof
+to $\refl$ if the type family which we want to inhabit varies both endpoints
+of the equality as in the following:
+\begin{equation*}
+\inferrule*[left={$=$-K}]{C : (a : A) \to a =_A a \to \UU \\
+    c : (a : A) \to C(a, \refl_a) \\
+    a : A \\ p : a =_A a}
+  {\elim'_{=_A}(C, c, a) : C(a) }
+\end{equation*}
+We will assume this rule to hold in Chapter~\ref{chp:iit} and later chapters,
+but explicitly assume its absence in this and the following two chapters.
+\end{remark}
+
+But what does equality, as defined here, mean?
+The most important consequence is, that two equal objects are \emph{indiscernable}
+by any attribute in the sense that for any type family $C : A \to \UU$ if
+$C(a)$ and $a = b$, then we can prove $C(b)$ as we can prove in the following
+lemma which defines an operation to achieve this:
+
+\begin{lemma}[Transport]
+Let $A : \UU$ and $C : A \to \UU$.
+For any two elements $a, b : A$ with $p : a = b$ we can define the
+\textbf{transport} operation on $p$:
+\begin{equation*}
+p* : C(a) \to C(b)
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+By induction, we can assume $p$ to be $\refl_a$, on wich we can define
+$(\refl_a)*(c) :\equiv c$.
+\end{proof}
 
 \section{Theorem Provers Based on Type Theory}\label{sec:tt-provers}
 
