@@ -482,12 +482,41 @@ Conversely the elimination rule describes that to proof a statement $C$ about th
 tree like structure it is enough to prove $C$ for $\IWsup{a}{c}$
 under the hypothesis that it holds for all recursive input data $c(b)$.
 
-We will now show that indexed W-types live up to our expectations of capturing
-all previously mentioned inductive types, from $\emptytype$ to $\vecty$.
-To provide a succinct translation of all of these, we will provide all the
-arguments for the respective indexed W-types in Table~\ref{tbl:tt-iw},
+Assuming that we already have $\emptytype$, $\unit$, sum and $\Sigma$-type,
+indexed W-types live up to our expectations of capturing
+all previously mentioned inductive types.
+To provide a translation of these, we will provide all the
+arguments for the respective indexed W-types in Table~\ref{tbl:tt-iws},
 while often, in the case of $I \equiv \unit$ describe
 $\unit \to A$ in place of a type $A$ itself.
+
+\begin{sidewaystable}\label{tbl:tt-iws}
+\centering
+{$\begin{array}{r|lllll}
+\text{Type Former} & I : \UU & A : \UU & B : A \to \UU & o : A \to I & r : (a : A) \to B(a) \to I \\
+\hline
+\N
+  & \unit
+  & \makecell[cl]{\unit \\ + \unit}
+  & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(\star) \mapsto \unit}
+  & \_ \mapsto \star
+  & \_ \mapsto \star \\
+\vecty_A
+  & \N
+  & \makecell[cl]{\unit \\ + A \times \N}
+  & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(a, n) \mapsto \unit}
+  & \makecell[cl]{\inl(\star) \mapsto 0          \\ \inr(a, n) \mapsto n + 1}
+  & \makecell[cl]{ - \\ \inr(a, n)(\star) \mapsto n} \\
+x =_A \_
+  & A
+  & \unit
+  & \star \mapsto \emptytype
+  & \star \mapsto x
+  & -
+\end{array}$}
+\caption{The input data for the indexed W-types corresponding to the type formers
+given in Chapter~\ref{sec:tt-dtt}.}\label{tbl:if-iws}
+\end{sidewaystable}
 
 \section{Homotopy Type Theory}\label{sec:tt-hott}
 
