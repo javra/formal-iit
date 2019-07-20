@@ -691,6 +691,43 @@ All of these laws can be proven by induction on of the paths involved,
 in case of the associativity on $r$.
 \end{proof}
 
+As a suitable notion of equality, propositional equality is respected by
+functions:
+\begin{lemma}
+Let $A, B : \UU$, $f : A \to B$, and $a, b : A$. Then, there is a function
+$\ap_f : (a = b) \to (f(a) = f(b))$ such that $\ap_f(\refl_a) \equiv \refl_{f(a)}$.
+\hfill $\square$
+\end{lemma}
+
+Under this notion $\ap_f$, every function is functorial with respect to
+equality.
+Besides this, it is also functorial with respect of function composition.
+The following laws can be proved by induction on the paths involved:
+\begin{lemma}
+Let $A, B, C : \UU$, $f : A \to B$ and $g : B \to C$. For paths $p : a =_A b$ and
+$q : b =_A c$ we have equalities
+\begin{itemize}
+\item $\ap_f(p \ct q) = \ap_f(p) \ct \ap_f(q)$,
+\item $\ap_f(p\inv) = \ap_f(p)\inv$,
+\item $\ap_g(\ap_f(p)) = \ap_{g \circ f}(p)$, and
+\item $\ap_{\id_A}(p) = p$. \hfill $\square$
+\end{itemize}
+\end{lemma}
+
+If in the above considerations, $f$ is instead a dependent function, we can not
+necessarily consider the type $f(a) = f(b)$ since the left and right hand side
+need not have the same type.
+For this situation, there is a dependent version of the above defined function
+$\ap_f$:
+\begin{lemma}\label{thm:apd-hott}
+Let $A : \UU$, $P : A \to \UU$ and $f : \prod_{(a : A)} P(a)$. Then, we can construct
+a dependent function
+\begin{equation*}
+\apd_f : \prod_{a, b : A} ~ \prod_{p : a = b} (p_*(f(a)) = f(b)) \text{,}
+\end{equation*}
+such that $\apd_f(a, a, \refl_a) \equiv \refl_{f(a)}$. \hfill $\square$
+\end{lemma}
+
 \section{Theorem Provers Based on Type Theory}\label{sec:tt-provers}
 
 
