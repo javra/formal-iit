@@ -1,0 +1,14 @@
+\section{Examples for Higher Inductive Types}
+
+\begin{equation*}
+\begin{gathered}
+%\inferrule*[left=$\Sph^1$-Form]{ }{\Sph^1 : \UU} \qquad
+\inferrule*[left=$\Sph^1$-Intro1]{ }{\Sbase : \Sph^1} \qquad
+\inferrule*[left=$\Sph^1$-Intro2]{ }{\Sloop : \Sbase =_{\Sph^1} \Sbase} \\[.7em]
+\inferrule*[left=$\Sph^1$-Elim]
+	{C : \Sph^1 \to \UU \\ c : C(\Sbase) \\ p : \Sloop_*(c) = c \\ x : \Sph^1}
+	{\ind_{\Sph^1}(C,c,p,x) : C(x)}
+\end{gathered}
+\end{equation*}
+
+\section{Coequalizers as a Fundamental HIT}
