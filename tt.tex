@@ -571,12 +571,63 @@ We will assume this rule to hold in Chapter~\ref{chp:iit} and later chapters,
 but explicitly assume its absence in this and the following two chapters.
 \end{remark}
 
+While we introduced types as a means to represent sets and propositions,
+passing on the K-rule also gives rise to a further interpretation:
+We can use types to model the homotopy types of topological spaces.
+This principle, together with the univalence axiom which we will introduce
+in the next chapter, is the underlying insight of the field of \emph{homotopy type theory}.
+This correspondence was first made precise by \cite{kapulkinlumsdaine},
+who modelled homotopy type theory using simplicial sets.
+In this correspondence -- a succinct list of which can be found in Table~\ref{tbl:tt-hott}) --
+equality proofs correspond to \textbf{paths}, a name which we not refrain
+from using from now on.
+
+\begin{sidewaystable}
+{\small
+\begin{tabular}{r|ccc}
+  & Logical Interpretation & Set Interpretation & Homotopical Interpretation \\
+\hline
+(closed) Type $A : \UU$
+  & Proposition
+  & Set
+  & Topolocial Space \\
+Function $f : A \to B$
+  & Proof of implication
+  & Function between sets
+  & Continuous map \\
+Type family $B : A \to \UU$
+  & Proposition with free variable in $A$
+  & Family of sets indexed by $A$
+  & Fibration over base $A$ \\
+Pair $(a, b) : A \times B$
+  & Proof of conjuction
+  & Pair in cartesian product
+  & Point in product space \\
+Element $\inl(a) : A + B$
+  & Proof of disjunction
+  & Element of disjoint union
+  & Point in disjoint union \\
+Dep. fn. $f : \Pi(B)$
+  & Proof of universal quantification
+  & Dep. set valued function
+  & Section of fibration \\
+Dep. pair $(a, b) : \Sigma(B)$
+  & Proof of existential quantification
+  & Dependent product
+  & Point in total space of fibration \\
+Equality $p : a =_A b$
+  & --
+  & Equality in $A$
+  & Path from $x$ to $y$ \\
+\end{tabular}}
+\caption{Three interpretations}\label{tbl:tt-hott}
+\end{sidewaystable}
+
 But what does equality, as defined here, mean?
 The most important consequence is, that two equal objects are \emph{indiscernable}
 by any attribute in the sense that for any type family $C : A \to \UU$ if
 $C(a)$ and $a = b$, then we can prove $C(b)$ as we can prove in the following
 lemma which defines an operation to achieve this:
-
 \begin{lemma}[Transport]
 Let $A : \UU$ and $C : A \to \UU$.
 For any two elements $a, b : A$ with $p : a = b$ we can define the
