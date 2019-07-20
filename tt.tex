@@ -789,6 +789,31 @@ and that it behaves as we expect it to on easy examples such as
 $(\unit \to A) \simeq A$, $(\emptytype + A) \simeq A$, and
 $(\emptytype \times A) \simeq \emptytype$.
 
+But how can we now compare the equivalence and equality on types?
+By induction the reflexivity proof for equivalence is enough to show that
+equality implies equivalence:
+For each $A, B : \UU$ there is
+\begin{equation*}
+\idtoeqv_{A, B} : (A =_{\UU} B) \to (A \simeq B) \text{.}
+\end{equation*}
+But how about the other direction?
+It turns out that there is no way to obtain equality from equivalence,
+so once solution,
+the consistency of which has been shown by \cite{kapulkinlumsdaine},
+is to assume axiomatically, that $\idtoeqv_{A, B}$ has an inverse function:
+\begin{axiom}[Univalence]
+For every $A, B: \UU$ we asume that
+$\idtoeqv_{A, B}$ is itself an equivalence.
+This implies that
+\begin{equation*}
+(A =_\UU B) \simeq (A \simeq B)
+\end{equation*}
+and yields an inverse to $\idtoeqv_{A, B}$ which we call
+\begin{equation*}
+\ua_{A, B} : (A \simeq B) \to (A =_\UU B) \text{.}
+\end{equation*}
+\end{axiom}
+
 
 \section{Theorem Provers Based on Type Theory}\label{sec:tt-provers}
 
