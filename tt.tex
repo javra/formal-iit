@@ -482,7 +482,9 @@ Conversely the elimination rule describes that to proof a statement $C$ about th
 tree like structure it is enough to prove $C$ for $\IWsup{a}{c}$
 under the hypothesis that it holds for all recursive input data $c(b)$.
 
-Assuming that we already have $\emptytype$, $\unit$, sum and $\Sigma$-type,
+Assuming that we already have $\emptytype$, $\unit$, $\twotype$ and $\Sigma$-types
+at our disposal (this allows us to define $A + B :\equiv (b : \twotype) \times C(b)$
+with $C(0_\twotype) :\equiv A$ and $C(1_\twotype) :\equiv B$),
 indexed W-types live up to our expectations of capturing
 all previously mentioned inductive types.
 To provide a translation of these, including indexed inductive types still to
@@ -522,7 +524,7 @@ x =_A \_
 given in Chapter~\ref{sec:tt-dtt}.}\label{tbl:if-iws}
 \end{sidewaystable}
 
-\section{Homotopy Type Theory}\label{sec:tt-hott}
+\section{Typal Equality and Homotopy Type Theory}\label{sec:tt-hott}
 
 Until now, the only equations we encountered were judgmental equalities which
 aren't ``visible'' internally in the type theory.
@@ -580,16 +582,68 @@ Let $A : \UU$ and $C : A \to \UU$.
 For any two elements $a, b : A$ with $p : a = b$ we can define the
 \textbf{transport} operation on $p$:
 \begin{equation*}
-p* : C(a) \to C(b)
+p^* : C(a) \to C(b)
 \end{equation*}
 \end{lemma}
 
 \begin{proof}
 By induction, we can assume $p$ to be $\refl_a$, on wich we can define
-$(\refl_a)*(c) :\equiv c$.
+$(\refl_a)^*(c) :\equiv c$.
+\end{proof}
+
+While it is obvious that equality should be an equivalence relation,
+we only added a witness for reflexivity.
+But what about its symmetry and transitivity?
+It turns out that these can be proven by induction without the need
+to add them as constructors:
+\begin{lemma}
+Let again be $A : \UU$, $a, b : A$, and $p : a = b$.
+Then, there is an equality proof $p\inv : b = a$, called the \textbf{inverse}
+of $p$.
+\end{lemma}
+
+\begin{proof}
+Applying the eliminator to $p$, we can reduce this problem to finding a path
+$(\refl_a)\inv : a = a$, which we can define to be $\refl_a$ itself.
+\end{proof}
+
+\begin{lemma}
+For $A : \UU$, elements $a, b, c : A$ and paths $p : a = b$ and $q : b = c$,
+there is a path $p \ct q : a = c$, proving that propositional equality is
+transitive.
+\end{lemma}
+
+\begin{proof}
+Here it suffices to apply induction on the second path and give the definition
+\begin{equation*}
+p \ct \refl_b :\equiv p \text{.}
+\end{equation*}
+\end{proof}
+
+Having provided the proof that equality is an equivalence relation,
+we can already conclude that it makes types a \emph{setoid}.
+But more than that we can also prove that it carries the structure of a
+\emph{groupoid}:
+\begin{lemma}[Groupoid laws]
+Let $A : \UU$, $a, b, c, d : A$ and $p : a = b$, $q : b = c$ and $r : c = d$.
+Then,
+\begin{itemize}
+\item $p = p \ct \refl_b = \refl_a \ct p$,
+\item $p\inv \ct p = \refl_b$, $p \ct p\inv = \refl_a$,
+\item $(p\inv)\inv = p$ and
+\item $p \ct (q \ct r) = (p \ct q) \ct r$.
+\end{itemize}
+\end{lemma}
+
+\begin{proof}
+All of these laws can be proven by induction on of the paths involved,
+in case of the associativity on $r$.
 \end{proof}
 
 \section{Theorem Provers Based on Type Theory}\label{sec:tt-provers}
+
+
+
 
 
 
