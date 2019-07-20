@@ -619,6 +619,10 @@ Equality $p : a =_A b$
   & --
   & Equality in $A$
   & Path from $x$ to $y$ \\
+Equivalence $f : A \simeq B$
+  & Proof of biconditional
+  & Bijection
+  & Homotopy equivalence
 \end{tabular}}
 \caption{Three interpretations}\label{tbl:tt-hott}
 \end{sidewaystable}
@@ -813,6 +817,56 @@ and yields an inverse to $\idtoeqv_{A, B}$ which we call
 \ua_{A, B} : (A \simeq B) \to (A =_\UU B) \text{.}
 \end{equation*}
 \end{axiom}
+
+Another instance of equalities we have not explored so far are \emph{iterated equalities}:
+Equalities between equality proofs.
+Since for types $A : \UU$ representing propositions we might only care about whether
+or not we have a proof for it, it might not make sense to
+consider multiple elements, so we might want that for all $a, b : A$ we have $a = b$.
+For types that should represent sets we \emph{do} want multiple elements, but
+we might not be interested in having different equality proofs --
+so for $a, b : A$ and $p, q : a =_A b$ we might want to have a proof for $p =_{a = b} q$.
+This effect that at a certain level of iteration, all (equality) proofs should become
+equal is called \textbf{truncation}:
+\begin{defn}[$n$-types]
+For a type $A : \UU$ we set
+\begin{align*}
+\isntype{(-1)}{(A)} \equiv \isProp(A) &:\equiv (a, b : A) \to a = b \text{,} \\
+\isntype{0}{(A)} \equiv \isSet(A)  &:\equiv (a, b : A)(p, q : a = b) \to p = q \text{, and} \\
+\isntype{(n + 1)}{(A)} &:\equiv (a, b : A) \to \isntype{n}{(a = b)} \text{ for $n : \N$.}
+\end{align*}
+and call $A$ a \textbf{proposition} if $\isProp(A)$, a set if $\isSet(A)$ and more
+general an
+$n$-type or $n$-truncated if $\isntype{n}{(A)}$.
+We also extend this definition to include what it means for a type to represent a
+contractible space, a singleton, or a true proposition:
+\begin{equation*}
+\isntype{(-2)}{(A)} \equiv \isContr(A) :\equiv (a : A) \times ((b : B) \to a = b) \text{.}
+\end{equation*}
+\end{defn}
+
+There are some important, but easy to prove facts about truncatedness:
+\begin{lemma}
+\begin{itemize}
+\item If $A : \UU$ is an $n$-type, then $A$ is an $(n+1)$-type.
+\item For each $n \geq -2$ and $A : \UU$, the type $\isntype{n}(A)$ is a mere
+proposition.
+\item If $A : \UU$ is an $n$-type and $B : A \to \UU$ such that for each $a : A$,
+$B(a)$ is an $n$-type, then $(a : A) \times B(a)$ is an $n$-type as well.
+\item If $A : \UU$ and $B : A \to \UU$ are such that $B(a)$ is an $n$-type for each
+$a : A$, then $(a : A) \to B(a)$ is an $n$-type as well.
+\item Let $n \geq -1$. Then, $A : \UU$ is an $(n+1)$-type if and only if for all $a : A$,
+the equality type $a =_A a$ is an $n$-type.
+\item Let $n \geq 0$. Then, $A : \UU$ is an $n$-type, if and only if for all $a : A$,
+the \emph{$n$-fold iterated loop space} $\Omega^{n+1}(A, a)$, which is defined using
+recursion on $n$ by
+\begin{align*}
+\Omega^1(A, a) &:\equiv (a =_A a) \text{ and}\\
+\Omega^{n+1}(A, a) &:\equiv (\refl_{\ddots_a} =_{\Omega^n(A,a)} \refl_{\ddots_a}) \text{,}
+\end{align*}
+is contractible. \hfill $\square$
+\end{itemize}
+\end{lemma}
 
 
 \section{Theorem Provers Based on Type Theory}\label{sec:tt-provers}
