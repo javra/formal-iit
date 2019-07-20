@@ -720,13 +720,75 @@ need not have the same type.
 For this situation, there is a dependent version of the above defined function
 $\ap_f$:
 \begin{lemma}\label{thm:apd-hott}
-Let $A : \UU$, $P : A \to \UU$ and $f : \prod_{(a : A)} P(a)$. Then, we can construct
+Let $A : \UU$, $B : A \to \UU$ and $f : (a : A) B(a)$. Then, we can construct
 a dependent function
 \begin{equation*}
-\apd_f : \prod_{a, b : A} ~ \prod_{p : a = b} (p_*(f(a)) = f(b)) \text{,}
+\apd_f : \{a, b\}(p : a =_A b) \to p_*(f(a)) =_B(b) f(b) \text{,}
 \end{equation*}
 such that $\apd_f(a, a, \refl_a) \equiv \refl_{f(a)}$. \hfill $\square$
 \end{lemma}
+
+We continue by consideren one of the representation of one of the most import
+notions of homotopy theory:
+Homotopies between functions.
+\begin{defn}[Homotopy of functions]\label{def:tt-htpy}
+Two maps $f, g : A \to B$ are called \textbf{homotopic} or \textbf{pointwise equal}
+if for all $a : A$ we have
+$f(a) = g(a)$.
+We define the notation
+\begin{equation*}
+f \sim g :\equiv (a : A) f(a) = g(a) \text{.}
+\end{equation*}
+We can define the same for two dependent functions $f, g : \prod_{(a : A)} B(a)$
+over the same type family.
+\end{defn}
+
+\begin{remark}[Function Extensionality]\label{rmk:tt-funext}
+Since in homotopy theory, we can find a path $p : f = g$ whenever $f \sim g$,
+we might ask if in homotopy type theory this holds as well --
+are two functions equal as soon as they are pointwise equal?
+In the setting of homotopy type theory we will be able to derive this from
+univalence, while in settings where we assum the K-rule, we will usually
+assume this property of the function space, which is called \textbf{function extensionality},
+axiomatically.
+\end{remark}
+
+So far, we have not considered what it means for two \emph{types to be equal}.
+Of course, our definition of equality is valid for the universe itself as well,
+but how does it relate to how we represent
+biconditionals of propositions,
+bijections between sets,
+and homotopy equivalences between spaces?
+One common representation of all of these three concepts is the notion of
+equivalence of types:
+\begin{defn}[Equivalences]\label{def:tt-hae}
+Let $A, B : \UU$. A function $f : A \to B$ is called an \textbf{equivalence}
+between $A$ and $B$, if there is a $g : B \to A$ such that
+$\eta : g \circ f \sim \id_A$ and $\epsilon : f \circ g \sim \id_B$ and furthermore
+\begin{equation*}
+\tau : \prod_{a : A} \ap_f(\eta(a)) =_{f(g(f(a)))=a} \epsilon(f(a)) 
+ \equiv \ap_f \circ \eta \sim \epsilon \circ f \text{.}
+\end{equation*}
+We need $\tau$ to make sure that each two witnesses $f$ is an equivalence are
+equal.
+Since $\tau$ looks like the one of the two commutativity conditions for pairs
+of adjoint functors, this kind of equivalence is also called a \textbf{half
+adjoint equivalence}.
+%The type of witnesses for $f$ to be an equivalence shall be
+%\begin{equation*}
+%\isequiv(f) :\equiv \sum_{g : B \to A} ~ \sum_{\eta : g \circ f \sim \id_A} ~
+%\sum_{\epsilon : f \circ g \sim \id_B} \ap_f \circ \eta \sim \epsilon \circ f \text{.}
+%\end{equation*}
+The type of all equivalences between two types $A, B : \UU$ is denoted by
+\begin{equation*}
+A \simeq B :\equiv \sum_{f : A \to B} \isequiv(f) \text{.}
+\end{equation*}
+\end{defn}
+It is easy to show that the equivalence of types is indeed an equivalence relation
+and that it behaves as we expect it to on easy examples such as
+$(\unit \to A) \simeq A$, $(\emptytype + A) \simeq A$, and
+$(\emptytype \times A) \simeq \emptytype$.
+
 
 \section{Theorem Provers Based on Type Theory}\label{sec:tt-provers}
 
