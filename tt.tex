@@ -281,6 +281,16 @@ a couple of further essential type formers.
 Note that, once we have added dependent functions, we can rediscover
 non-dependent functions as the special case of dependent functions over
 a constant type family.
+When iterating $\Pi$-types,
+we will often find that the arguement of a dependent function is already
+determined by an earlier argument, as in
+$f : (a : A)(b : B(a)) \to C(a, b)$.
+In this case, we lend the notation used by many theorem provers and
+use curly brackets to denote arguments which will be left implicit:
+If $f :\{a : A\}(b : B(a)) \to C(a, b)$,
+we write $f(b) : C(a, b)$.
+If we later want to state these explicitly we will re-use curly brackets
+to denote that we reintroduce them: $f\{a\}(b) : C(a, b)$.
 
 Two important logical connectives are still missing:
 Conjunction and disjunction. In type theory these coincide with
@@ -349,6 +359,19 @@ rules we have already seen for the non-dependent sum type:
 	{\elim_{(a : A) \times B(a)}(C, p, x) : C(x)}
 \end{gathered}
 \end{equation*}
+As our notation already suggests, we can view the product $A \times B$ as a special
+case of a sigma type where $B$ is a constant type family.
+Note that also the sum type $A + B$ can be defined as a special case of the sigma
+type over $C : \twotype \to \UU$ with $C(0_\twotype) :\equiv A$
+and $C(1_\twotype) :\equiv B$.
+By induction we can define the \textbf{projections}
+\begin{align*}
+\pr_1 &: ((a : A) \times B(a)) \to A \text{ and} \\
+\pr_2 &: (x : (a : A) \times B(a)) \to B(\pr_1(x)) \text{.}
+\end{align*}
+which return the components of the dependent pairs.
+When we iterate $\Sigma$-types an products we will be liberal with the notation
+and allow notation like $\pr_3, \ldots$ as well.
 
 With the type formers we met so far, we can already represent a lot of mathematical
 definitions and knowledge.
@@ -835,9 +858,9 @@ For a type $A : \UU$ we set
 \isntype{0}{(A)} \equiv \isSet(A)  &:\equiv (a, b : A)(p, q : a = b) \to p = q \text{, and} \\
 \isntype{(n + 1)}{(A)} &:\equiv (a, b : A) \to \isntype{n}{(a = b)} \text{ for $n : \N$.}
 \end{align*}
-and call $A$ a \textbf{proposition} if $\isProp(A)$, a set if $\isSet(A)$ and more
+and call $A$ a \textbf{proposition} if $\isProp(A)$, a \textbf{set} if $\isSet(A)$ and more
 general an
-$n$-type or $n$-truncated if $\isntype{n}{(A)}$.
+\textbf{$n$-type} or $n$-truncated if $\isntype{n}{(A)}$.
 We also extend this definition to include what it means for a type to represent a
 contractible space, a singleton, or a true proposition:
 \begin{equation*}
@@ -871,8 +894,23 @@ is contractible. \hfill $\square$
 
 \section{Theorem Provers Based on Type Theory}\label{sec:tt-provers}
 
-
-
+%TODO
+% * intro stuff
+% * common features
+% * lean
+% ** history
+% ** libraries, community, leanhott
+% ** type theory (cite mario?)
+% ** tactics
+% ** meta language
+% ** lean4
+% * agda
+% ** history
+% ** dependent pattern matching
+% ** ttintt
+% ** iits are possible
+% ** versions: without-K, rewrite-rules, cubical agda
+% 
 
 
 
