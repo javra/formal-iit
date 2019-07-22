@@ -26,6 +26,25 @@ while, as we will see, in homotopy type theory it is more
 fitting to call them \textbf{higher inductive types} given the fact
 that equality types carry not only proofs but data.
 
+A minimal example for this could be the following definition of would be a
+type theoretic representation of the topological space of the interval $I$.
+Its constructors are two points, but furthermore also a path which
+connects these two points:
+\begin{equation*}
+\begin{gathered}
+%\inferrule*[left=$I$-Form]{ }{I : \UU} \qquad
+\inferrule*[left=$I$-Intro1]{ }{0_I : I} \qquad
+\inferrule*[left=$I$-Intro2]{ }{1_I : I} \qquad
+\inferrule*[left=$I$-Intro3]{ }{\seg : 0_I = 1_I} \\[.7em]
+\inferrule*[left=$I$-Elim]
+	{C : I \to \UU \\ c_0 : C(0_I) \\ c_1 : C(1_I) \\ p : \seg_*(c_0) = c_1 \\ x : I}
+	{\elim_I(C, c_0, c_1, p, x) : C(x)}
+\end{gathered}
+\end{equation*}
+It is easy to check that the unique map $I \to \unit$ is an equivalence,
+and so $I$ is contractible and thus a set.
+But what if instead of two point constructors we only had one,
+as in the higher inductive types goverened by the following rules?
 \begin{equation*}
 \begin{gathered}
 %\inferrule*[left=$\Sph^1$-Form]{ }{\Sph^1 : \UU} \qquad
@@ -33,8 +52,25 @@ that equality types carry not only proofs but data.
 \inferrule*[left=$\Sph^1$-Intro2]{ }{\Sloop : \Sbase =_{\Sph^1} \Sbase} \\[.7em]
 \inferrule*[left=$\Sph^1$-Elim]
 	{C : \Sph^1 \to \UU \\ c : C(\Sbase) \\ p : \Sloop_*(c) = c \\ x : \Sph^1}
-	{\ind_{\Sph^1}(C,c,p,x) : C(x)}
+	{\elim_{\Sph^1}(C,c,p,x) : C(x)}
 \end{gathered}
 \end{equation*}
+We can see that $\Sloop$ introduces a new path from $\Sbase$ to itself which
+cannot be reduced to $\refl_\Sbase$.
+This means that we can interpret it as a loop which is not homotopic
+to the identity, and so the type represents the topological space of the circle.
+The fact that $\Sloop$ is not equal to $\refl_\Sbase$ also makes it clear that
+this type is not a set.
+
 
 \section{Coequalizers as a Fundamental HIT}
+
+
+
+
+
+
+
+
+
+
