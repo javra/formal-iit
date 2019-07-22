@@ -70,7 +70,7 @@ one basepoint and one surface:
 \begin{equation*}
 \begin{gathered}
 %\inferrule*[left=$\Sph^1$-Form]{ }{\Sph^1 : \UU} \qquad
-\inferrule*[left=$\Sph^2$-Intro1]{ }{\Sbase : \Sph^1} \qquad
+\inferrule*[left=$\Sph^2$-Intro1]{ }{\Sbase : \Sph^2} \qquad
 \inferrule*[left=$\Sph^2$-Intro2]{ }{\Ssurf : \refl_{\Sbase} =_{\Sbase = \Sbase} \refl_{\Sbase}} \\[.7em]
 %\inferrule*[left=$\Sph^2$-Elim]{ TODO?
 %	{C : \Sph^2 \to \UU \\ c : C(\Sbase) \\ p : \mathsf{}(c) = c \\ x : \Sph^1}
@@ -81,11 +81,65 @@ one basepoint and one surface:
 Besides these closed examples for higher inductive types, we can also
 have important constructions which are parametrized over an arbitrary type.
 One important operation in topology, especially in the field of homologies,
-is the one of the \textbf{suspension} $\Sigma(A)$ of spaces $A$ which turn an $n$-dimensional
+is the one of the \textbf{suspension} $\Susp(A)$ of spaces $A$ which turn an $n$-dimensional
 type into a $(n+1)$-dimensional type.
 Suspensions will also provide a way to conveniently define all higher-dimensional
 spheres by setting $\Sph^{n + 1} :\equiv \Susp(\Sph^n)$.
+The suspension has two point constructors (sometimes called the north and
+south pole) and for each point in $A$ a path between those points:
+\begin{equation*}
+\begin{gathered}
+\inferrule{ }
+  {\SuspN : \Susp(A)} \qquad
+\inferrule{ }
+  {\SuspS : \Susp(A)} \qquad
+\inferrule{a : A}
+  {\Suspmerid(a) : \SuspN = \SuspS} \\[.7em]
+\inferrule{C : \Susp(A) \to \UU \\
+  c_\SuspN : C(\SuspN) \\
+  c_\SuspS : C(\SuspS) \\
+  c_\Suspmerid : (a : A) \to \Suspmerid(a)^*(\SuspN) = \SuspS}
+  {\elim_{\Susp(A)}(C, c_\SuspN, c_\SuspS, c_\Suspmerid) : (x : \Susp(A)) \to C(x) }
+\end{gathered}
+\end{equation*}
 
+Another very general construction, which does not only depend on one a single
+type but instead has as input a whole \emph{span} of types, meaning
+three types $L$, $M$, and $N$, and functions $f : L \to M$ and $g : L \to N$.
+It consists of a type $P \equiv \pout{L}{M}{N}$ the point constructors of which are to functions
+$\inl$ and $\inr$ as in the following diagram:
+\begin{center}
+   \begin{tikzpicture}[x=\diagx,y=-\diagy]
+   \node (A) at (0,0) {$L$};
+   \node (C) at (1,0) {$N$};
+   \node (B) at (0,1) {$M$};
+   \node (D) at (1,1) {$P$}; %{$\pout L M N$};
+  
+   \draw[->] (A) to node [left] {$f$} (B);
+   \draw[->] (A) to node [above] {$ g$} (C);
+   \draw[->, dashed] (B) to node [below] {$\inl$} (D);
+   \draw[->, dashed] (C) to node [right] {$\inr$} (D);
+  \end{tikzpicture}
+\end{center}
+The introduction rules are the same as for the sum type, but each instance  of $L$
+contributes a new path in the resulting type:
+\begin{equation*}
+\begin{gathered}
+\inferrule{m : M}
+  {\inl(m) : \pout{L}{M}{N}} \qquad
+\inferrule{n : N}
+  {\inr(n) : \pout{L}{M}{N}} \\[.7em]
+\inferrule{l : L}
+  {\glue(l) : \inl(f(l)) = \inr(g(l)) }
+\end{gathered}
+\end{equation*}
+One can try to visualize the resulting type as the sum of $M$ and $N$ which
+was glued along an $L$-shaped overlapping.
+The pushout is a very general construction.
+In fact, it is easy to check that all the previous higher inductive types we
+presented were just special cases of a pushout,
+for example the suspension $\Susp(A)$ can also be defined
+as the pushout where both $f$ and $g$ are the unique map $A \to \unit$.
 
 \section{Coequalizers as a Fundamental HIT}
 
