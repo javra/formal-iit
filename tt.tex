@@ -592,6 +592,20 @@ of the equality as in the following:
 \end{equation*}
 We will assume this rule to hold in Chapter~\ref{chp:iit} and later chapters,
 but explicitly assume its absence in this and the following two chapters.
+
+In literature, our version of \textsc{$=$-Elim} is often called the
+\emph{based} J-rule, because the equation's left hand side is fixed,
+or Paulin-Mohring J-rule, after \cite{Moh93}.
+An alternative, but provably equivalent version is the so-called
+\textbf{unbased J-rule} in which the type family varies over both sides
+of the equation:
+\begin{equation*}
+\inferrule*[left={$=$-Elim'}]
+	{C : (a, b : A) \to a =_A b \to \UU \\
+		c : C(a, a, \refl_a) \\
+		a, b : A \\ p : a =_A b}
+	{\elim'_{=_A}(C, c, a, b, p) : C(b, p)}
+\end{equation*}
 \end{remark}
 
 While we introduced types as a means to represent sets and propositions,
