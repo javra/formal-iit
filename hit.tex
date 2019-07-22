@@ -1,5 +1,31 @@
 \section{Examples for Higher Inductive Types}
 
+The typal equality discussed in the last chapter works just fine if we want
+to \emph{prove} things to be equal.
+But in mathematics as well as computer science, we also often want to
+\emph{make things equal}, in the sense that we might want to consider a type
+$A$ and two of its elements $a, b : A$ and want to obtain
+another type which only differs from $A$ in that $a$ and $b$ are equal.
+In short, we want to take \emph{a quotient}.
+In this chapter we will present different ways to achieve quotients in the setting
+of homotopy type theory.
+Afterwards we will show how we can derive all of these from the basic notion
+of a \emph{homotopy coequalizer}.
+
+The general way to achieve quotients is to go beyond the inductive types
+which we encountered in the last chapters -- and which were all examples of
+indexed W-types --
+and also allow for constructors which,
+in contrast to the \emph{point constructors} which we have seen so far,
+are \emph{path constructors}.
+Instead of adding new elements to the inductive type,
+these constructors are there to make instances of other constructors equal.
+In a setting where the K-rule is present, and every type is a set (see Remark~\ref{rmk:tt-uip}),
+this bigger class of inductive type is called \textbf{quotient inductive types},
+while, as we will see, in homotopy type theory it is more
+fitting to call them \textbf{higher inductive types} given the fact
+that equality types carry not only proofs but data.
+
 \begin{equation*}
 \begin{gathered}
 %\inferrule*[left=$\Sph^1$-Form]{ }{\Sph^1 : \UU} \qquad

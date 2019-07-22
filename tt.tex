@@ -905,6 +905,30 @@ is contractible. \hfill $\square$
 \end{itemize}
 \end{lemma}
 
+\begin{remark}[Uniqueness of Identity Proofs]\label{rmk:tt-uip}
+Truncation levels are a notion which behaves quite differently
+depending on whether we assume presence of the K-rule or not.
+
+If, as in homotopy type theory, we only assume the J-rule, it is an easy exercise
+to find types which are not sets:
+In fact the universe $\UU$ itself is not a set:
+We can construct
+at least two different automorphisms of $\twotype$: The identity function
+and the map $f : \twotype \to \twotype$ with $f(0_\twotype) :\equiv 1_\twotype$
+and $f(1_\twotype) :\equiv 0_\twotype$.
+It is easy to prove that these are non-equal and as such, using univalence,
+yield different instances of the type $\twotype = \twotype$.
+
+If on the other hand we \emph{do} assume the K-rule, then it is immediate
+-- by first applying the J-rule to $p$ and then the K-rule to $q$ -- that
+for every type $A$ we can use the rule to show the inhabitedness of the
+type family
+\begin{equation*}
+(a, b : A) (p, q : a = b) \to p = q \text{,}
+\end{equation*}
+and so $A$ is a set.
+\end{remark}
+
 
 \section{Theorem Provers Based on Type Theory}\label{sec:tt-provers}
 
