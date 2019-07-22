@@ -141,6 +141,22 @@ presented were just special cases of a pushout,
 for example the suspension $\Susp(A)$ can also be defined
 as the pushout where both $f$ and $g$ are the unique map $A \to \unit$.
 
+An example for a higher inductive types, the importance of which is easily recognizable
+even we only care for propositions and sets is the one of the \textbf{truncation operator}.
+It is a tool to bring types to the desired level of trunction,
+as we can see in the following example:
+Remember that we represented the disjunctive logical connective with
+the sum type.
+But the sum of two propositional types is not necessarily a proposition itself:
+For example we have $\unit + \unit \simeq \twotype$.
+So how can we make it a proposition?
+The solution is to add equations between \emph{all} the points in the sum type
+and additionaly make sure that no trivial higher equality proofs exist.
+
+Next, we will discuss how -- parallel to how we unified the examples for
+indexed inductive types using indexed W-types --
+find a general way to express all higher inductive types which we need.
+
 \section{Coequalizers as a Fundamental HIT}
 
 
