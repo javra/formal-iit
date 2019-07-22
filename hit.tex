@@ -1,4 +1,4 @@
-\section{Examples for Higher Inductive Types}
+\section{Examples of Higher Inductive Types}
 
 The typal equality discussed in the last chapter works just fine if we want
 to \emph{prove} things to be equal.
@@ -61,6 +61,30 @@ This means that we can interpret it as a loop which is not homotopic
 to the identity, and so the type represents the topological space of the circle.
 The fact that $\Sloop$ is not equal to $\refl_\Sbase$ also makes it clear that
 this type is not a set.
+
+In the same way in which we can add arbitrary paths between constructors,
+we can also use iterated equality types to express the addition
+of arbitrary higher dimensional cells (surfaces, volumes).
+An example for this is the definition of a twodimensional sphere, where we have
+one basepoint and one surface:
+\begin{equation*}
+\begin{gathered}
+%\inferrule*[left=$\Sph^1$-Form]{ }{\Sph^1 : \UU} \qquad
+\inferrule*[left=$\Sph^2$-Intro1]{ }{\Sbase : \Sph^1} \qquad
+\inferrule*[left=$\Sph^2$-Intro2]{ }{\Ssurf : \refl_{\Sbase} =_{\Sbase = \Sbase} \refl_{\Sbase}} \\[.7em]
+%\inferrule*[left=$\Sph^2$-Elim]{ TODO?
+%	{C : \Sph^2 \to \UU \\ c : C(\Sbase) \\ p : \mathsf{}(c) = c \\ x : \Sph^1}
+%	{\elim_{\Sph^1}(C,c,p,x) : C(x)}
+\end{gathered}
+\end{equation*}
+
+Besides these closed examples for higher inductive types, we can also
+have important constructions which are parametrized over an arbitrary type.
+One important operation in topology, especially in the field of homologies,
+is the one of the \textbf{suspension} $\Sigma(A)$ of spaces $A$ which turn an $n$-dimensional
+type into a $(n+1)$-dimensional type.
+Suspensions will also provide a way to conveniently define all higher-dimensional
+spheres by setting $\Sph^{n + 1} :\equiv \Susp(\Sph^n)$.
 
 
 \section{Coequalizers as a Fundamental HIT}
