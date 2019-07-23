@@ -341,6 +341,30 @@ are \emph{interderivable} in homotopy type theory.
 
 \section{Encode-Decode Proofs}
 
+To motivate our results, which we will present in the next chapter,
+will will now look at some important problems which occur when
+we want to prove facts about higher inductive types.
+Often, we want to find out what specific equality types of
+higher inductive types look like.
+For a very concrete example, one of the most basic results in homotopy theory
+is the calculation that \emph{the fundamental group of the circle is
+isomorphic to the group $\Z$ of integers}.
+It is an example of a proplem which in a classical, set theoretic setting,
+is solved in a very way which is very different from the approach which is needed
+in its type theoretic counterpart.
+\cite{licataShulman_circle} were the first to translate this fact into the
+setting of homotopy type theory.
+Another fundamental theorem in homotopy theory is the \emph{theorem of
+Seifert-van Kampen}.
+It provides proof that the fundamental groupoid of a pushout of two spaces is
+isomorphic to the pushout of the fundamental groupoid of these spaces.
+This is an important help when trying to calculate homotopy groups of spaces
+which were ``glued'' together from more primitive spaces using pushouts.
+\cite{favonia:SvK} documented and formalized in Agda a type theoretic
+equivalent of the Seifert-van Kampen thoerem.
+In this chapter, we will revisit the proof ideas for both of these results
+and discover, what they have in common.
+
 
 
 
