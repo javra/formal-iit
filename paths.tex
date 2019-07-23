@@ -20,7 +20,101 @@ Q: \{a, b : A\} \to [a] = [b] \to \UU \text{.}
 Is it possible to have simple-to-check conditions which are sufficient to
 conclude $Q(q)$ for a general $q$ (instead of just $glue(s)$ for some $s : a \sim b$)?
 
+\begin{remark}
+Note that $Q$ above quantifies over two elements of $A$ and an equality of $\quot$.
+If instead we asked the same question for a type family
+\begin{equation*}
+S: (x, y : \quot) \to x = y \to \UU \text{,}
+\end{equation*}
+the answer would be that we could the J-rule to populate this family by giving
+$S(\refl_x)$.
+The principle we want for the applications we presented is the version
+where endpoints are ``restricted'' as above.
+\end{remark}
 
+It turns out that, like for the J-rule, there is a generalization of the above question.
+We get this generalization by switching from an \emph{unbased} (or \emph{global}) type family
+to a \emph{based} (or \emph{local}) one:
+We can fix one of the two endpoints to be $[a_0] : \quot$ and replace $Q$
+by a family which is indexed only \emph{once} over $A$:
+\begin{equation}
+P : (b : A) \to [a_0] = [b] \to \UU \text{.}
+\end{equation}
+Like for the two versions of the J-rule, a principle answering the based version
+of the question also answers the unbased one, which is why we will focus
+exclusively on the former.
+
+In order to get some intuition for the subtleties of the equality types,
+let us first look at a hypothetical principle which turns out to be wrong.
+Usually, induction principles contain one case for every constructor,
+the standard equality constructor is $\refl$ and with \textsc{Coeq-Intro2}, we
+have one further path constructor $\glue$.
+Thus, we might try whether it is sufficient to assume terms
+\begin{align*}
+r &: P(\refl_{[a_0]}) \text{ and}\\
+p &: (b : A)(s : a_0 \sim b) \to P(\glue(s))
+\end{align*}
+to conclude that $(b : A)(q : [a_0] = [b]) \to P(q)$?
+It turns out that this attempt fails:
+Consider the relation $\sim$ on the natural numbers defined by
+\begin{equation*}
+(m \sim n) :\equiv m + 1 = n \text{.}
+\end{equation*}
+We can look at the coequalizer $\specialquot{\N}$.
+Let us take $1 : \N$ as the base point and $P : (n : \N) \to ([0] = [n]) \to \UU$
+defined by $P(n,q) :\equiv (n \geq 1)$.
+The terms $r$ and $p$ are constructed easily, but at the same time, it is clear
+that $P(0, \glue(k)\inv)$ is empty (where $k$ is a proof for $0 + 1 = 1$).
+
+The above naïve suggestion was easy to disprove, but let us try to understand
+why it was insufficient.
+Equalities that come from $A$ can, by the J-rule, be assumed to be $\refl$;
+these are sufficiently covered.
+However this is not true for equalities that are generated using the $\glue$ constructor.
+The counterexample uses the fact that we have not explicitely closed them under symmetry
+and similarity -- we could have also used that we have not closed them
+under transitivity.
+
+How could we fix this? Given an equality $q$ in $\quot$, we can compose it
+with $\glue(s)$ assuming the endpoints match.
+This suggests that the induction principle we are looking for should assume
+$Q(q) \to Q(q \ct \glue(s))$.
+But we can also compose with $\glue(s)\inv$,
+suggesting that we also need a function $Q(q)  \to Q(q \ct \glue(s)\inv)$.
+The operations of composing with $\glue(s)$ and its inverse should furthermore
+be inverse to each other,
+wich motivates us to ask for only \emph{one} of them and require this one to be
+an equivalence, i.\,e. $Q(q) \simeq Q(q \ct \glue(s))$.
+This finally leads us to a valid induction principle, which is short, useful, and
+comes with two $\beta$-rules.
+Proving this princple is the main result of this chapter:
+\begin{thm}[Induction for Coequalizer Equality]
+Assume $A$ and $\sim$ as before, a point $a_0 : A$, and we are further given
+a type family
+\begin{equation*}
+P : (b : A) \to [a_0] = [b] \to \UU \text{,}
+\end{equation*}
+together with terms
+\begin{align*}
+r &: P(\refl_{[a_0]}) \text{ and} \\
+e &: \{b, c : A\}(q : [a_0] = [b])(s : b \sim c) \to P(q) \simeq P(q \ct \glue(s)) \text{.}
+\end{align*}
+The we can counstruct a dependent function
+\begin{equation*}
+\ind_{r, e} : \{b : A\}(q : [a_0] = [b]) \to P(q)
+\end{equation*}
+with the following equalities reminiscent of $\beta$-rules:
+\begin{align*}
+\ind_{r,e} (\refl_{[a_0]}) &= r \label{eq:paths-thm-based-first-beta} \\
+\ind_{r,e}(q \ct \glue(s)) &= e (q,s, \mathsf{ind}_{r,e}(q)) \label{eq:paths-thm-based-second-beta} \text{.}
+\end{align*}
+\end{thm}
+
+\begin{remark}
+The theorem can be proved in a way which makes the first $\beta$-rule hold judgmentally.
+This is what we have done in our formalization, but we will refrain from checking
+whether equalities hold strictly in this chapter.
+\end{remark}
 
 
 
