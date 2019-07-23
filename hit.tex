@@ -23,10 +23,13 @@ these constructors are there to make instances of other constructors equal.
 In a setting where the K-rule is present, and every type is a set (see Remark~\ref{rmk:tt-uip}),
 this bigger class of inductive type is called \textbf{quotient inductive types},
 while, as we will see, in homotopy type theory it is more
-fitting to call them \textbf{higher inductive types} given the fact
+fitting to call them \textbf{higher inductive types} (HITs) given the fact
 that equality types carry not only proofs but data.
+Higher inductive types
+allow the development of a synthetic version of homotopy theory inside HoTT (cf.~\cite{Buchholtz2018,Buchholtz2018CellularCI,buchholtz2016cayley,BuchRijke_projectiveSpaces,favonia:SvK,licataFinster_Eilenberg,licataBrunerie_s1again,Brunerie2017,rijke:join}).
+A main objective of this line of research is to describe, classify, and compare path spaces (i.e.\ equality types) or homotopy groups (i.e.\ truncated path spaces) of higher inductive types such as circles and spheres.
 
-A minimal example for this could be the following definition of would be a
+A minimal example for a higher inductive type could be the following definition of would be a
 type theoretic representation of the topological space of the interval $I$.
 Its constructors are two points, but furthermore also a path which
 connects these two points:
@@ -225,6 +228,9 @@ quotients:
 \item it does not have to be a relation at all, because for $a, b : A$, the type of relatedness witnesses $a \sim b : \UU$
 does not need to be a proposition but can contain multiple elements and even
 structure in higher equalities.
+(It might be reasonable to speak of a quotient by a higher relation,
+which is the approach taken by
+\cite{boulierRijkeTab_higherRels}.)
 \end{itemize}
 The formation, introduction, and elimination rules for the coequalizer
 are the following:
@@ -278,7 +284,25 @@ $\sim : A \to A \to \UU$ as the coequalizer on the maps
 \end{equation*}
 \end{remark}
 
+Another reason why we might avoid to conflate homotopy coequalizers with
+ordinary quotients is, that $\quot$ is not always a set, even if $A$ is:
+We can express the circle which we have defined earlier as a coequalizer
+in the following simple way:
+Set $A :\equiv \unit$ and for $a , b : A$, set $a \sim b :\equiv \unit$.
+While this, at first glance, might seem to yield a trivial coequalizer,
+it actually add an \emph{additional} path to the unit type, and
+it is easy to check that $\quot \simeq \Sph^1$.
 
+To see the importance of not requiring the relation to be propositional,
+consider the case of the pushout.
+It can be written as a coequalizer on $A :\equiv M + N$, but it is easy that the
+following definition for $\_\sim\_$ is not necessarily a proposition,
+and in general it is neither reflexive, nor symmetric, nor transitive:
+\begin{align*}
+(\inl(m) \sim \inl(m')) &:\equiv \emptytype \text{,} \\
+(\inl(m) \sim \inr(n)) &:\equiv (l : L) \times (f(l) = m) \times (g(l) = n) \text{, and} \\
+(\inr(m) \sim x) &:\equiv  \emptytype \text{.}
+\end{align*}
 
 
 
