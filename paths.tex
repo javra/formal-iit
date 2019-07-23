@@ -104,10 +104,10 @@ The we can counstruct a dependent function
 \ind_{r, e} : \{b : A\}(q : [a_0] = [b]) \to P(q)
 \end{equation*}
 with the following equalities reminiscent of $\beta$-rules:
-\begin{align*}
+\begin{align}
 \ind_{r,e} (\refl_{[a_0]}) &= r \label{eq:paths-thm-based-first-beta} \\
 \ind_{r,e}(q \ct \glue(s)) &= e (q,s, \mathsf{ind}_{r,e}(q)) \label{eq:paths-thm-based-second-beta} \text{.}
-\end{align*}
+\end{align}
 \end{thm}
 
 \begin{remark}
@@ -116,8 +116,22 @@ This is what we have done in our formalization, but we will refrain from checkin
 whether equalities hold strictly in this chapter.
 \end{remark}
 
+In the following sections we will first prove this main result (Chapter~\ref{sec:paths-main}),
+then modify it to obtain a version for pushouts (Chapter~\ref{sec:paths-pushout}),
+and present a few smaller applications (Chapter~\ref{sec:paths-applications})
+by characterizing the loop space of the circle and proving that
+pushouts preserve embeddings,
+before applying the approach to state a version of the Seifert-van Kampen theorem
+which instead of groupoids refers to \emph{higher} fundamental groupoids
+(Chapter~\ref{sec:paths-svk}).
 
+\section{The Main Theorem: Path Spaces in Coequalizers}\label{sec:paths-main}
 
+\section{Equality in Pushouts}\label{sec:paths-pushout}
+
+\section{First Applications}\label{sec:paths-applications}
+
+\section{Free Groupoids and a Higher Seifert-van Kampen Theorem}\label{sec:paths-svk}
 
 
 
