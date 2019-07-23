@@ -184,7 +184,7 @@ objects $X, Y : \bproj \CatA$ a type $\CatA(X, Y)$ of morphisms;
 a composition operator $\circ$ and identities of the following obvious types
 \begin{align*}
 \_\circ\_ &: \{X, Y, Z : \bproj \CatA\} \to \CatA(Y, Z) \to \CatA(X, Y) \to \CatA(X, Z) \text{,} \\
-\id &: \{X : \proj \CatA\} \to \CatA(X, X) \text{,}
+\id &: \{X : \bproj \CatA\} \to \CatA(X, X) \text{,}
 \end{align*}
 together with the two standard equalities for the identities and
 one equality which states that $\circ$ is associative:
@@ -202,6 +202,83 @@ We can define them in terms of contractability.
 An object $X$ of a category $\CatA$ is called \textbf{initial} if for every other
 object $Y$ the type of morphisms $\CatA(X, Y)$ is contractible.
 \end{defn}
+
+For the whole remainder of the section, let us assume that a type $A : \UU$
+together with a point $a_0 : A$ and a relation $\_\sim\_ : A \to A \to \UU$ are
+given.
+Our main category of interest is the following:
+
+\begin{defn}[Category of Coherent, Pointed Families]
+The category $\CatC$ is defined as follows:
+Objects in $\bproj \CatC$ are ``pointed type families respecting $\sim$'',
+by which we mean triples $(K, r, e)$ of the types
+\begin{align*}
+K &: A \to \UU \text{,} \\
+r &: K(a_0) \text{, and} \\
+e &: \{b, c : A\}(b \sim c) \to K(b) \simeq K(c) \text{.}
+\end{align*}
+Morphisms are ``pointed fibrewise functions''.
+Explicitely, a morphism in $\CatC((K, r, e), (K', r', e'))$ is 
+a triple $(f, \gamma, \delta)$ with
+\begin{align*}
+f &: (b : A) \to K(b) \to K'(b) \text{,} \\
+\gamma &: f_{a_0}(r) = r' \text{, and} \\
+\delta &: \{b, c : A\}(s : b \sim c) \to e'(s) \circ f_b = f_c \circ e(s) \text{.}
+\end{align*}
+It might be helpful to thing of $\gamma$ as an equality witnessing that, for any
+$s : b \sim c$ the following square commutes:
+ \begin{equation} \label{eq:commuting-square}
+  \begin{tikzpicture}[x=\diagx,y=-\diagy,baseline=(current bounding box.center)]
+   \node (Kab) at (0,0) {$K(b)$};
+   \node (Kac) at (1,0) {$K(c)$};
+   \node (Kpab) at (0,1) {$K'(b)$};
+   \node (Kpac) at (1,1) {$K'(c)$};
+  
+   \draw[->] (Kab) to node [above] {$\scriptstyle e(s)$} (Kac);
+   \draw[->] (Kpab) to node [above] {$\scriptstyle e'(s)$} (Kpac);
+   \draw[->] (Kab) to node [left] {$\scriptstyle f_b$} (Kpab);
+   \draw[->] (Kac) to node [right] {$\scriptstyle f_c$} (Kpac);
+  \end{tikzpicture}
+ \end{equation}
+The remaining components (identities, composition and their equations) are
+straightforward to define.
+For example identities are given as
+\begin{equation*}
+(\lambda b.\, \id, \refl_{r}, \lambda s.\, \refl_{e(s)}) \text{,}
+\end{equation*}
+and composition is given by
+\begin{equation*}
+(f', \delta', \gamma') \circ (f, \delta, \gamma)
+  :\equiv (\lambda b. ({f_b}' \circ f_b), \ap_{f'_{a_0}}(\delta) \ct \delta', \gamma' \circ \gamma) \text{,}
+\end{equation*}
+where the last bit is given by pasting two vertically neighboring
+squares \eqref{eq:commuting-square}. %(we do not think that writing down the full type-theoretic expression for this offers much insight).
+\end{defn}
+
+A variation of Theorem~\ref{thm:paths-main-thm},
+this time not as dependent elimination principle but as a non-dependent recursor,
+together with uniqueness can now be stated as follows:
+\begin{thm}[Initiality of Coequalizer Equality] \label{thm:paths-mainresult-cat-based}
+ Consider the object $(K^i, p^i, e^i)$ of $\CatA$, where the first part is given by
+ \begin{equation*}
+  K^i (b) :\equiv ([a_0] = [b]),
+ \end{equation*}
+ i.e.\ $K^i$ is given by equality in the coequalizer $\quot$.
+ The point is given by
+ \begin{equation*}
+  r^i :\equiv \refl_{[a_0]}.
+ \end{equation*}
+ For every $s : b \sim c$, the component $e^i(s)$ is the equivalence between $([a_0] = [b])$ 
+and $([a_0] = [c])$ which is given by composition with $\glue(s)$;
+ we simply write
+ \begin{equation*}
+  e^i(s) :\equiv \_ \ct \glue(s).
+ \end{equation*}
+ Then, our statement is: The object $(K^i, p^i, e^i)$ is initial in the category $\CatA$.
+\end{thm}
+
+
+
 
 \section{Equality in Pushouts}\label{sec:paths-pushout}
 
