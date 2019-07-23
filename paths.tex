@@ -88,7 +88,9 @@ an equivalence, i.\,e. $Q(q) \simeq Q(q \ct \glue(s))$.
 This finally leads us to a valid induction principle, which is short, useful, and
 comes with two $\beta$-rules.
 Proving this princple is the main result of this chapter:
-\begin{thm}[Induction for Coequalizer Equality]
+
+%\begin{restatable}[Induction for Coequalizer Equality]{thm}{main-thm}
+\begin{thm}[Induction for Coequalizer Equality]\label{thm:paths-main-thm}
 Assume $A$ and $\sim$ as before, a point $a_0 : A$, and we are further given
 a type family
 \begin{equation*}
@@ -124,8 +126,82 @@ pushouts preserve embeddings,
 before applying the approach to state a version of the Seifert-van Kampen theorem
 which instead of groupoids refers to \emph{higher} fundamental groupoids
 (Chapter~\ref{sec:paths-svk}).
+Most of the contents have been formalized in Lean, an effort which we will
+comment on in Chapter~\ref{sec:paths-lean}.
 
 \section{The Main Theorem: Path Spaces in Coequalizers}\label{sec:paths-main}
+
+We will first formulate and prove the non-dependent version of the main result,
+by developing the corresponding categorical framework inside type theory.
+This then allows us to derive the induction principle as stated in Theorem~\ref{thm:paths-main-thm}.
+
+Using categorical ideas to structure constructions and reason inside type
+theory is standard.
+The dependent elimination principle can usually equivalently be formulated
+as a recursion (or \emph{non-dependent} elimination) principle together
+with a uniqueness principle,
+often phrased as a \emph{universal property}.
+A principled way of doing this is to define objects and morphisms of a
+category; the statement then is that the inductive type in question is
+(homotopy) initial in this category.
+For the specific case of homotopy type theory, the connection between
+induction and initiality has been shown by
+\cite{awodeyGamSoja_hoAlgs} for inductive types,
+and by \cite{DBLP:journals/corr/Sojakova14} for some higher inductive types.
+
+However, category theory in homotopy type theory is subtle.
+The ``obvious'' naïve definition of a category without imposing any
+truncation levels on objects and morphisms (sometimes called a
+\emph{wild category}) is not always a well-behaved notion.
+For example the slice of a wild category is not a wild category anymore.
+The underlying reason is that the identity and associativity
+equalities do now behave like laws (or properties) but like higher morphisms
+in a \emph{higher category} where additional coherences are required.
+One approach to higher categories in homotopy type theory
+is discussed by~\cite{Capriotti2017}.
+Alternatively, the \emph{univalent categories} by~\cite{ahrens_rezk}
+restrict the truncation levels to avoid the issue.
+For us,
+truncating is not a suitable strategy since it would not allow us to prove our general result.
+
+Although not well-behaved in general, wild categories are still a useful tool
+for us.
+We do \emph{not} think of them as ``bad ordinary categories'' but instead
+as an approximation to $(\infty,1)$-categories, where most of the
+higher data is omitted.
+However, since none of our constructions require us to actually \emph{use}
+the omitted data, we are able to get away with this.
+Most importantly,
+we can talk about the concept of homotopy initiality without ever referring
+to higher morphisms.
+Technically, we do not even need associativity -- it could be excluded from the
+following definition without consequences for the rest of the paper.
+
+\begin{defn}[Wild Categories]
+A \textbf{wild category} $\CatA$, for simplicity henceforth simply
+\textbf{category}, consists of a type $\bproj{\CatA} : \UU$ of objects; for
+objects $X, Y : \bproj \CatA$ a type $\CatA(X, Y)$ of morphisms;
+a composition operator $\circ$ and identities of the following obvious types
+\begin{align*}
+\_\circ\_ &: \{X, Y, Z : \bproj \CatA\} \to \CatA(Y, Z) \to \CatA(X, Y) \to \CatA(X, Z) \text{,} \\
+\id &: \{X : \proj \CatA\} \to \CatA(X, X) \text{,}
+\end{align*}
+together with the two standard equalities for the identities and
+one equality which states that $\circ$ is associative:
+\begin{align*}
+\id \circ f &= f \text{,}\\
+f \circ \id &= f \text{, and}\\
+(f \circ g) \circ h &= f \circ (g \circ h) \text{.}
+\end{align*}
+\end{defn}
+
+Initiality in wild categories is one of the few notions which are still well-behaved
+in wild categories:
+We can define them in terms of contractability.
+\begin{defn}[Initiality]
+An object $X$ of a category $\CatA$ is called \textbf{initial} if for every other
+object $Y$ the type of morphisms $\CatA(X, Y)$ is contractible.
+\end{defn}
 
 \section{Equality in Pushouts}\label{sec:paths-pushout}
 
@@ -133,6 +209,7 @@ which instead of groupoids refers to \emph{higher} fundamental groupoids
 
 \section{Free Groupoids and a Higher Seifert-van Kampen Theorem}\label{sec:paths-svk}
 
+\section{Formalization in Lean}\label{sec:paths-lean}
 
 
 

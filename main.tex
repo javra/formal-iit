@@ -95,6 +95,8 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \usepackage{rotating}
 \usepackage{makecell}
 \usepackage{stmaryrd}
+%\usepackage{thmtools} this makes tex take forever
+%\usepackage{thm-restate} this as well
 
 \fancyhead[LO]{\leftmark}
 \fancyhead[RE]{\rightmark}
@@ -276,6 +278,11 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \newcommand{\Z}{\mathbb Z}
 \newcommand{\specialquot}[1]{#1 \! \sslash \! {\scriptstyle \sim}}
 \newcommand{\specialtwoquot}[2]{#1 \! \sslash \! #2}
+\newcommand{\CatA}{\mathcal A}
+\newcommand{\CatC}{\mathcal C}
+\newcommand{\CatD}{\mathcal D}
+\newcommand{\CatP}{\mathcal P}
+\newcommand{\bproj}[1]{\tproj{}{#1}}
 
 \renewcommand{\backrefalt}[4]{
 	\ifcase #1
