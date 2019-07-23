@@ -94,6 +94,7 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 %\usepackage[top=1in, bottom=1.25in, left=1.25in, right=1.25in]{geometry} %TODO decide
 \usepackage{rotating}
 \usepackage{makecell}
+\usepackage{stmaryrd}
 
 \fancyhead[LO]{\leftmark}
 \fancyhead[RE]{\rightmark}
@@ -269,6 +270,9 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \setlength{\diagy}{1.5cm}
 \newcommand{\pout}[3]{#2 \! \sqcup^{#1} \! #3}
 \newcommand{\glue}{\ensuremath{\mathsf{glue}}}
+
+%stuff from the lics paper
+\newcommand{\quot}{A \! \sslash \! {\scriptstyle \sim}}
 
 \renewcommand{\backrefalt}[4]{
 	\ifcase #1

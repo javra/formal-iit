@@ -215,7 +215,37 @@ quotients:
 does not need to be a proposition but can contain multiple elements and even
 structure in higher equalities.
 \end{itemize}
+The formation, introduction, and elimination rules for the coequalizer
+are the following:
+\begin{equation*}
+\begin{gathered}
+\inferrule*[left=Coeq-Form]{A : \UU \\ \_\sim\_ : A \to A \to \UU}
+  {\quot : \UU}\\[.7em]
+\inferrule*[left=Coeq-Intro1]{a : A}
+  {[a] : \quot} \qquad
+\inferrule*[left=Coeq-Intro2]{a, b : A \\ s : a \sim b}
+  {\glue(s) : [a] = [b] }\\[.7em]
+\inferrule*[left=Coeq-Elim]{P : \quot \to \UU \\
+  f : (a : A) \to P([a]) \\
+  e : \{a, b : A\} (s : a \sim b) \to \glue(s)^*(f(a)) = f(b)  }
+  {\elim_\quot(P,f,e) : (a : \quot) \to P(x)}
+\end{gathered}
+\end{equation*}
 
+\begin{remark}[Pathovers]
+Since we will often encounter equality types with a transported term on one
+side, it merits its own name and notation:
+Whenever we have a type family $B : A \to \UU$, two points $a, a' : A$,
+and a path $p : a = a'$, we will for $b : B(a)$ and $b' : B(a')$ define the
+type of
+\textbf{paths over} or \textbf{dependent paths over} $p$ to be
+\begin{equation*}
+(b =_p b') :\equiv (p*(b) = b') \text{.}
+\end{equation*}
+These path-overs have proven to be useful for many formalizations and their
+attributes, as well as their generalizations to square-overs and
+cube-overs have been described by \cite{licatacubical}.
+\end{remark}
 
 
 
