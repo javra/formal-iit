@@ -192,7 +192,8 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 		{\mathbin{\raisebox{0.25ex}{$\scriptstyle\,\centerdot\,$}}}
 		{\mathbin{\raisebox{0.1ex}{$\scriptscriptstyle\,\centerdot\,$}}}
 }
-\newcommand{\trunc}[2]{\left\Vert #2\right\Vert_{#1}}
+\newcommand{\trunc}[2]{\mathopen{}\left\Vert #2\right\Vert_{#1}\mathclose{}}
+\newcommand{\tproj}[3][]{\mathopen{}\left|#3\right|_{#2}^{#1}\mathclose{}}
 \newcommand{\squash}[1]{\trunc{}{#1}}
 \newcommand{\isntype}[1]{\mathsf{is}\mbox{-}{#1}\mbox{-}\mathsf{type}}
 \newcommand{\N}{\mathbb{N}}
