@@ -259,7 +259,7 @@ A variation of Theorem~\ref{thm:paths-main-thm},
 this time not as dependent elimination principle but as a non-dependent recursor,
 together with uniqueness can now be stated as follows:
 \begin{thm}[Initiality of Coequalizer Equality] \label{thm:paths-mainresult-cat-based}
- Consider the object $(K^i, p^i, e^i)$ of $\CatA$, where the first part is given by
+ Consider the object $(K^i, p^i, e^i)$ of $\CatC$, where the first part is given by
  \begin{equation*}
   K^i (b) :\equiv ([a_0] = [b]),
  \end{equation*}
@@ -274,11 +274,131 @@ and $([a_0] = [c])$ which is given by composition with $\glue(s)$;
  \begin{equation*}
   e^i(s) :\equiv \_ \ct \glue(s).
  \end{equation*}
- Then, our statement is: The object $(K^i, p^i, e^i)$ is initial in the category $\CatA$.
+ Then, our statement is: The object $(K^i, p^i, e^i)$ is initial in the category $\CatC$.
 \end{thm}
 
+In the following we will first provide a proof of this theorem, requiring various constructions
+and lemmas,
+before then deriving the dependent version.
+In order to prove Theorem~\ref{thm:paths-mainresult-cat-based}, we consider
+a second category which we call $\CatD$.
+We will then show that $\CatC$ and $\CatD$ are isomorphic.
+The point of this is that it is very easy to find the initial object in
+$\CatD$, and, via the isomorphism, it can easily
+be transported to $\CatC$.
+A useful technical tool is the formulation of coequalizer induction
+as an equivalence which is what we start with:
+\begin{lemma}[Coequalizer Induction as Equivalence]\label{lem:paths-quot-ind-equiv}
+Given a type family $P : \quot \to \UU$, there is a canonical map from the type
+ \begin{equation}\label{eq:quot-ind-1}
+  (x : \quot) \to P(x)
+ \end{equation}
+ to the type
+ \begin{equation}\label{eq:quot-ind-2}
+(f : (a : A) \to P([a])) \times
+  \Bigl( \{a, b : A\}(s : a \sim b) \to f(a) =_{\glue(s)} f(b) \Bigr)
+\end{equation}
+ mapping $g$ to the pair $(g \circ [-], \lambda s. \mathsf{apd}_g(\glue(s)))$.
+ This canonical map is an equivalence.
+\end{lemma}
+\begin{proof}
+The standard induction principle for the coequalizer states that there is a function
+from \eqref{eq:quot-ind-2} to \eqref{eq:quot-ind-1} with
+$\beta$-rules that essentially amount to stating that this function is a
+section of the canonical map above.
+\Cref{lem:paths-quot-ind-equiv} replaces ``section'' by ``inverse''.
+This easily follows from the standard induction principle.
+We are not the first to make this observation --
+a small variation of the lemma is already present in the Lean library, formalized
+by \cite{floris:dependent-lemma-lean}.
+\end{proof}
 
+\begin{remark}
+Note that \Cref{lem:paths-quot-ind-equiv} crucially depends on the ``non-recur\-siveness''
+of the coequalizer $\quot$.
+For example, the analogous statement about the natural numbers $\N$ is false
+(i.\,e. assuming it leads to a contradiction).
+\end{remark}
 
+In line with the strategy outlined above, we further consider the following
+category $\CatD$:
+\begin{defn}[Category $\CatD$]
+ $\DD$ is the category of pointed families over $\quot$.
+ Explicitly, objects in $\bproj {\CatD}$ are pairs $(L,p)$ as in
+ \begin{align*}
+  L &: \quot \to \UU \\
+  p &: L([a_0]),
+ \end{align*}
+ and morphisms in $\CatD((L,p), (L',p'))$ are pairs $(g,\epsilon)$ of types 
+ \begin{align}
+  & g : \Pi(x : \quot). L(x) \to L'(x) \label{eq:D0-morph-g}  \\
+  & \epsilon : g(p) = p' \label{eq:D0-morph-e}
+ \end{align}
+ Again, the remaining components of the category are defined in the straightforward way.
+\end{defn}
+
+The connection between $\CatC$ and $\CatD$ is as follows:
+\begin{lemma} \label{lem:paths-cats-are-iso}
+ The two categories are isomorphic, in the following sense.
+ There is a map
+ \begin{equation} \label{eq:Phi0-folded}
+  \Phi_0 : \bproj{\CatD} \to \bproj{\CatC}
+ \end{equation}
+ which is an equivalence, and there is also a map
+ \begin{equation} \label{eq:Phi1-folded}
+  \Phi_1 : \Pi (X,Y : \bproj{\CatD}). \CatD(X,Y) \to \CatC(\Phi_0(X),\Phi_0(Y))
+ \end{equation}
+ such that each $\Phi_1(X,Y)$ is an equivalence.
+ Moreover, identities and compositions are preserved by the equivalence.
+\end{lemma}
+
+\begin{proof}
+Let us unfold the type in \eqref{eq:Phi0-folded}; this is the type of the equivalence
+that we \emph{want} to construct:
+\begin{align}
+\begin{gathered}
+ (L : \quot \to \UU) \times L([a_0]) \\
+\simeq (K : A \to \UU) \times K(a_0) \times (\{b, c : A\}(s : b \sim c) \to K(b) \simeq K(c))
+\end{gathered}
+\end{align}
+\Cref{lem:paths-quot-ind-equiv} gives us a tool to construct equivalences.
+Let us use that lemma with the constant type family $P(x) :\equiv \UU$;
+this makes use of the fact that the lemma works on all universe levels.
+The lemma then gives us, simply by replacing $P(x)$ by $\UU$,
+renaming variables, and using the fact that we are now in the non-dependent
+special case, the following equivalence $\varphi_0$:
+\begin{align}\label{eq:phi0}
+\begin{gathered}
+ (\quot \to \UU) \\
+\simeq  (K : A \to \UU) \times (\{b, c : A\}(s : b \sim c) \to K(b) = K(c)) \text{.}
+\end{gathered}
+\end{align}
+Moreover, we know how $\varphi_0$ is defined, namely by
+\begin{equation}\label{eq:paths-phi0-compute}
+\varphi_0 :\equiv (L \circ [-], \lambda s. \ap_L(\glue(s)))
+\end{equation}
+(since we are in the non-dependent case, $\apd$ became $\ap$).
+
+We claim that the function $\Phi_0$ of type \eqref{eq:Phi0-folded} can be
+constructed from $\varphi_0$ via two small modifications:
+\begin{itemize}
+\item First, if we compare the domain of $\Phi_0$ with the domain of $\varphi_0$,
+and furthermore their codomains,
+we see that the ``point-component'' is missing from $\varphi_0$, i.\,e.
+the component of the $\Sigma$-type $L([a_0])$ is missing in its
+domain and $p : K(a_0)$ is missing in its codomain.
+However, we can ust extend domain and codomain with this component.
+The Equation \eqref{eq:paths-phi0-compute} tells us that this extension
+is completely trivial, since $K \equiv L \circ [-]$, i.\,e. we extend
+$\varphi_0$ with the identity on one additional new component.
+\item The codomain of this extended $\varphi_0$ only differes from the codomain
+of $\Phi_0$ in that the component $e$ in \eqref{eq:phi0}
+concludes $K(b) = K(c)$ instead of $K(b) \simeq K(c)$.
+To close this gap we can use the canonical function $\idtoeqv$ which
+turns an equality between types into an equivalence.
+The univalence axiom ensures that it is an equivalence itself.
+\end{itemize}
+\end{proof}
 
 \section{Equality in Pushouts}\label{sec:paths-pushout}
 
