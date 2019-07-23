@@ -66,7 +66,7 @@ In the same way in which we can add arbitrary paths between constructors,
 we can also use iterated equality types to express the addition
 of arbitrary higher dimensional cells (surfaces, volumes).
 An example for this is the definition of a twodimensional sphere, where we have
-one basepoint and one surface:
+one basepoint and one surface (see Figure~\ref{fig:hit-circle}):
 \begin{equation*}
 \begin{gathered}
 %\inferrule*[left=$\Sph^1$-Form]{ }{\Sph^1 : \UU} \qquad
@@ -77,6 +77,17 @@ one basepoint and one surface:
 %	{\elim_{\Sph^1}(C,c,p,x) : C(x)}
 \end{gathered}
 \end{equation*}
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[x=\diagx, y=\diagx]
+ \draw[black] (.5,0) circle (.5);
+ \draw[black,fill=black] (0,0) circle (.6ex);
+ \node at (-.3,.0) {$\mathsf{base}$};
+ \node at (1.2,.15) {$\mathsf{loop}$};
+\end{tikzpicture}
+\caption{A circle with a base point.}\label{fig:hit-circle}
+\end{figure}
 
 Besides these closed examples for higher inductive types, we can also
 have important constructions which are parametrized over an arbitrary type.
@@ -245,6 +256,26 @@ type of
 These path-overs have proven to be useful for many formalizations and their
 attributes, as well as their generalizations to square-overs and
 cube-overs have been described by \cite{licatacubical}.
+\end{remark}
+
+\begin{remark}[Coequalizer of Functions]
+In category theory, coequalizers are not defined on an object and a relation
+but instead are a universal construction on two functions $f, g : X \to A$
+which can be thought as an object in which for each $x : X$, $f(x)$ and $g(x)$ are identified.
+This can be expressed in our variant of a coequalizers by setting the relation
+on $A$ to be
+\begin{equation*}
+a \sim b :\equiv (x : X) \times (f(x) = a) \times (g(x) = b) \text{,}
+\end{equation*}
+or, alternatively by defining $\_\sim\_$ inductively by $f(x) \sim g(x)$ for each
+$x : X$.
+It is then easy to see that the coequalizer of $f$ and $g$ is $\quot$.
+
+Vice versa, we can view $\quot$ for an arbitrary $A : \UU$ and
+$\sim : A \to A \to \UU$ as the coequalizer on the maps
+\begin{equation*}
+ \pr_1,\pr_2 : \left(\Sigma(a,b : A).a \sim b\right) \rightrightarrows A \text{.}
+\end{equation*}
 \end{remark}
 
 
