@@ -316,7 +316,7 @@ based on aesthetical considerations, since we can also derive coequalizers
 from pushouts in the following way:
 \begin{center}
    \begin{tikzpicture}[x=\diagx,y=-\diagy]
-   \node (A) at (0,0) {$(a, b : A) \times a \sim b$};
+   \node (A) at (0,0) {$A + (a, b : A) \times a \sim b$};
    \node (C) at (2,0) {$A$};
    \node (B) at (0,1) {$A$}; %TODO
    \node (D) at (2,1) {$P$}; %{$\pout L M N$};
@@ -327,9 +327,16 @@ from pushouts in the following way:
    \draw[->, dashed] (C) to node [right] {$\inr$} (D);
   \end{tikzpicture}
 \end{center}
-and it is easy to see that the pushout $P$ is equivalent to $\quot$.
+with
+\begin{align*}
+f(\inl(a)) &:\equiv a \text{,} \\
+f(\inr(a, b, s)) &:\equiv a \text{,} \\
+g(\inl(a)) &:\equiv a \text{, and} \\
+g(\inr(a, b, s)) &:\equiv b \text{.}
+\end{align*}
+It is then easy to check that the pushout $P$ is equivalent to $\quot$.
 As a result, we can conclude that pushouts and homotopy coequalizers
-are \emph{interderivable} in homotopy type theory
+are \emph{interderivable} in homotopy type theory.
 \end{remark}
 
 \section{Encode-Decode Proofs}
