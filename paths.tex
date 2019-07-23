@@ -1,0 +1,33 @@
+We have seen in the previous chapter that the encode-decode method can be used
+in a variety of cases when we want to make statements about the equality
+types -- or \emph{path spaces} -- of higher inductive types.
+Going through all necessary steps of such a proof can be somewhat tedious, but
+part of it is very mechanical work.
+One main goal of this chapter is to present a different method to
+directly work with equality types of coequalizers and pushouts
+(and construction based on these):
+Since elimination rules such as one for coequalizers characterize only
+the points  of the type, but in the constructors we create points
+and equalities simultaeously, we believe that it is natural to hope for
+an ``induction principle for equalities'' which is reminiscent of an elimination
+rule.
+More concretely, for our case of a coequalizer $\quot : \UU$ of a type $A : \UU$
+and typal relation $\_\sim\_ : A \to A \to \UU$,
+let us assume we are given a type family
+\begin{equation*}
+Q: \{a, b : A\} \to [a] = [b] \to \UU \text{.}
+\end{equation*}
+Is it possible to have simple-to-check conditions which are sufficient to
+conclude $Q(q)$ for a general $q$ (instead of just $glue(s)$ for some $s : a \sim b$)?
+
+
+
+
+
+
+
+
+
+
+
+
