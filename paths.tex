@@ -806,6 +806,114 @@ In the following, we present an alternative (and significantly shorter) argument
 
 \section{Free Groupoids and a Higher Seifert-van Kampen Theorem}\label{sec:paths-svk}
 
+Fundamental groups in topology are \emph{quotients} of spaces --
+in homotopy type theory we represented them as 0-truncations of equality types.
+Thus, it is natural to ask for a \emph{higher dimensional} verion of the theorem
+which does not quotient or truncate.
+In homotopy theory, different versions have been proved by \cite{lurie18derived}
+and \cite{brown2011nonabelian}.
+In homotopy type theory, it is an open problem how this could be done.
+Our results of the current paper suggest one possible such higher Seifert-van Kampen theorem,
+which we present in this section.
+Note that the precise formulation of a theorem is part of the open question how
+to generalize the SvK theorem in HoTT,
+since the analogue of the $\code$ family by Favonia and Shulman has to be defined
+(and a trivial solution exists: define this analogue to be the equality).
+Our justification for why the analogue we suggest is reasonable is that, by
+$0$-truncating, the Favonia-Shulman theorem can be recovered relatively easily.
+As in \Cref{sec:paths-pushout}, let as assume $L, M, N : \UU$,
+$f : L \to M$, and $g : L \to N$. We write $P :\equiv \pout{L}{M}{N}$.
+A caveat is in order.
+In this section, we make used of \emph{indexed higher inductive types},
+of which we expect that they can be encoded in terms of higher inductive types,
+analogously to the fact that indexed inductive types can always be encoded via
+inductive types, as proven by \cite{DBLP:journals/jfp/AltenkirchGHMM15,Sattler:indexedW}.
+
+To recall, the Seifert-van Kampen theorem in the version of
+\cite{favonia:SvK} states that for $x, y : M + N$ there is an equivalence
+\begin{equation*}
+\trunc{0}{\inp(x) =_P \inp(y)} \simeq \code(x,y) \text{.}
+\end{equation*}
+The central difficulty of a higher version of the theorem is, of course,
+avoiding the set-truncation.
+Note that, in our description of the the lists used to define $\code$,
+the set-truncations in 
+\begin{align*}
+p_i &: \trunc 0 {g(l_i) = g(k_{i+1})} \text{ and} \\
+q_i &: \trunc 0 {p(k_i) = p(l_i)}
+\end{align*}
+can be removed since we set-truncate later
+when taking the set-quotient.
+This is essentially a repeated application of the equivalence
+\begin{equation*}
+ \trunc{n}{(a:A) \times \trunc{n}{B(a)}} \simeq \trunc{n}{(a:A) \times B(a)}.
+\end{equation*}
+This unnecessary set-truncation \emph{does} make sense in the formulation of the
+Seifert-van Kampen theorem, where all equality types are set-truncated, but
+removing it makes it easier to motivate our \emph{higher} Seifert-van Kampen theorem.
+
+Next, we suggest an alternative definition for the type of lists (before quotienting/truncation).
+To simplify things further, let us fix $n_0 : N$ and consider lists starting at this point.
+Let us now look at the following \emph{indexed} inductive type $C_0 : (M+N) \to \UU$
+with three constructors,
+where $C_0(x)$ should be understood as a type of lists from $n_0$ to $x$.
+Recall that we keep the embeddings $i_1 : M \to (M+N)$ and $i_2 : N \to (M+N)$ implicit.
+\begin{equation*}
+\begin{gathered}
+\inferrule*[left=$C_0$-Intro1]{ }{\nil : C_0(n_0)} \\[.7em]
+\inferrule*[left=$C_0$-Intro2]{l : L \\ c : C_0(f(l))}{ \glconstr(l,c) : C_0(g(l))} \qquad
+\inferrule*[left=$C_0$-Intro3]{l : L \\ c : C_0(g(l))}{ \glconstr'(l,c) : C_0(f(l))} \qquad
+\end{gathered}
+\end{equation*}
+Clearly, $\nil$ gives us the empty list.
+The other two constructors allow us to switch between lists ending in a point in $M$
+to lists ending in a point in $N$ and vice versa.
+Intuitively, this is done simply by adding a $\glue$ at the end of the list.
+This explains how to add the \emph{vertical} lines of a list as drawn in \eqref{eq:linked-paths-drawing}.
+It may be surprising that we do not add the \emph{horizontal} components $p_i$ and $q_i$ explicitly.
+The reason is that they are automatically and implicitly present in this encoding:
+the map $(\_)^*$ of type
+\begin{equation}
+  \{l,l' : L\} \to (g(l) = g(l')) \to \big(C_0(g(l)) \to C_0(g(l'))\big)
+\end{equation}
+allows us to ``insert'' the upper horizontal components in \eqref{eq:linked-paths-drawing}
+and (exchanging $g$ by $f$) also the lower horizontal components.
+
+The type $C_0(x)$ encodes lists from $n_0$ to $x$, but we have not done the
+quotienting, i.e.\ the lists \eqref{eq:linked-paths-drawing} and
+\eqref{eq:linked-paths-drawing-simplified} are still different.
+To remedy this, we can turn $C_0$ into an indexed \emph{higher} inductive type 
+and add constructors ensuring that $\glconstr(l, \glconstr'(l, x)) = x$ and
+$\glconstr'(l,\glconstr(l,x)) = x$.
+If we set-truncate, this would give us the correct type, namely something equivalent
+to the $\code(n_0,x)$ by Favonia and Shulman. 
+Since we do not want to set-truncate, we have to be more careful.
+$\glconstr(l)$ and $\glconstr'(l)$ together with the equality constructors will
+form a pair of \emph{quasi-inverses}~\citepalias{hottbook}, and it is known
+that this type is not well-behaved.
+Instead, we mirror the components that form an actual equivalence.
+Although there are several formulations that would work, we use those that turn
+$\glconstr$ into a \emph{bi-invertible map} ~\citepalias{hottbook}, as with
+the following introduction rules for a type family $C : (M+N) \to \UU$:
+\begin{equation*}
+\begin{gathered}
+\inferrule*[left=$C$-Intro1]{ }{\nil : C(n_0)} \qquad
+\inferrule*[left=$C$-Intro2]{l : L \\ c : C(f(l))}{\glconstr(l,c) : C(g(l))} \\[.7em]
+\inferrule*[left=$C$-Intro3]{l : L \\ c : C(g(l))}{\mathsf{linv}(l,c) : C(f(l))} \qquad
+\inferrule*[left=$C$-Intro4]{l : L \\ c : C(g(l))}{\mathsf{rinv}(l,c) : C(f(l))} \\[.7em]
+\inferrule*[left=$C$-Intro5]{l : L \\ c : C(f(l))}{\mathsf{linv}(l, \glconstr(l, x)) = x } \qquad
+\inferrule*[left=$C$-Intro6]{l : L \\ c : C(g(l))}{\glconstr(l,\mathsf{rinv}(l,y)) = y}
+\end{gathered}
+\end{equation*}
+This definition of $C$ does certainly not look very appealing, and we only give
+this presentation because it is the ``standard'' way of presenting higher
+inductive types.
+If we allow ourselves to fold the last five constructors into a single one,
+its introduction rule could look as follows:
+\begin{equation*}
+\inferrule*[left=$C$-Intro2-6]{l : L}{C(f(l)) \simeq C(g(l))}
+\end{equation*}
+
 \section{Formalization in Lean}\label{sec:paths-lean}
 
 
