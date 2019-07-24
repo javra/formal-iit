@@ -398,6 +398,232 @@ To close this gap we can use the canonical function $\idtoeqv$ which
 turns an equality between types into an equivalence.
 The univalence axiom ensures that it is an equivalence itself.
 \end{itemize}
+This concludes the construction of the equivalence $\Phi_0$, and,
+using \eqref{eq:paths-phi0-compute}, we can
+write down how the function part of it computes when applied to
+a pair $(L, p)$:
+ \begin{equation} \label{eq:paths-Phi0-compute}
+  \Phi_0(L,p) \equiv \big(L \circ [-], p, \lambda s. \idtoeqv(\ap_L(\glue(s)))\big)
+ \end{equation}
+
+The construction of $\Phi_1$ as in \eqref{eq:Phi1-folded} is slightly
+more subtle, since it depends on $\Phi_0$, but it works in essentially the same way.
+Assume we are given $(L, p)$ and $(L', p')$ in $\bproj \CatD$.
+We unfold the desired type of $\Phi_1((L,p),(L',p'))$, making use of
+equation \eqref{eq:paths-Phi0-compute}.
+This gives us the following type which we want to inhabit:
+ \begin{equation} \label{eq:paths-Phi1}
+  \begin{alignedat}{2}
+   &&& \left(g : \Pi(x : \quot). L(x) \to L'(x)\right) \times \left(g(p) = p'\right) \\
+   \simeq &&& \phantom{\times} \left(f : \Pi(b : A). L([b]) \to L'([b])  \right) \\
+           &&& \times (\delta: f(p) = p') \\
+           &&& \times \Bigl( \Pi\{b,c : A\},(s : b \sim c). \\
+           &&& \phantom{=========} \idtoeqv(\ap_L(\glue(s))) \circ f(b)  \\
+           &&& \phantom{=======} = f(c) \circ \idtoeqv(\ap_{L'}(\glue(s)) \Bigr)
+  \end{alignedat}
+ \end{equation}
+Let us use \Cref{lem:paths-quot-ind-equiv} again, this time with the
+type family $P(x) :\equiv (L(x) \to L'(x))$.
+Simply by pluggin this into \Cref{lem:paths-quot-ind-equiv} and renaming variables
+we obtain the following equivalence $\varphi_1$:
+\begin{equation}\label{eq:paths-phi1}
+\begin{gathered}
+((x : \quot) \to L(x) \to L'(x)) \\
+\simeq \\
+(f : (b : A) \to L([b]) \to L'([b])) \times (\{b, c : A\}(s : b \sim c) \to f(b) =_{\glue(s)} f(c))
+\end{gathered}
+\end{equation}
+Similar to what we have done before, we have to use \eqref{eq:paths-phi1}
+to derive \eqref{eq:paths-Phi1};
+and as before, there are two steps.
+First, we need to add the equation for the points (i.\,e. the components $\epsilon$
+and $\delta$), but this is as simple and direct as before; we will not spell
+out the details here.
+Second, and more interestingly, we have to show that the $\gamma$'s of
+\eqref{eq:paths-Phi1} and \eqref{eq:paths-phi1} coincide in the sense
+that their types are equivalent.
+As very often in homotopy type theory when we want to prove something for
+a specific equality (here $\glue(s)$), the easiest way to do it is to
+generalize the statement and formulate it in terms of an \emph{arbitrary}
+equality,
+which then allows for path induction.
+The only red herring here is that $f$ is a family of functions.
+But since it is indexed over $A$ and the equality in question lives in $\quot$,
+we cannot make use of this.
+The equivalence follows from \Cref{lem:paths-aux-lemma-function-eq} below,
+by using $f(b)$ for $h$, $f(c)$ for $k$, and $\glue(s)$ for $q$.
+It is easy to check that $\Phi_1$ preserves identities and composition of
+morphisms.
+\end{proof}
+
+\begin{lemma}\label{lem:paths-aux-lemma-function-eq}
+Let $Z$ be a type, $F, G : Z \to \UU$ two type families, $x, y : Z$,
+and $q : x = y$ a path.
+Assume we have functions $h : F(x) \to G(x)$ and $k : F(y) \to G(y)$.
+Then, the path-over type $h =_q k$ is equivalent to the type
+ \begin{equation*}
+  \idtoeqv(\ap_G(q)) \circ h = k \circ \idtoeqv(\ap_F(q)).  
+ \end{equation*}
+\end{lemma}
+
+Having shown \Cref{lem:paths-cats-are-iso}, which constitutes the main
+technical difficulty of the proof of theorem \Cref{thm:paths-mainresult-cat-based},
+we can work with $\CatD$ instead of $\CatC$.
+The benefit is that it is easy to find the initial object of $\CatD$.
+
+\begin{lemma} \label{lem:paths-D0-init}
+ Let us consider the object $(L^i,p^i)$ of $\CatD$, given as follows:
+ \begin{align*}
+  & L^i(x) :\equiv ([a_0] = x) \\
+  & p^i :\equiv \refl_{[a_0]}.
+ \end{align*}
+ This object is initial in $\CatD$.
+\end{lemma}
+\begin{proof}
+ Let $(L,p)$ be any other object.
+ After unfolding the definition of morphisms in $\CatD$, 
+ the type $\CatD((L^i,p^i),(L,p))$ is given by
+ \begin{equation*}
+  \big(g : (x : \quot) \to ([a_0] = x) \to L(x)\big) \times
+   \big(g([a_0], \refl) = p \big) \text{.}
+ \end{equation*}
+This type is contractible by applying ``singleton contraction'' twice:
+first, we use that an element $x$ together with an equality $[a_0] = x$
+form a contractible pair, simplifying the above type to $(g : L([a_0])) \times (g = p)$;
+and this type is clearly contractible.
+\end{proof}
+
+Having found the initial object in $\CatD$, we transport it to $\CatC$ in order
+to prove the categorical version of our main result, which is \Cref{thm:paths-mainresult-cat-based}.
+\begin{proof}[Proof of \Cref{thm:paths-mainresult-cat-based}]
+Since $\Phi_1$, as constructed in \Cref{lem:paths-cats-are-iso}, preserves
+morphism spaces, $\Phi_0$ preserves the initial object.
+Thus, all we need to do is to use the object found in \Cref{lem:paths-D0-init}
+and compute using \eqref{eq:paths-Phi0-compute}.
+ This gives us $K_0^i$ and $r_0^i$ immediately.
+ The last component $e_0^i$ is correct by a standard ``path induction''-argument.
+\end{proof}
+
+As a last step we can now derive the dependent eliminator from the non-dependent one.
+The main part of this derivation of \Cref{thm:paths-main-thm} is completely
+standard and follows known principles,
+which for example can be found in the work by \cite{awodeyGamSoja_hoAlgs}.
+We use the ``total space'' construction to turn the dependent case into the
+non-dependent one.
+Afterwards, we still need to derive the $\beta$-rules, and this is trickier;
+we use a small trick to ``strictify'' equations.
+
+\begin{proof}[Proof of \Cref{thm:paths-main-thm}]
+Assume that $P$, $r$ and $e$ are given.
+The ``total space'' versions of these three components from an object
+$(\overline P, \overline r, \overline e)$ of the category $\CatC$, and they
+are defined as follows:
+\begin{align*}
+  \overline P &: A \to \UU \\
+  \overline P(b) &:\equiv (q : [a_0] = [b]) \times P(q) \\[.7em]
+  \overline r &: \overline{P}(a_0) \\
+  \overline r &:\equiv (\refl_{[a_0]}, r) \\[.7em]
+  \overline e &: \{b,c : A\} \to (b \sim c) \to \overline P(b) \simeq \overline P(c) \\
+  \overline e (s) &:\equiv \left(\_ \ct \glue(s), e(\_,s,\_)\right). % \label{eq:total-e-def}
+\end{align*}
+Note that the definition of $\overline e (s)$ implicitely uses the fact that
+an equivalence between $\Sigma$-types can be constructed from a pair of
+equivalences for the first and second component.
+Explicitely, the function part of $\overline e (s)$ maps a given pair
+$(q, x)$ with $q : [a_0] = [b]$ and $x : P(q)$
+to the pair $(q \ct \glue(s), e(q,s,x))$.
+We have a morphism from initial object of $\CatC$ to this newly constructed object
+which from now on we will call $(f, \gamma, \delta)$,
+but we also have the ``first projection'' in the other direction:
+ \begin{align}
+  (f,\delta,\gamma) &: \CatC\big((K^i,p^i,e^i),(\overline P, \overline r, \overline e)\big)  \label{eq:morphism-from-initial} \\
+  (\lambda b. \pr_1,\refl_{r^i},\lambda s. \refl_{e^i(s)}) &: \CatC\big((\overline P, \overline r, \overline e),(K^i,p^i,e^i)\big)
+ \end{align}
+It follows from initiality that the composition of these morphisms is the
+identity on the object $(K^i, r^i, e^i)$,
+i.\,e. we have a $\psi$ of the following type:
+ \begin{equation} \label{eq:section-retraction}
+  \psi: (\lambda b. \pr_1,\refl_{r^i},\lambda s. \refl_{e^i(s)}) \circ (f, \delta, \gamma)
+   = (\lambda b. \id, \refl_{r^i}, \lambda s. \refl_{e^i(s)}) \text{.}
+ \end{equation}
+In particular, given any $q : [a_0] = [b]$, we get an equality
+ \begin{equation} \label{eq:proj1-f}
+  \psi^1_q : \pr_1(f_b(q)) = q \text{,}
+ \end{equation}
+and we can define $\ind_{r,e}(q) : P(q)$ by
+ \begin{equation}
+  \mathsf{ind}_{r,e}(q) :\equiv (\psi^1_q)^*(\pr_2(f_b(q))). \label{eq:derived-ind-principle}
+ \end{equation}
+
+This defines the induction principle, but the two $\beta$-rules still need to
+be justified.
+The equality $\psi$ in \eqref{eq:section-retraction} consists of three parts,
+one for each component;
+let us write $(\psi^1, \psi^2, \psi^3)$ for them.
+The general idea is that, just as $\psi^1$ has allowed us to construct
+the inuction principle \eqref{eq:derived-ind-principle},
+$\psi^2$ allows us to show the first $\beta$-equation and $\psi^3$ gives us the
+second one.
+The main difficulty here are the many \emph{transports} or \emph{pathovers}
+which are involved, since the types of $\psi^2$ and $\psi^3$ depend on $\psi^1$.
+The trick is to split $f$ into $(f_1, f_2)$ anby setting $f_b^1 :\equiv \pr_1 \circ f_b$
+and $f_b^2 :\equiv \pr_2 \circ f_b$, and similarly split $\gamma$ and $\delta$.
+Using this, and calculating the left side of \eqref{eq:section-retraction}, we get
+ \begin{equation*}
+  (\psi^1, \psi^2, \psi^3) : \; (f^1, \delta^1, \gamma^1) = (\lambda b. \id, \refl_{r^i}, \lambda s. \refl_{e^i(s)}) \text{.}
+ \end{equation*}
+ Now, we can generalize the situation: we claim that, \emph{for all} $(\psi^1, f^1, \ldots)$,
+ we can derive the induction principle plus two $\beta$-equalities.
+ This formulation allows us to use based path induction on $(f^1, \psi^1)$ and
+ assume that $f^1 \equiv \lambda b.\id$, $\psi_1 \equiv \refl_{\lambda b.\id}$.
+ This lets the mentioned dependencies disappear and we get $\psi^2 : \delta^1 = \refl_{r^i}$ 
+ as well as $\psi^3 : \gamma^1 = \lambda s.\refl_{e^i(s)}$.
+ In addition, \eqref{eq:derived-ind-principle} simplifies to $\mathsf{ind}_{r,e}(q) :\equiv \pr_2(f_b(q))$.
+
+ For the first $\beta$-equality, we unfold the type of $\delta$:
+ \begin{equation*}
+  \delta : (\refl_{a_0}, \ind_{r,e}(\refl_{a_0})) = (\refl_{a_0}, r)
+ \end{equation*}
+ We need to show that the second components are equal.
+ From $\delta$, we get that the second components are equal when one is
+ transported along the $\delta^1$,
+ and from $\psi^1$, we get that this is a transport along $\refl$.
+
+
+ The procedure for the second $\beta$-equation is similar. 
+ The details are best seen by considering the following diagram:
+ \begin{equation*}
+ \begin{tikzpicture}[x=2.5\diagx,y=-1.5\diagy]
+  \node (A) at (0,0) {$[a_0]=[b]$};
+  \node (C) at (1,0) {$(q : [a_0]=[b]) \times P(q)$};
+  \node (B) at (0,1) {$[a_0]=[c]$};
+  \node (D) at (1,1) {$(q : [a_0]=[c]) \times P(q)$};
+  \node (E) at (.5,.5) {$\gamma$};
+ 
+  \draw[->] (A) to node [left] {$\scriptstyle{\_ \ct \glue(s)}$} (B);
+  \draw[->] (A) to node [above] {$\scriptstyle{f_b}$} (C);
+  \draw[->] (B) to node [below] {$\scriptstyle{f_b}$} (D);
+  \draw[->] (C) to node [right] {$\scriptstyle {\_ \ct \glue(s) , e(\_,s,\_)}$} (D);
+ \end{tikzpicture}
+ \end{equation*}
+ $\gamma$ says that this square commutes.
+ Let us take some $q : [a_0]=[b]$ and see how it is mapped (using $f_1 \equiv \id$ and so on):
+ \begin{equation*}
+ \begin{tikzpicture}[x=2.5\diagx,y=-1.5\diagy]
+  \node (A) at (0,0) {$q$};
+  \node (C) at (1,0) {$(q, \mathsf{ind}_{r,e}(q))$};
+  \node (B) at (0,1) {$q\ct \glue(s)$};
+  \node (D) at (1,1) {$(q \ct \glue(s), \mathsf{ind}(q \ct \glue(s)))$};
+  \node (D2) at (1,.65) {$(q \ct \glue(s), e(q,s,\mathsf{ind}_{r,e}(q))$};
+  
+  \draw[|->] (A) to node {} (B);
+  \draw[|->] (A) to node {} (C);
+  \draw[|->] (B) to node {} (D);
+  \draw[|->] (C) to node {} (D2);
+ \end{tikzpicture}
+ \end{equation*}
+ Here, $\gamma$ tells us that the two pairs at the bottom right are equal.
+ As before, we need that their second components are equal; and analogously to what we did before, we use $\psi^3$ to see that this is the case.
 \end{proof}
 
 \section{Equality in Pushouts}\label{sec:paths-pushout}
