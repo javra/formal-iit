@@ -623,10 +623,82 @@ Using this, and calculating the left side of \eqref{eq:section-retraction}, we g
  \end{tikzpicture}
  \end{equation*}
  Here, $\gamma$ tells us that the two pairs at the bottom right are equal.
- As before, we need that their second components are equal; and analogously to what we did before, we use $\psi^3$ to see that this is the case.
+ As before, we need that their second components are equal; and analogously to
+ what we did before, we use $\psi^3$ to see that this is the case.
 \end{proof}
 
 \section{Equality in Pushouts}\label{sec:paths-pushout}
+
+We already learned that pushouts and coequalizers are interderivable, so it is
+an obvious question what our main theorem translates to when regarded for
+pushouts instead of coequalizers.
+We write $\inp: (M+N) \to \pout L M N$ for the map given by $(\inl, \inr)$.
+To simplify notation, we keep the inclusions $\inl : M \to (M+N)$
+and $\inl : N \to (M+N)$ implicit and only mention the inclusions into the
+pushout.
+
+Since pushouts are used a lot and play a vital role in the Seifert-van Kampen theorem 
+(cf.~\Cref{sec:paths-svk}),
+we want to state our main result explicitly for pushouts instead of coequalizers.
+The proofs can straightforwardly be obtained by expressing the pushouts as coequalizers,
+as described in the introduction. (In Lean, this is simply a specialization).
+
+\begin{thm}[Induction for Pushout Equality] \label{thm:paths-main-pushout}
+ Assume $L, M, N : \UU$, $f : L \to M$, $g : L \to N$ are given as in the
+ definition of the pushout,
+ together with a point $n_0 : N$.
+ Assume we are given families $P, Q$ and terms $r,e$ as follows:
+%  \begin{equation}
+ \begin{align}
+  P &: \{m : M\} \to (\inr(n_0) = \inl(m)) \to \UU \label{eq:P-mainresult-pushout}\\
+  Q &: \{n : N\} \to (\inr(n_0) = \inr(n)) \to \UU \label{eq:Q-mainresult-pushout} \\
+  r &: Q(\refl_{\inr(n_0)}) \label{eq:r-mainresult-pushout} \\
+  e &: (l : L) \to (q: \inr(n_0) = \inl(f(l)))
+       \to P(q) \simeq Q(q \ct \glue(l)). \label{eq:e-mainresult-pushout}
+ \end{align}
+%  \end{equation}
+ Then, we can construct terms
+%  \begin{equation}
+ \begin{align*}
+  \mathsf{ind}^P_{r,e} &: \{m : M\}(q : \inr(n_0) = \inl(m)) \to P(q) \\
+  \mathsf{ind}^Q_{r,e} &: \{n : N\}(q : \inr(n_0) = \inr(n)) \to Q(q)
+ \end{align*}
+%  \end{equation}
+ with the following $\beta$-rules:
+ \begin{align*}
+  \mathsf{ind}^P_{r,e} (\refl_{\inr(n_0)}) &= r \\
+  \mathsf{ind}^Q_{r,e}(q \ct \glue(l)) &= e (l,q,\mathsf{ind}^P_{r,e}(q))
+ \end{align*}
+ \qed
+\end{thm}
+
+\begin{remark}
+ As before, the first $\beta$-rule
+holds judgmentally in our formalization.
+\end{remark}
+
+\begin{thm}[Initiality of Pushout Equality] \label{thm:paths-mainresult-pushout-based}
+ Given the same data as in the previous theorem, we can consider the category $\CatP$,
+ whose definition mirrors that of $\CatC$.
+ Objects are quadruples $(J,K,r,e)$,
+ \begin{align*}
+  J &: M \to \UU \\
+  K &: N \to \UU \\
+  r &: K(n_0) \\
+  e &: \Pi (l : L). J(f(l)) \simeq K(g(l))
+ \end{align*}
+and a morphism between $(J,K,r,e)$ and $(J',K',r',e')$ consists of fiberwise
+functions which preserve $r$ and commute with $e$. %, $e'$.
+  Then, the object $(J^i,K^i,r^i,e^i)$ defined by
+ \begin{align*}
+  J^i(m) &:\equiv \left(\inr(n_0) = \inl(m)\right) \\
+  K^i(n) &:\equiv \left(\inr(n_0) = \inr(n)\right) \\
+  r^i &:\equiv \refl_{\inr(n_0)} \\
+  e^i(l) &:\equiv \_ \ct \glue(l)
+ \end{align*}
+is initial in $\CatP$. \qed
+\end{thm}
+
 
 \section{First Applications}\label{sec:paths-applications}
 
