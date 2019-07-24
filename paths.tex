@@ -911,7 +911,7 @@ inductive types.
 If we allow ourselves to fold the last five constructors into a single one,
 its introduction rule could look as follows:
 \begin{equation*}
-\inferrule*[left=$C$-Intro2-6]{l : L}{C(f(l)) \simeq C(g(l))}
+\inferrule*[left=$C$-Intro7]{l : L}{C(f(l)) \simeq C(g(l))}
 \end{equation*}
 
 It may also be interesting to do this in the formulation for a coequalizer
@@ -937,6 +937,117 @@ by~\citet{gun:squid} (based on Capriotti's idea),
 by van der Weide et al.\ in unpublished work, and in a formalization by
 ~\citet{Evan:Squid}.
 This example is discussed further in \Cref{rmk:paths-generalized-squid} below.
+
+The type family $C$ depends on the chosen point $n_0$.
+To remove this dependency, let us consider a version of $C$ which is indexed
+twice over $(M+N)$:
+we write $\mathfrak C(n_0, y)$ for $C(y)$.
+This expression plays the role of $\code$ in our higher analogue of
+the Favonia-Shulman result, \Cref{thm:favonia:SvK}.
+While it can be extended to a family $P \to P \to \UU$ in a straightforward way,
+we choose the following formulation for simplicity
+(and to match \Cref{thm:favonia:SvK} more closely):
+
+\begin{thm}[Higher Seifert-van Kampen Theorem]\label{thm:paths-higher-SvK}
+ For $x,y : M+N$, we have an equivalence:
+ \begin{equation} \label{eq:thm-higher-svk}
+  \left(\inp(x) =_P \inp(y)\right) \simeq \mathfrak C (x,y).
+ \end{equation}
+\end{thm}
+
+\begin{proof}
+Like all (indexed/higher/ordinary) inductive types,
+our type family $C$ is initial in an
+appropriately formulated category of algebras (see \citet{awodeyGamSoja_hoAlgs},
+\cite{Coquand:2018:HIT:3209108.3209197}, and others).
+Here is where we draw the connection with the main result of the paper:
+The category in which $C$ is initial is
+the category $\CatP$ from \Cref{thm:paths-mainresult-pushout-based}.%
+\footnote{To be precise, the object $(C \circ i_1, C \circ i_2, \nil, \glconstr)$ is initial in $\PP$.}
+This is easy to see when we use the general specification and definition of
+higher inductive-inductive types given by Kaposi and Kov{\'a}cs
+\cite{kaposi_et_al:LIPIcs:2018:9190,AAhiits},
+but see \Cref{rmk:paths-generalized-squid} below.
+
+By the uniqueness of the initial object and by \Cref{thm:paths-mainresult-pushout-based},
+$C(x)$ is equivalent to $\inr(n_0) =_P \inp(x)$.
+Letting $n_0$ vary, we get the statement of the theorem.
+\end{proof}
+
+It is relatively straightforward to recover the set-truncated SvK statement
+(\Cref{thm:hits-svk}) from the higher version (\Cref{thm:paths-higher-SvK}).
+We can simply set-truncate both sides in \eqref{eq:thm-higher-svk} and then prove
+that $\trunc 0 {\mathfrak C(x,y)}$ is equivalent to $\code(x,y)$ by constructing
+maps in both directions.
+
+\begin{remark} \label{remark:generalized-squid}
+\Cref{thm:higher-SvK} and its proof 
+deserve additional comments.
+We think it is fair to say that the formal theory of indexed higher inductive
+types is not yet well-established, but it is under very active development.
+\citet{kaposi_et_al:LIPIcs:2018:9190,AAhiits} have
+suggested a definition for general higher inductive-inductive types which captures
+the case we need.
+Indexed higher inductive types are considered in some of the cubical settings;
+cf.\ \citet{cavallo2019higher}, and there are plans to extend
+cubical Agda~\citep{andrea:cubicalagda,anders:cubicalblog,andreaAnders:experiments}
+and redtt~\citep{redtt} with the concept (at the time of writing, a possibly not
+final version is available in cubical Agda).
+Our definition of $C$ would be covered by any potential implementation of
+indexed higher inductive types.
+We think it would be desirable to also allow a direct syntactical representation as
+in
+\textsc{$C$-Intro7}, even if only as syntactic sugar
+for the rules it replaces.
+Note that Kaposi and Kov{\'a}cs allow equalities between types,
+which is very similar to allowing this family of equivalences.
+
+The critical step in the above proof of \Cref{thm:paths-higher-SvK} is to establish
+$C$ as the initial object of the
+category $\CatP$.
+With the specification suggested by Kaposi and Kov{\'a}cs allowing
+\textsc{$C$-Intro7}, with equalities instead of
+equivalences, this part is easy.
+However, we want to emphasize that the initiality of
+$C$ using \textsc{$C$-Intro7}
+is not immediate at all if we use what we could call the
+\emph{direct induction principle}
+\footnote{The terminology was suggested by Anders M\"ortberg.}.
+The direct induction principle is the ``standard'' principle one derives by
+giving one case for each constructor, as done in the book~\citepalias{hottbook}
+and by current proof assistants such as cubical Agda.
+Unfortunately, due to the type dependency in the direct induction principle,
+it becomes very hard to ``fold'' the components for the type
+$C$ in order to achieve the principle one
+would expect from the constructor \textsc{$C$-Intro7}.
+We expect that implementing \Cref{thm:paths-higher-SvK} in cubical Agda would be
+extremely tedious for this reason.
+% (note that \Cref{thm:higher-SvK} is also not part of our Lean formalization).
+
+The core of the problem with the direct induction principle is that it does not
+allow us to ``reason on the level of constructors''.
+As an example, let us consider the interval with two point constructors and one
+path constructor.
+If we can reason on the level of constructors, it is by ``singleton contraction''
+clear that one point and the path constructor form a contractible pair, and that
+the interval is therefore equivalent to the type generated by a single point.
+With the direct induction principle, this style of reasoning is not possible.
+It turns out to be easy enough to prove the interval contractible, but  in other
+cases, the situation is less fortunate.
+
+As an example, proposals by~\citet{gun:squid}, unpublished
+work by van der Weide et al., and a formalization by Cavallo based on a remark
+by M\"ortberg~\citep{Evan:Squid} suggest to define $\Z$ as a higher inductive
+type, and their very definition is chosen such that $\Z$ should become the
+initial object of the category of pointed types with automorphism
+(cf.\ \Cref{sec:paths-applications}).
+Their definitions are versions of \eqref{eq:free-higher-groupoid-nice} with
+$A$ and $\sim$ replaced by the unit type and the relation constantly unit.
+Crucially, they have to ``unfold'' the constructor $\cons$, since this is
+what the current cubical proof assistants require.
+It turns out that this makes it extremely tedious to prove the resulting
+type equivalent to other definitions of the integers.
+\end{remark}
 
 \section{Formalization in Lean}\label{sec:paths-lean}
 
