@@ -699,8 +699,37 @@ functions which preserve $r$ and commute with $e$. %, $e'$.
 is initial in $\CatP$. \qed
 \end{thm}
 
-
 \section{First Applications}\label{sec:paths-applications}
+
+We anticipate that our main result, especially in the formulations of
+\Cref{thm:paths-main-thm} and \Cref{thm:paths-main-pushout},
+will be a very useful tool for a variety of constructions
+in homotopy type theory.
+In this chapter, we will present two short applications.
+
+The \textbf{loop space} $\Omega(X)$ of a type $X$ with an (implicitly given)
+point $x_0 : X$ is defined to be $x_0 = x_0$.
+Thus, the loop space of the circle $\Sph^1$ is simply
+$\Sbase = \Sbase$.
+We can use our main result to reprove \Cref{thm:hit-s1} stating that
+\begin{equation*}
+\Omega(\Sone) \simeq \Z \text{.}
+\end{equation*}
+
+\begin{proof}[New proof for \Cref{thm:hit-s1}]
+As discussed previously, $\Sone$ is the coequalizer of $\unit$ and
+the relation which has $\unit$ as its value.
+This allows us to apply \Cref{thm:paths-mainresult-cat-based} and, since all quantifications
+are now quantifications over the unit type, we can safely ignore them.
+Thus, $\big(\Omega(\Sone), \refl, \_ \ct \mathsf{loop}\big)$ is the initial object
+in the category of pointed types with an automorphism.
+Due to the uniqueness of initial objects,
+all we need is that $(\Z, 0, S)$
+is initial in this category.
+This statement is completely removed from the higher inductive type $\Sone$;
+it is a basic property of the integers, analogous to the fact that $(\N,0,S)$ 
+is initial in the category of pointed types with an endofunction.
+\end{proof}
 
 \section{Free Groupoids and a Higher Seifert-van Kampen Theorem}\label{sec:paths-svk}
 
