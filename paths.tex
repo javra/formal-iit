@@ -730,6 +730,79 @@ This statement is completely removed from the higher inductive type $\Sone$;
 it is a basic property of the integers, analogous to the fact that $(\N,0,S)$ 
 is initial in the category of pointed types with an endofunction.
 \end{proof}
+Of course, the difficulty of a concrete proof for the initiality property depends
+on the concrete definition of $\Z$ that one uses.
+With the definition used by Licata and Shulman (essentially $\N + \unit + \N$),
+this is easy albeit some work.
+We will come back to definitions of the integers in \Cref{remark:generalized-squid}.
+
+As a second application we will prove that a certain class of functions,
+called embeddings, is preserved under pushouts.
+\begin{defn}\label{def:paths-emb}
+An \textbf{embedding} is a map $h : X \to Y$ whose fibers are propositions,
+i.\,e. where, for each $y: Y$, the type
+$h\inv(y) :\equiv (x:X) \times (y = h(x))$ is a proposition.
+Equivalently, $h$ is an embedding if and only if 
+\begin{equation} \label{eq:ap}
+ \ap_h : \{x,x': X\} \to (x = x') \to (h(x) = h(x'))
+\end{equation}
+is a family of equivalences between path spaces.
+\end{defn}
+
+As formalized by Finster~\cite{eric:embedding-pushout} via an encode-decode construction,
+embeddings are closed under pushout.
+In the following, we present an alternative (and significantly shorter) argument.
+
+\begin{thm}[Pushouts preserve Embeddings]
+ Embeddings are closed under pushout.
+ Explicitly, if $f$ in following the diagram is an embedding, then so is $\inr$:
+\begin{equation*}
+  \begin{tikzpicture}[x=\diagx,y=-\diagy,baseline=(current bounding box.center)]
+   \node (A) at (0,0) {$L$};
+   \node (C) at (1,0) {$N$};
+   \node (B) at (0,1) {$M$};
+   \node (D) at (1,1) {$\pout L M N$};
+  
+   \draw[right hook->] (A) to node [left] {$\scriptstyle f$} (B);
+   \draw[->] (A) to node [above] {$\scriptstyle g$} (C);
+   \draw[->, dashed] (B) to node [below] {$\scriptstyle \inl$} (D);
+   \draw[right hook->, dashed] (C) to node [right] {$\scriptstyle \inr$} (D);
+  \end{tikzpicture}
+\end{equation*}
+\end{thm}
+
+\begin{proof}
+ Using \eqref{eq:ap}, we need to show that $\ap_\inr : (n_0 = n) \to (\inr(n_0) = \inr(n))$
+ is an equivalence for all points $n_0, n$.
+ Thus, for any $q : \inr(n_0) = \inr(n)$, we want to find something in the fiber over $q$.
+ This tells us how we need to choose the type family $Q$ of \Cref{thm:paths-main-pushout}:
+ we fix $n_0$ and define
+ \begin{align*}
+  Q &: (n : N) \to (\inr(n_0) = \inr(n)) \to \UU \\ 
+  Q(n,q) &:\equiv \ap_\inr^{-1}(q).
+ \end{align*}
+ We also need to define the type family $P$.
+ Given something in $M$, we ``move'' it back to $N$ by going via the fiber, which
+ allows us to define $P$ using $Q$:
+ \begin{align*}
+  P &: (m : M) \to (\inr(n_0) = \inl(m)) \to \UU \\
+  P(m,q) &:\equiv \left((l_0, q_0) : f^{-1}(m)\right) \times
+      Q\big(g(l_0), q \ct \ap_{\inl}(q_0) \ct \glue(l_0)\big).
+ \end{align*}
+ The component $r$ is the obvious one,
+ $r :\equiv (\refl, \refl)$.
+ For a given $l:L$ we know that, since $f$ is an embedding, the type $f\inv(f(l))$
+ is contractible and we can assume $(l_0, q_0) \equiv (l, \refl)$.
+ This implies $P(f(l),q) \simeq Q(g(l),q \ct \glue(l))$, which is exactly what we
+ need in order to define the component $e$.
+ Thus, we have 
+ \begin{equation*}
+  \mathsf{ind}^Q_{r,e} : \{n : N\}(q : \inr(n_0) = \inr(n)) \to \ap_\inr\inv(q),
+ \end{equation*}
+ i.\,e. a section $s$ of $\ap_\inr$ (a function such that $\ap_\inr \circ s = \mathsf{id}$).
+ To show that $s \circ \ap_\inr : (n_0 = n) \to (n_0 = n)$ is the identity,
+ we do path induction and use the first $\beta$-rule.
+\end{proof}
 
 \section{Free Groupoids and a Higher Seifert-van Kampen Theorem}\label{sec:paths-svk}
 
