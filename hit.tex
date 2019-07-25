@@ -306,7 +306,7 @@ and in general it is neither reflexive, nor symmetric, nor transitive:
 
 With the pushouts (and sequential colimits which are defined similarly),
 and given that there are more intricate constructions giving
-propositional truncations (\cite{floris_proptrunc,kraustrunc}) and higher truncations (\cite{rijke:join}),
+propositional truncations \citep{floris_proptrunc,kraustrunc} and higher truncations~\citep{rijke:join},
 we have presented ways to encode all the higher inductive types
 which we have seen so far as coequalizers.
 
@@ -365,10 +365,93 @@ equivalent of the Seifert-van Kampen thoerem.
 In this chapter, we will revisit the proof ideas for both of these results
 and discover, what they have in common.
 
+The intuitive way to compare the integers with the loop space
+$\Omega(\Sph^1)$ of the sphere is the following:
+Each loop can be reached by following the constructor $\Sloop$ a number of
+times either in its actual direction or by reversing the direction, i.\,e.\
+concatenating with $\Sloop \inv$.
+Following an inverted loop after a non-inverted one or vice versa cancels out since
+we have
+\begin{equation*}
+\Sloop \ct \Sloop \inv = \refl = \Sloop \inv \ct \Sloop \text{.}
+\end{equation*}
+The integer corresponding to a loop would then be the ``exponent'' of the number
+of times we concatenate $\Sloop$ (with $\Sloop^0 = \refl$).
+But translating this intuition into a formal proof, especially in order
+to define a function from the loop space to the integers, requires some tricks.
 \begin{thm}[Loop Space of the Circle, \cite{licataShulman_circle}]\label{thm:hit-s1}
-foo
+The loop space of the circle is equivalent to the
+type of the integers: $\Omega(\Sph^1, \Sbase) \simeq \Z$
 \end{thm}
 
+\begin{proof}
+Instead of directly defining a map $\Omega(\Sph^1, \Sbase) \to \Z$,
+we perform the type theoretic equivalent of constructing the
+\emph{universal cover} for the circle.
+Over each point of the circle, we will have a whole type, i.\,e. a type family
+$\code : \Sph^1 \to \UU$
+and by the end we will be able to prove that this type family satisfies the
+following equivalences:
+\begin{equation}\label{eq:hit1}
+(\Sbase = x) \simeq \code(x) \simeq \Z \text{,}
+\end{equation}
+after which we can get the desired result by plugging in $x \equiv \Sbase$.
+The definition of this type family is the following:
+\begin{equation*}
+\code(x) :\equiv \elim_{\Sph^1}(\lambda \_.\UU, \Z, \ua(S)) \text{,}
+\end{equation*}
+with $S : \Z \to \Z$ being the successor function on the integers, which
+is obviously an equivalence.
+The definition means that we will, by the reduction rules,
+have $\code(\Sbase) \equiv \Z$ and
+$\ap_\code(\Sloop) = \ua(S)$.
+We can then calculate that
+\begin{equation}\label{eq:hit2}
+\Sloop^*(z) \equiv (\ap_\code(\Sloop))^*(z) \equiv (\ua(S))^*(z) \equiv S(z) \text{,}
+\end{equation}
+and that, by the same reasoning, $(\Sloop\inv)^*(z) = P(z)$ where
+$P = S\inv$ is the predecessor function on $\Z$.
+After we gave the definition of $\code$, the second equivalence of \eqref{eq:hit1}
+is immediate by induction on $x$, while the first one is more involved.
+We call the map into $\code(x)$, which we have to define,
+the \emph{encoding} map and the inverse the \emph{decoding}.
+
+The encoding works by, for each path, transporting along this type in the type
+family $\code$, starting from zero:
+\begin{align*}
+\mathsf{encode} &: \{x : \Sph^1\}(p : \Sbase = x) \to \code(x) \\
+\mathsf{encode}(p) &:\equiv p^*(0)
+\end{align*}
+This is the same as defining $\mathsf{encode}$ as $0$ induction on $p$.
+It is easy to check via \eqref{eq:hit2} that $\mathsf{encode}(\Sloop)$
+calculates to $S(z)$, $\mathsf{encode}(\Sloop \ct \Sloop)$ to
+$S(S(z))$ etc.
+
+Defining the decoding function goes by induction on the circle element
+$x$ involved.
+For the induction we first have to give the base case
+$\mathsf{decode}(\Sbase) : \code(\Sbase) \to (\Sbase = \Sbase)$ which we set to the function which is
+constantly $\Sloop$.
+We then have to prove that
+\begin{equation*}
+\Sloop^*(\lambda \_.\, \Sloop) = (\lambda\_.\, \Sloop) \text{,}
+\end{equation*}
+where the transport is over the type family $\lambda x'.\, code(x') \to (\Sbase = x')$,
+a calculation we don't want detail here. This defines $\mathsf{decode}$.
+It is then left to prove by induction that
+\begin{align*}
+\mathsf{encode}(\mathsf{decode})(c) &= c \text{ for all $c : \code(x)$ and} \\
+\mathsf{decode}(\mathsf{encode})(p) &= p \text{ for all $x : \Sph^1$ and $p : \Sbase = x$.}
+\end{align*}
+completing the proof of the theorem.
+\end{proof}
+
+The proof for the Seifert-van Kampen theorem employs the same method of
+providing a type family acting as a universal cover.
+It can be seen as a generalization of the above theorem.
+\begin{thm}[Seifert-van Kampen, \cite{favonia:SvK}]\label{thm:paths-svk}
+bar
+\end{thm}
 
 
 
