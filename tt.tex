@@ -932,9 +932,55 @@ and so $A$ is a set.
 
 \section{Theorem Provers Based on Type Theory}\label{sec:tt-provers}
 
+As remarked at the beginning of \Cref{chp:tt}, we value type theory not only
+for its capability to represent mathematics and logics, but also for its good
+computational behaviour.
+This suggests to have a look at how type theory is implemented in different languages
+the focus of which can be either to be a functional programming language based
+on dependent types or a theorem proving tool, or to be useful in both of these
+use cases.
+With regards to this thesis, introducing different implementations is relevant
+in two ways:
+\begin{enumerate}
+\item A good part of the new results in the form of definitions, lemmas,
+and theorems, has been formalized in a one of these lanuages, and
+\item both the higher Seifert-van Kampen theorem presented in~\Cref{sec:paths-svk}
+as well as the attempted reduction from inductive-inductive type to inductive
+families in ~\Cref{chp:red} suggest useful new features or extensions of implementations
+of type theory.
+\end{enumerate}
+We will thus concentrate on the two languages we have used in this respect:
+Lean~\citep{mouracade} and Agda~\citep{agda}.
+This does not mean that the content discussed is irrelevant to other implementations
+or that these are less important.
+Au contraire -- the theorem prover Coq~\citep{coq} is not only the implementation
+with the biggest user base but also has a lot of distinguishing features.
+
+Before we delve into the differences between Lean and Agda, we will first
+take a look at what these proves have \emph{in common}.
+The following list contains both fundamental design principle as well as
+several features which are important to improve the usability of the
+implementation:
+\begin{itemize}
+\item Implementation of \emph{Martin-Löf type theory} with an unlimited chain of universes.
+Construction can be made \emph{universe polymorphic} by the use of
+universe variables which are used as variable indices for the unvierses.
+\item Function types distinguish between explicit and \emph{implicit arguments}.
+The latter are useful to make definitions more succinct.
+\item Both languages are equipped with a system of \emph{modules} or \emph{name spaces}
+used to organize definitions and their accessability.
+\item There is a way to customize the implementation by the means of \emph{options}.
+This enables us to switch between a set-truncated setting and
+homotopy type theory.
+\item The implementations have an open source code which is reviewable and
+customizable by everybody.
+\end{itemize}
+
+Let us next concentrate on Lean as our first specimen.
+
+\subsection{Lean}
+
 %TODO
-% * intro stuff
-% * common features
 % * lean
 % ** history
 % ** libraries, community, leanhott
@@ -942,6 +988,11 @@ and so $A$ is a set.
 % ** tactics
 % ** meta language
 % ** lean4
+
+
+\subsection{Agda}
+
+%TODO
 % * agda
 % ** history
 % ** dependent pattern matching
