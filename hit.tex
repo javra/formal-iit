@@ -499,20 +499,34 @@ is changed and/or the position of $p_i$ and $q_i$ are swapped.
 \begin{figure}
  \centering
   \begin{tikzpicture}[x=\diagx,y=-\diagy]
-   \node (A) at (0,0) {$n_0$};
-   \node (B) at (1,0) {$g(k_1)$};
-   \node (C) at (1,1) {$f(k_1)$};
-   \node (H) at (4,1) {$f(l_2)$};
-   \node (I) at (4,0) {$g(l_2)$};
-   \node (J) at (5,0) {$n$};
+   \node (A) at (0,0) {$m$};
+   \node (B) at (1,0) {$g(x_1)$};
+   \node (C) at (1,1) {$f(x_1)$};
+   \node (D) at (2,1) {$f(y_1)$};
+   \node (E) at (2,0) {$g(y_1)$};
+   \node (F) at (3,0) {$g(x_2)$};
+   \node (G) at (3,1) {$f(x_2)$};
+   \node (H) at (4,1) {$f(y_2)$};
+   \node (I) at (4,0) {$g(y_2)$};
+   \node (J) at (5,0) {$m'$};
   
    \draw[->] (A) to node [above] {$p_0$} (B);
+%    \draw[->] (B) to node [left] {$\scriptstyle {\glue(x_1)}$} (C);
    \draw[->] (B) to node {} (C);
-   \draw[->] (C) to node [above] {$q_1 \ct q_2$} (H);
+   \draw[->] (C) to node [above] {$q_1$} (D);
+%    \draw[->] (D) to node [left] {$\scriptstyle {\glue(y_1)^{-1}}$} (E);
+   \draw[->] (D) to node {} (E);
+   \draw[->] (E) to node [above] {$p_1$} (F);
+%   \draw[->] (F) to node [left] {$\t {\glue(x_2)}$} (G);
+   \draw[->] (F) to node {} (G);
+   \draw[->] (G) to node [above] {$q_2$} (H);
+%    \draw[->] (H) to node [left] {$\scriptstyle {\glue(y_2)^{-1}}$} (I);
    \draw[->] (H) to node {} (I);
    \draw[->] (I) to node [above] {$p_2$} (J);
   \end{tikzpicture}
-\caption{``Zig-zag paths'' in the pushout codes.}\label{fig:hit-svk-zigzag}
+\caption{``Zig-zag paths'' in the pushout codes, vertical arrows correspond
+to applications of $\glue$, horizontal arrows to applications of
+$\ap_\inl$ and $\ap_\inr$.}\label{fig:hit-svk-zigzag}
 \end{figure}
 
 With this definition, the statement of the theorem can be stated as the following:
@@ -523,6 +537,30 @@ For each $x, y : P$ we have
 \end{equation*}
 \end{thm}
 
+\begin{proof}
+Again, we define functions $\mathsf{encode}$ and $\mathsf{decode}$ constituting
+the equivalence.
+The strategy is generally the same as for the characterization of equalities
+in the circle:
+The encoding function
+\begin{equation*}
+\mathsf{encode} : \{u, v : P\} \to \trunc{0}{u = v} \to \code(u, v)
+\end{equation*}
+can be defined by induction on the truncated type (since we truncated $\code(u,v)$)
+then on the path $p : u = v$ involved, and setting the function to be the trivial
+element in the respective type of lists:
+\begin{equation*}
+\mathsf{encode}(\tproj{}{\refl}) :\equiv (\refl) \text{.}
+\end{equation*}
+This is the same as transporting $p$ along the type family $\lambda v.\, \code(u,v)$.
+The decoding function has to take a list and ``glue together'' the paths in the
+pushout which it represents, as for example
+\begin{align*}
+ & \mathsf{decode} (p_0, x_1, q_1, y_1, p_1, \ldots) \\
+:\equiv & \ap_\inl(p_0) \ct \glue(x_1) \ct \ap_\inr(q_1) \ct \glue(y_1)\inv \ct \ap_\inl(p_1) \ct \ldots
+\end{align*}
+The proof that these functions are inverse to each other is again done by induction.
+\end{proof}
 
 
 
