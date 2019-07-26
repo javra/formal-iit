@@ -449,8 +449,78 @@ completing the proof of the theorem.
 The proof for the Seifert-van Kampen theorem employs the same method of
 providing a type family acting as a universal cover.
 It can be seen as a generalization of the above theorem.
+Recall that in a classical topological setting the statement of the
+theorem is the following:
+\begin{quote}
+The fundamental groupoid of the pushout of two spaces is equivalent to the pushout of
+its fundamental groupoids.
+\end{quote}
+So while the for the theorem about the circle the ``right-hand side'' of the
+equivalence was rather clearly defined, here the
+question is whether we find a good definition of the pushout of groupoids.
+Since we attempt another example of an encode-decode proof, we
+might as well first define the morphisms of the pushout of groupoids as the
+code itself.
+Intuitively, the morphisms the pushout $P :\equiv \pout{L}{M}{N}$
+are ``zig-zags'' consisting of morphisms
+alternatingly in ${M}$ and ${N}$, separated by morphisms in $L$.
+\begin{defn}[Codes for Groupoid Pushouts, \cite{favonia:SvK}]
+We define a type family $\code : P \to P \to \UU$, by recursion on both arguments.
+That means that it suffices to give families $M \to M \to \UU$,
+$M \to N \to \UU$, $N \to M \to \UU$, and $N \to N \to \UU$ that agree on
+$f(l)$ and $g(l)$ for all $l : L$ in either argument.
+We will omit proof of this agreement.
+For the first case, i.\,e.\ if we have $m, m' : N$, we want $\code(\inr(m), \inr(m'))$ to be
+the inductive type where elements are characterized as lists
+\begin{equation*}
+ (p_0, x_1, q_1, y_1, p_1, x_2, q_2, y_2, p_2, \ldots, y_k, p_k) \text{,}
+\end{equation*}
+the entries of which have the following type for each $0 < i \leq k$: (cf. \Cref{fig:hit-svk-zigzag}):
+\begin{align*}
+x_i, y_i &: L \\
+p_0 &: \trunc{0}{m = f(x_1)} \\
+p_i &: \begin{cases} \trunc{0}{f(y_i) = f(x_{k + 1})} & \text{for $i < k$} \\
+  \trunc{0}{f(y_k) = m'} & \text{for $i = k$}  \end{cases} \\
+q_i &: \trunc{0}{g(x_k) = g(y_k)} \text{.}
+\end{align*}
+These lists have to be quotiented by the path constructors
+\begin{align*}
+(\ldots, q_i, y_i, \refl_{f(y_i)}, y_i, q_{i+1}, \ldots)
+  &= (\ldots, q_i \ct q_{i+1}, \ldots) \text{ and} \\
+(\ldots, p_i, x_i, \refl_{g(x_i)}, x_i, p_{i+1}, \ldots)
+  &= (\ldots, p_i \ct p_{i+1}, \ldots) \text{,}
+\end{align*}
+and the resulting type is made a set by the means of truncation.
+The type families for the three remaining cases are likewise defined
+``zig-zags'' in the form of quotiented lists, where the parity of the length
+is changed and/or the position of $p_i$ and $q_i$ are swapped.
+\end{defn}
+
+\begin{figure}
+ \centering
+  \begin{tikzpicture}[x=\diagx,y=-\diagy]
+   \node (A) at (0,0) {$n_0$};
+   \node (B) at (1,0) {$g(k_1)$};
+   \node (C) at (1,1) {$f(k_1)$};
+   \node (H) at (4,1) {$f(l_2)$};
+   \node (I) at (4,0) {$g(l_2)$};
+   \node (J) at (5,0) {$n$};
+  
+   \draw[->] (A) to node [above] {$p_0$} (B);
+   \draw[->] (B) to node {} (C);
+   \draw[->] (C) to node [above] {$q_1 \ct q_2$} (H);
+   \draw[->] (H) to node {} (I);
+   \draw[->] (I) to node [above] {$p_2$} (J);
+  \end{tikzpicture}
+\caption{``Zig-zag paths'' in the pushout codes.}\label{fig:hit-svk-zigzag}
+\end{figure}
+
+With this definition, the statement of the theorem can be stated as the following:
 \begin{thm}[Seifert-van Kampen, \cite{favonia:SvK}]\label{thm:paths-svk}
-bar
+For each $x, y : P$ we have
+\begin{equation*}
+\trunc{0}{x = y} \equiv \code(x, y) \text{.}
+\end{equation*}
 \end{thm}
 
 
