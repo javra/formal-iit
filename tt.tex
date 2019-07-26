@@ -974,31 +974,158 @@ This enables us to switch between a set-truncated setting and
 homotopy type theory.
 \item The implementations have an open source code which is reviewable and
 customizable by everybody.
+\item There are a one or several text editors which support an interactive
+and well-integrated use of the language.
 \end{itemize}
 
 Let us next concentrate on Lean as our first specimen.
 
 \subsection{Lean}
 
-%TODO
-% * lean
-% ** history
-% ** libraries, community, leanhott
-% ** type theory (cite mario?)
-% ** tactics
-% ** meta language
-% ** lean4
+The development of the theorem prover Lean was started by
+Leonardo de Moura at Microsoft Research in 2013.
+It aims to be both a useful tool for the formalization of mathematics and
+the verification of programs written in other languaes as well as
+be a useful and performant programming language itself.
+Another goal of Lean is to make automated theorem proving (such as the solution
+for SMT-style problems) available in a dependently typed theorem prover.
+As of now, Lean is in its third major version, after a lot of the system was
+overhauled in the transition from Lean 2.
+The fourth version is under development but not yet ready to be used as a prover.
 
+Lean -- as its name states -- relies on a relatively small trusted kernel to which
+the user code is compiled to.
+This makes it easier to make claims about the consistency of the prover.
+Let us first take a look at some of the specifics of Lean's type theory.
+
+Lean is based on \emph{inductive families} as described by \citet{dybjer94}.
+Whenever the user writes down the definition of such an inductive family,
+Lean generates its constructors and its dependent eliminator and makes
+it available to the user.
+For example, the following snippet shows a definition of the natural numbers:
+\begin{leancodebr}
+inductive nat : Type 0
+| zero : nat
+| succ : nat → nat
+
+#check nat.succ nat.zero -- Prints nat.succ nat.zero : nat
+#check @nat.rec_on -- Π {C : nat → Sort u} (n : nat),
+                   --   C nat.zero →
+                   --   (Π (a : nat), C a → C (nat.succ a)) → C n
+\end{leancodebr}
+
+ widely used subclass of inductive types are \textbf{structures}, which are
+similar to what is often referred to as ``records''.
+Structures are inductive types which are non-recursive and only have one constructor.
+That means that they are equivalent to iterated sigma types but, among other advantages,
+have named projections.
+Structures provide a basic inheritance mechanism as they can extend arbitrarily
+many other structures:
+\begin{leancode}
+structure graph (V : Type) :=
+  (E : V → V → Sort)
+
+structure refl_graph (V : Type) extends graph V :=
+  (refl : Π (v : V), E v v)
+
+structure trans_graph (V : Type) extends graph V :=
+  (trans : Π (u v w : V), E u v → E v w → E u w)
+\end{leancode}
+
+Lean features a strict and impredicative universe \leani{Prop} of propositions.
+Since this universe is incompatible with homotopy type theory, we have to be
+careful to exclude its use whenever we want formalizations to hold in
+a setting of homotopy type theory instead of truncated type theory.
+\emph{Strict} here means that if we have a proposition \leani{p : Prop} and two
+proofs \leani{a, b : P}, these are considered judgmentally equal, thus for
+every type family \leani{P → Type}, the fibers \leani{P a} and \leani{P b}
+are judgmentally equal as well.
+\emph{Impredicative} means, that for every type family valued in \leani{Prop},
+its universal quantification \leani{∀ a, P a} is in \leani{Prop} as well, even
+if \leani{A} is not.
+
+Lean makes heavy use of \emph{tactics}.
+These are commands which can modify a given proof goal or a series of proof
+goals.
+They are accesible once the user has switched from a mode where she can
+enter literal proof terms to a \emph{tactic-mode},
+which allows her to give proofs and definitions as a sequence of tactic applications,
+which are then desugared as the do-notation of a \emph{tactic monad}.
+Here is an example for a tactic proof in lean, using a simplification tactic,
+a rewriting tactic, and a tactic calling previously defined theorems:
+\begin{leancodebr}
+example : ∀ (n : ℕ), n = 0 ∨ n > 0 :=
+begin
+  intro n,
+  induction n with n' IH,
+  simp,
+  right,
+  cases IH,
+  rw IH, constructor,
+  apply nat.zero_lt_succ
+end
+\end{leancodebr}
+
+Lean has its own \emph{meta-language} which allows the user to define new
+language features like commands and tactics.
+It does so by providing a way to reflect arbitrary terms into an inductive \emph{type of
+expressions} \leani{expr},
+such that by recursion on this type, structural recursion on the term can 
+be emulated.
+
+Lean has several big libraries, the biggest one, which provides basic data types,
+tactics, and formalization in different fields of mathematics, is called
+\emph{Mathlib} (\url{https://github.com/leanprover-community/mathlib}).
+It is not recommended to use Lean without using Mathlib.
+Another big formalization effort it Lean's homotopy type theory library,
+the development of which has been described by \citet{leanhott}.
+It was originally written in Lean 2 and then ported to Lean 3.
 
 \subsection{Agda}
 
+Agda is a theorem prover. Its first version was written by Catarina Coquand, while
+the development of the current major version, Agda 2, was initiated by
+Andreas Abel and Ulf Norell in 2005.
+There are biannual ``Agda Implementors Meetings'' to discuss new ideas on how to
+improve Agda.
+
+Compared to Lean, Agda implements a wider range of inductive types,
+also allowing \emph{inductive-inductive types}.
+In contrast to Lean it does not automatically produce the eliminator for an
+inductive definition but instead provides an induction principle based
+on \emph{dependent pattern matching}:
+The user can write (dependent) functions with an inductive domain, by pattern
+matching on its input.
+In the following example, an indexed type of vectors and its head function are
+defined:
+\begin{agdacode}
+data Vec (A : Set) : N → Set where
+  nil : Vec A Z
+  cons : ∀{n} → A → Vec A n → Vec A (S n)
+
+hd : ∀{A n} → Vec A (S n) → A
+hd (cons a v) = a
+\end{agdacode}
+
+Agda has several options which make it possible to use it with a range of different
+type theories:
+Homotopy type theory is supported by declaring via an option \agdai{--without-K}
+that it should reject any use of the K-rule.
+Agda also has an option \agdai{--rewriting} whic makes it possible to declare
+many equalities as strict by declaring their proofs to be \emph{rewrite rules}
+\citep{cockxrewrite}, giving the type theory the flavour of extensional type
+theory.
+
+Agda has also been modified to support a type theory which provides
+a constructive, non-axiomatic version of univalence.
+Based on the geometry of its identity types, this type theory is called
+\emph{cubical type theory}, and the modified version has the name
+``Cubical Agda'' \citep{andrea:cubicalagda}.
+
 %TODO
-% * agda
 % ** history
-% ** dependent pattern matching
 % ** ttintt
-% ** iits are possible
-% ** versions: without-K, rewrite-rules, cubical agda
+% ** versions: without-K, cubical agda
 % 
 
 
