@@ -495,6 +495,46 @@ the external parameter as well:
   &:\equiv \grm{f}^\MM(\mu, \tau)
 \end{align*}
 
+The treatment of substitutions looks almost identical to the one in the algebra
+operator in that the cateogorical structure of subsitution gets interpreted
+as the strict category of functions in the outer type theory:
+\begin{align*}
+\grm{\id}^\MM(\mu)
+  &:\equiv \mu \\
+\grm{\sigma \circ \delta}^\MM(\mu)
+  &:\equiv \grm{\sigma}^\MM(\grm{\delta}^\MM(\mu)) \\[.7em]
+\grm{A[\sigma]}^\MM(\mu, \alpha, \beta)
+  &:\equiv \grm{A}^\MM(\grm{\sigma}^\MM(\mu), \alpha, \beta) \\
+\grm{t[\sigma]}^\MM(\mu)
+  &:\equiv \grm{t}^\MM(\grm{\sigma}^\MM(\mu)) \\[.7em]
+\grm{\epsilon}^\MM(\mu)
+  &:\equiv \star \\
+\grm{(\sigma,\,t)}^\MM(\mu)
+  &:\equiv \left(\grm{\sigma}^\MM(\mu), \grm{t}^\MM(\mu)\right) \\
+\grm{\pi_1(\sigma)}^\MM(\mu)
+  &:\equiv \pr_1(\grm{\sigma}^\MM(\mu)) \\
+\grm{\pi_2(\sigma)}^\MM(\mu)
+  &:\equiv \pr_2(\grm{\sigma}^\MM(\mu))
+\end{align*}
+
+The definition of morphisms doesn't yet make the algebras over a given
+signature \grm{\Gamma} a category: For this we would still need to define
+identity and composition and prove the cateogory laws.
+But these constructions are trivial on the one hand -- in last consequence
+they are identity and composition of functions in the outer type theory --
+and they are not necessary to state the most important categorical attribute
+is definable without identity and composition:
+Initiality.
+
+\begin{defn}[Initial Algebra]
+An algebra $\gamma : \grm{\Gamma}^\CC$ is called \textbf{weakly initial} if
+for every other algebra $\delta : \grm{\Gamma}^\CC$ we can find a morphism
+\begin{equation*}
+\mu : \grm{\Gamma}^\MM(\gamma, \delta) \text{.}
+\end{equation*}
+It is (strongly) \textbf{initial}, if this morphism is unique for every $\delta$.
+\end{defn}
+
 %TODO
 
 %\section{Displayed Algebras and Sections}
