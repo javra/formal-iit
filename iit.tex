@@ -450,7 +450,50 @@ consisting of foo.
     \to \grm{\Delta}^\MM(\grm{\sigma}^\CC(\gamma), \grm{\sigma}^\CC(\delta))}
 \end{gathered}
 \end{equation*}
+
+We will again proceed in the order we presented the type theory in
+\Cref{sec:ii-syntax}, starting with the different ways we can form contexts.
+There are no surprises here since we can define it by recursion and because
+the empty context does not contain any information:
+\begin{align*}
+\grm{\cdot}^\MM(\gamma, \delta)
+  &:\equiv \unit \text{ and} \\
+\grm{(\Gamma,\,A)}^\MM((\gamma, \alpha), (\delta, \beta))
+  &:\equiv (\mu : \grm{\Gamma}^\MM(\gamma,\delta)) \times \grm{A}^\MM(\mu, \alpha, \beta) \text{.}
+\end{align*}
+
+For the universe, the definition makes sure that morphisms between sorts
+are indeed functions between their corresponding realizations.
+The element operator requires a proof that the two ways we can
+obtain an algebra of the term in the codomain of the morphism match:
+\begin{align*}
+\grm{\UU}^\MM(\mu, \gamma, \delta)
+  &:\equiv \grm{\gamma}^\CC \to \grm{\delta}^\CC \text{ and} \\
+\grm{\El(a)}^\MM(\mu, \alpha, \beta)
+  &:\equiv \left( \grm{a}^\MM(\mu, \alpha) = \beta \right) \text{.}
+\end{align*}
 \end{defn}
+
+Recursive $\Pi$-types are mapped to dependent function spaces on the
+set which is the algebra ofer the universe term.
+For the application we can perform on the equality proof and
+thus we can assume it to be $\refl$.
+\begin{align*}
+\grm{\Pi(a, B)}^\MM(\mu, \pi, \phi)
+  &:\equiv \left(\alpha : \grm{a}^\CC(\gamma)\right)
+    \to \grm{B}^\MM\left((\mu, \refl), \pi(\alpha), \phi(\grm{a}^\MM(\mu, \alpha))\right) \\
+\grm{\IIapp(f)}^\MM\{\gamma, \alpha\}(\mu, \refl)
+  &:\equiv \grm{f}^\MM(\mu, \alpha)
+\end{align*}
+
+Morphisms between interpretations of non-recursive $\Pi$-types are functions over
+the external parameter as well:
+\begin{align*}
+\grm{\ExtPi{T}{B}}^\MM(\mu, \pi, \phi)
+  &:\equiv (\tau : T) \to \grm{B(\bltau)}^\MM(\mu, \pi(\tau), \phi(\tau)) \\
+\grm{f(\bltau)}^\MM(\mu)
+  &:\equiv \grm{f}^\MM(\mu, \tau)
+\end{align*}
 
 %TODO
 
