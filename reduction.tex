@@ -242,7 +242,7 @@ $m : \grm{\Gamma}^\MM$.
 
 TODO: explain reduction to W-types maybe
 
-\section{Type Erasure}
+\section{Type Erasure}\label{sec:red-e}
 
 As seen in the examples, the first step to prove the reducability is to formally
 define the operation which we will call \emph{flattening} or -- inspired by
@@ -489,7 +489,7 @@ respective algebra:
 \end{align*}
 \end{defn}
 
-\section{The Wellformedness Predicate}
+\section{The Wellformedness Predicate}\label{sec:red-w}
 
 To remove the ambiguity created by the type erasure we will now have to find
 a way to select those instances of the types which are ``wellformed'' in the
@@ -810,7 +810,7 @@ of sort terms:
 \end{align*}
 \end{defn}
 
-\section{The Initial Object}
+\section{The Initial Object}\label{sec:red-sg}
 
 Since we now have a way to ``carve out'' the wellformed elements from the types
 we created via type erasure, can now define our desired inductive-inductive types
@@ -1115,7 +1115,7 @@ object by plugging in the respective initial objects of the inductive families:
 \end{equation*}
 \end{defn}
 
-\section{The Eliminator Relation}
+\section{The Eliminator Relation}\label{sec:red-r}
 
 Now that we have defined a candidate for the initial object in the category of
 algebras,
