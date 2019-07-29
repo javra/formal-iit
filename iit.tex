@@ -297,7 +297,7 @@ the algebras of of the specified inductive-inductive type.
 This means that the interpretation of our contexts must give the types of the
 sort and point constructors they specify.
 
-\begin{defn}[Algebra operator] %TODO name?
+\begin{defn}[Algebra Operator] %TODO name?
 By structural recursion over the source syntax, we define an operation $-^\CC$
 which assigns types to source contexts, fibrations over those to types, sections of
 these fibrations to terms, and maps between types to substitutions:
@@ -382,7 +382,7 @@ functions forming a \emph{strict} category. %TODO more explanation here
 
 \end{defn}
 
-\begin{example}[Natural numbers]
+\begin{example}[Natural numbers]\label{ex:iit-nat-alg}
 Strictly speaking, the algebra interpretation of the
 context from our example of natrual numbers (Example~\ref{ex:ii-syntax-nat})
 would compute to the following iterated $\Sigma$-type:
@@ -401,6 +401,56 @@ elements of the type
 %TODO more examples
 
 \section{Morphisms of Algebras}
+
+When we talk about the questions whether a language support inductive-inductive
+types, we obviously don't only want their constructors --
+in fact there are many algebras which don't meet our expectation of what the
+``realization'' of an inductive-inductive definition should be.
+Referring to \Cref{ex:iit-nat-alg} above, any type $N$ with a point $z : N$ and
+a function $s : N \to N$ is an algebra for the definition of the natural numbers,
+even types which are either ``too large'' and contain much more points,
+think for example of the real numbers,
+or too ``too small'' -- the unit type $\unit$ is an algebra for the natrual numbers
+as well.
+What we want is an algebra which is just large enough that all
+constructors are injective.
+We will express this as a categorical property:
+We will equip the algebras over a context with a notion of a \emph{morphism of algebra}
+that turns them into a category.
+The fact that the type is equipped with a non-dependent eliminator will then
+correspond to the fact that we can find a morphism from its
+realization to any other algebra -- the type is weakly initial.
+The fact that it also comes with $\beta$-rules is expressed by the fact
+that this morphism is unique, making the realization the \emph{initial algebra}.
+In this section we first give the definition of morphisms and then define
+initiality.
+
+\begin{defn}[Morphism Operator]
+Like for the algebra operator we again perform structural recursion over the
+syntax to define, what the type of morphisms between two of its algebras should
+be.
+Apart from contexts we will also give the operation on types, terms ans substitutions,
+consisting of foo.
+\begin{equation*}
+\begin{gathered}
+\inferrule{\grm{\vdash \Gamma} \\
+  \gamma, \delta : \grm{\Gamma}^\CC }
+  {\grm{\Gamma}^\MM(\gamma, \delta) : \UU } \qquad
+\inferrule{\grm{\Gamma \vdash A :: k} \\
+  \gamma, \delta : \grm{\Gamma}^\CC \\
+  \mu : \grm{\Gamma}^\MM(\gamma, \delta) }
+  {\grm{A}^\MM(\mu) : \grm{A}^\CC(\gamma) \to \grm{A}^\CC(\delta) \to \UU}\\[.7em]
+\inferrule{\grm{\Gamma \vdash t : A :: k} \\
+  \gamma, \delta : \grm{\Gamma}^\CC }
+  {\grm{t}^\MM : (\mu : \grm{\Gamma}^\MM(\gamma, \delta))
+    \to \grm{A}^\MM(\mu, \grm{t}^\CC(\gamma), \grm{t}^\CC(\delta))}\\[.7em]
+\inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta}} \\
+  \gamma, \delta : \grm{\Gamma}^\CC }
+  {\grm{\sigma}^\MM : \grm{\Gamma}^\MM(\gamma, \delta)
+    \to \grm{\Delta}^\MM(\grm{\sigma}^\CC(\gamma), \grm{\sigma}^\CC(\delta))}
+\end{gathered}
+\end{equation*}
+\end{defn}
 
 %TODO
 
