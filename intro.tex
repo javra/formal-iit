@@ -1,4 +1,8 @@
-\section{Examples of Inductive-Inductive Types}
+\section{Background}
+
+\section{Homotopy Type Theory and Higher Inductive Types}
+
+\section{The Concept of Induction-Induction}
 
 In the following, we will take a look at a few examples which we are going to
 revisit at various steps throughout this presentation:
@@ -22,7 +26,7 @@ while simultaneously defining a family $\mathop{Ty} : \mathop{Con} \to \UU$ with
 \end{example}
 
 \begin{example}[Free Dense Completion]
-\cite{nordvallinductive} proposed the example of a ``free dense completion'' of
+\citet{nordvallinductive} proposed the example of a ``free dense completion'' of
 an order (or, more general, any relation) which for any type $A : \UU$ and
 any type valued relation $\_<\_ : A \to A \to \UU$ on $A$ freely adds midpoints
 to all pairs of related elements by $\_<\_$.
@@ -40,3 +44,59 @@ postulating
 \mathop{mid}_r	&: \{x, y : A'\}(p : x <' y) \to \mathop{mid}(p) < y \text{.}
 \end{align*}
 \end{example}
+
+\section{Contributions and Publications}
+
+
+\section{Structure of this Thesis}
+
+We will start off this thesis by giving a more detailled exposition of the
+background in type theory, which is the basis for the further content.
+In this endevour, \Cref{chp:tt} does not only serve to give the necessary background
+to readers unfamiliar with dependent types, it also sets notations and terminology
+which we will re-use in the later chapters.
+In \Cref{sec:tt-provers}, it furthermore gives a short characterization of the interactive
+theorem provers Lean and Agda.
+
+\Cref{chp:hit} will then first introduce some examples of higher inductive types
+and will then go on to propose homotopy coequalizers as a fundamental higher
+inductive type which can serve to encode all of these examples.
+Sketches for two proofs using the ``encode-decode'' method will be given in
+\Cref{sec:hit-encode-decode}.
+
+Following the introduction of homotopy coequalizers we will then (\Cref{chp:paths})
+see how we can
+characterize the path spaces of all instances to replace encode-decode proofs.
+Apart from proving this characterization (\Cref{sec:paths-main})
+we will demonstrate this use in some examples (\Cref{sec:paths-applications}
+and \Cref{sec:paths-svk}).
+
+Switching not only the type theoretical setting from homotopy type theory
+but also the focus of the thesis, the second half will explore types which
+instead of higher dimensional structure carry intricate dependencies between
+multiple types to be defined.
+
+We will start this second half by first giving a syntax for inductive-inductive
+types (\Cref{chp:iit}) including its semantics,
+before comparing it to the simpler fragment of inductive families (\Cref{chp:if}).
+The latter will be reduced to indexed W-types in \Cref{sec:if-ex}.
+
+After reducing inductive families to indexed W-types we will try to reduce
+inductive-inductive types to inductive families:
+In \Cref{chp:red} we will a formal description about how to generate the
+inductive families which correspond to
+erasing the inductive-inductive typing information,
+recovering it with a wellformedness predicate, yielding a candidate for an inital
+object in the target type theory.
+Then we will present a binary relation which could be used in future to prove
+its initiality.
+
+
+
+
+
+
+
+
+
+
