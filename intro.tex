@@ -47,6 +47,38 @@ inductive families.
 
 \section{Homotopy Type Theory and Higher Inductive Types}
 
+Homotopy type theory is a relatively new field which connects the study of
+dependent types with the field of higher category theory and homotopy theory.
+This synthesis has since offered a new perspective on how to constructively
+have formal representation of homotopy theory which is \emph{synthetic},
+i.e. it builds the spaces which are considered out of just a few fundamental
+operations.
+
+The connection to homotopy theory is based on the observation that once might
+consider equality types, which by the proposition-as-types interpretation of type
+theory, represent the statement that two elements $x$ and $y$ of a type $A$
+are equal, as representing the spaces of \emph{paths modulo homotopy}.
+Extending on this equivalence, we can view types to represent spaces,
+types depending on the data of other types as fibrations.
+
+In this setting, we want to consider types, which are inductively defined,
+like for example the natural numbers, but which, besides of the \emph{points}
+of the type also allow the (free) generation of new paths and higher paths between
+points.
+These types are called \emph{higher inductive types}.
+
+To prove facts about higher inductive types, for example in order to get the
+type theoretic equivalent of the fact that the fundamental group of the circle
+is equivalent to the integers, or the type theoretic Seifert-van Kampen theorem,
+which characterizes the fundamental groupoid of a pushout of spaces,
+a proof strategy with the name ``encode-decode'' method is employed.
+
+In this thesis we provide a theorem which can be seen a generalization of
+encode-decode proofs.
+The application of this theorem can help to reduce ``boiler plate'' overhead
+in formalizations and in reasoning about the equalities between points
+of higher inductive types.
+
 \section{The Concept of Induction-Induction}
 
 In the following, we will take a look at a few examples which we are going to
