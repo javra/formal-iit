@@ -210,10 +210,10 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \newcommand{\CTw}{\mathbf{CTw}}
 \newcommand{\old}[1]{\overline{#1}}
 \newcommand{\oldold}[1]{\overline{\overline{#1}}}
-\newcommand{\gr}[1]{{\color{ForestGreen}#1}}
+\newcommand{\gr}[1]{{\color{lightgray}#1}}
 \newcommand{\grm}[1]{\ensuremath{\gr{#1}}}
 \newcommand{\blm}[1]{\ensuremath{{\color{Black}#1}}}
-\newcommand{\tqm}[1]{\ensuremath{{\color{Blue}#1}}}
+\newcommand{\tqm}[1]{\ensuremath{{\color{darkgray}#1}}}
 %\newcommand{\grinfer}[2]{\grm{\inferrule{{#1}}{{#2}}}}
 \newcommand{\Sc}{\mathsf{S}}
 \newcommand{\Pc}{\mathsf{P}}
@@ -289,6 +289,12 @@ pdfkeywords={interactive theorem proving}]{hyperref}
 \newcommand{\code}{\mathsf{code}}
 \newcommand{\glconstr}{\mathsf{gl}}
 
+%font replacements
+\newfontfamily{\freeserif}{DejaVu Sans}
+\newunicodechar{ℕ}{\texttt{\freeserif{ℕ}}}
+\newunicodechar{⊎}{\texttt{\freeserif{⊎}}}
+\newunicodechar{⬝}{$\ct$}
+
 \renewcommand{\backrefalt}[4]{
 	\ifcase #1
 		(No citations.)
@@ -334,6 +340,17 @@ specify inductice families and discuss how we can reduce each instance of an
 inductive-inductive type to an inductive family.
 Our result suggests a way to show that each type theory which encompasses
 inductive families can also express all inductive-inductive types.
+
+\chapter{Acknowledgements}
+
+Thanks, Obama.
+%TODO thank the following people:
+% thorsten
+% ambrus
+% andras
+% nicolai
+% paolo, gun
+% jenny, guerric, peter, colm, venanzio
 
 \tableofcontents
 

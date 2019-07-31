@@ -208,7 +208,7 @@ together with a point $a_0 : A$ and a relation $\_\sim\_ : A \to A \to \UU$ are
 given.
 Our main category of interest is the following:
 
-\begin{defn}[Category of Coherent, Pointed Families]
+\begin{defn}[Category of Coherent, Pointed Families]\label{def:paths-catC}
 The category $\CatC$ is defined as follows:
 Objects in $\bproj \CatC$ are ``pointed type families respecting $\sim$'',
 by which we mean triples $(K, r, e)$ of the types
@@ -322,7 +322,7 @@ For example, the analogous statement about the natural numbers $\N$ is false
 
 In line with the strategy outlined above, we further consider the following
 category $\CatD$:
-\begin{defn}[Category $\CatD$]
+\begin{defn}[Category $\CatD$]\label{def:paths-catD}
  $\DD$ is the category of pointed families over $\quot$.
  Explicitly, objects in $\bproj {\CatD}$ are pairs $(L,p)$ as in
  \begin{align*}
@@ -753,7 +753,7 @@ As formalized by Finster~\cite{eric:embedding-pushout} via an encode-decode cons
 embeddings are closed under pushout.
 In the following, we present an alternative (and significantly shorter) argument.
 
-\begin{thm}[Pushouts preserve Embeddings]
+\begin{thm}[Pushouts preserve Embeddings]\label{thm:paths-embedding}
  Embeddings are closed under pushout.
  Explicitly, if $f$ in following the diagram is an embedding, then so is $\inr$:
 \begin{equation*}
@@ -1051,7 +1051,139 @@ type equivalent to other definitions of the integers.
 
 \section{Formalization in Lean}\label{sec:paths-lean}
 
+Not all, but most results of this chapter have been formalized in the
+theorem prover Lean:
+\begin{itemize}
+\item We formalized the two wild categories $\CatC$ and $\CatD$
+of \Cref{def:paths-catC} and \Cref{def:paths-catD} as structures,
+\item we proved their equivalence as per \Cref{lem:paths-cats-are-iso},
+\item we provided the initial element of $\CatC$ as in \Cref{lem:paths-D0-init},
+\item we use it to prove the non-dependent version of the main result,
+\Cref{thm:paths-mainresult-cat-based},
+\item and then derive the dependent eliminator from the uniqueness of
+the non-dependent one, as in the proof of \Cref{thm:paths-main-thm},
+\item we specialize the result to pushouts, which in Lean, are a special case of
+coequalizers,
+\item we formalize the two applications of the thorem as given in
+\Cref{sec:paths-applications}.
+\end{itemize}
+The higher Seifert-van Kampen was not formalized, since we don't have
+indexed higher inductive types at our disposal in Lean.
 
+We will now give a few code snippets as examples for how the contents
+are represented in Lean.
+The formalization makes heavy use of Lean's homotopy type theory library
+\citep{leanhott}.
+
+The wild categories $\CatC$ and $\CatD$ are encoded as structures, the definition
+of objects and morphisms in the latter looking as follows:
+\begin{leancode}
+@[hott] protected structure CatD_ob :=
+  (L : D → Type w')
+  (n : L (ι x))
+
+@[hott] protected structure CatD_mor (X Y : CatD_ob) :=
+  (L : Π d, X.L d → Y.L d)
+  (n : L _ X.n = Y.n)
+\end{leancode}
+Note, that \leani{@[hott]} is a user-define command which makes sure that the
+strict universe of propositions is not used in any way, and thus our
+formalization is indeed consistent with homotopy type theory.
+
+The equivalence of $\CatC$ and $\CatD$ is, on objects defined and stated as
+follows (we omit the proof itself here):
+\begin{leancode}
+@[hott] private def CatCD_ob (X : CatC_ob) : CatD_ob :=
+⟨hott.quotient.elim X.K X.c, X.n⟩
+
+@[hott] private def CatDC'_ob (X : CatD_ob) : CatC_ob :=
+⟨X.L ∘ ι, X.n, λ y z r, ap X.L (eq_of_rel R r)⟩
+
+@[hott] private def CatCD_ob_equiv : CatC_ob ≃ CatD_ob := ...
+
+@[hott] private def CatCD_mor_equiv (X Y : CatD_ob)
+  : CatD_mor X Y ≃ CatC_mor (CatDC'_ob X) (CatDC'_ob Y) := ...
+\end{leancode}
+The initial object of $\CatC$ is then defined by first giving the initial
+object of $\CatD$ and then mapping it to $\CatC$:
+\begin{leancode}
+@[hott] private def CatD_init : CatD_ob := ⟨λ d, ι x = d, idp⟩
+\end{leancode}
+
+The non-dependent eliminator is manifested in the following:
+\begin{leancode}
+section elim'
+parameters {Q : A → Type (max u v)}
+  (x : A)
+  (Qrefl : Q x)
+  (Qeq : Π y z (r : R y z), Q y = Q z)
+include Qrefl Qeq
+
+@[hott] def Q_obj' : CatC_ob x := ⟨Q, Qrefl, Qeq⟩
+
+@[hott, elab_as_eliminator] protected def path_elim' (y : A) (p : ι x = ι y)
+  : Q y := ...
+\end{leancode}
+
+The version of the dependent eliminator for pushouts is obtained by a simple
+specialization, as visble in the following snippet:
+\begin{leancodebr}
+section
+  parameters (x : B ⊎ C)
+    (Q : Π (y : B ⊎ C), ι x = ι y →  Type w')
+    (Qrefl : Q x idp)
+    (Qcons : Π (a : A) (p : ι x = inl (f a)), 
+      Q (sum.inl (f a)) p ≃ Q (sum.inr (g a)) (p ⬝ glue a))
+  include Qrefl Qcons
+
+@[hott] private def prel : B ⊎ C → B ⊎ C → Type _ := 
+@hott.pushout.pushout_rel A B C f g
+
+@[hott] private def Qcons' (y z : B ⊎ C) (p : ι x = ι y) (r)
+  : Q y p ≃ Q z (p ⬝ eq_of_rel prel r) :=
+by { hinduction r with a; apply Qcons }
+
+@[hott] protected def path_rec (y : B ⊎ C) (p : ι x = ι y) : Q y p :=
+begin
+  refine quotient.path_rec x Qrefl _ y p,
+  exact Qcons' f g x Q Qrefl Qcons,
+end
+\end{leancodebr}
+
+To emphasize the benefits of our theorem when it comes to allowing for short
+proofs of homotopy theoretic statements,
+let us look at the proof of the theorem stating that pushouts preserve embeddings
+(\Cref{thm:paths-embedding}) in full:
+\begin{leancodebr}
+parameters {A : Type u} {B : Type v} {C : Type w} (f : A → B) (g : A → C)
+  [is_embedding f]
+include f g
+
+@[hott] def motive {c₀} :
+  Π x (q : (inr c₀ : pushout f g) = quotient.class_of _ x), Type _
+| (sum.inl b) q := Σ (a : fiber f b),
+                     fiber (ap inr) (q ⬝ ap inl a.2⁻¹ ⬝ (glue a.1))
+| (sum.inr c) q := fiber (ap inr) q
+
+@[hott] def fib_rec (c₀ c q) : @motive c₀ (sum.inr c) q :=
+let Qcons : Π a (p : inr c₀ = inl (f a)), 
+            motive (sum.inl (f a)) p ≃ motive (sum.inr (g a)) (p ⬝ glue a) :=
+ λ a p, @sigma_equiv_of_is_contr_left _
+    (λ (a : fiber f (f a)), fiber (ap inr) (p ⬝ ap inl (a.2)⁻¹ ⬝ glue (a.1))) 
+    (is_contr_of_inhabited_prop ⟨a, idp⟩) in
+pushout.path_rec f g _ motive ⟨idp, idp⟩ Qcons _ q
+
+@[hott] protected def preserves_embedding : is_embedding inr :=
+λ c c', adjointify _ (λ q, (fib_rec c c' q).1)
+  (λ p, (fib_rec c c' p).2) (λ p, by { hinduction p, refl })
+
+\end{leancodebr}
+
+
+%TODO
+% give example structures for the categories
+% give statement of the main thm
+% give proof of embedding lemma, accent its brevity
 
 
 
