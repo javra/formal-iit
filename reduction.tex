@@ -1,5 +1,65 @@
 \section{Example: Type Theory Syntax}\label{sec:red-ex}
 
+\begin{sidewaysfigure}
+\centering
+\tikzset{
+    state/.style={
+           rectangle,
+           rounded corners,
+           draw=black, very thick,
+           minimum height=2em,
+           inner sep=2pt,
+           text centered,
+           },
+}
+\begin{tikzpicture}[->, >=stealth]
+\node[state](IIT){
+  \color{ForestGreen}
+  \begin{tabular}{l}
+  \textbf{Inductive-Inductive Syntax} \\
+  \hline
+  $\UU$, $\El$, $\Pi$, $\hat{\Pi}$
+  \end{tabular}
+};
+\node[state,
+  node distance=6\diagx,
+  right of=IIT](IF)
+{
+  \color{Blue}
+  \begin{tabular}{l}
+  \textbf{Inductive-Inductive Syntax} \\
+  \hline
+  Sorts $\hat{\Pi}_\Sc$, $\UU$ \\
+  \hdashline
+  Points $\El$, $\hat{\Pi}_\Pc$, $\Rightarrow_\Pc$
+  \end{tabular}
+};
+\node[state,
+  node distance=3\diagy,
+  xshift=3\diagx,
+  below of=IIT](TTT)
+{
+  \begin{tabular}{l}
+  \textbf{Target Type Theory} \\
+  \hline
+  $\emptytype, \unit, \twotype, \Sigma, \Pi, \mathsf{IW}$
+  \end{tabular}
+};
+\path (IIT) edge node[anchor=south,above]{$\tqm{\grm{\Gamma}^\EE}, \tqm{\grm{\Gamma}^\WW}(\blgamma), 
+  \tqm{\grm{\Gamma}^\RR}(\gamma, \gamma^\CC) $} (IF);
+\path (IIT) edge[bend right=20]
+  node[anchor=south,left]{${\grm{\Gamma}^\CC}, {\grm{\Gamma}^\MM}(\blgamma, \delta), 
+  {\grm{\Gamma}^\Sg}(\gamma, \delta) $} (TTT);
+\path (IF) edge[bend left=20]
+  node[anchor=south,right]{${\tqm{\Gamma}^\CC}, {\tqm{\Gamma}^\MM},
+    \tqm{\Gamma}^\DD, \tqm{\Gamma}^\SS $} (TTT);
+\path (TTT) edge[bend left=20, dashed]
+  node[anchor=south,left]{Provides domain for \tqm{\hat{\Pi}}, \grm{\hat{\Pi}}} (IF);
+\path (TTT) edge[bend right=20, dashed] (IIT);
+\end{tikzpicture}
+\caption{The Type Theories used in this Chapter.}\label{fig:red-schema}
+\end{sidewaysfigure}
+
 Before we explain the reduction in the general case, it is useful to first
 look at how it works in a special case.
 As a prime example we chose Example~\ref{ex:ttintt} which describes
