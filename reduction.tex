@@ -1,5 +1,3 @@
-\section{Example: Type Theory Syntax}\label{sec:red-ex}
-
 \begin{sidewaysfigure}
 \centering
 \tikzset{
@@ -59,6 +57,29 @@
 \end{tikzpicture}
 \caption{The Type Theories used in this Chapter.}\label{fig:red-schema}
 \end{sidewaysfigure}
+
+We have now learned how we can express all inductive-inductive types
+and all inductive family by the means of signature consisting of the contexts
+of type theories which are made specifically for this purpose.
+Now we want to pursue the question of whether every inductive-inductive type
+can be represented in a type theory that only supports indexed W-types, and thus
+inductive families.
+
+To explore how we can transform an inductive-inductive signature into a sequence
+of constructions in inductive families, we will have to deal with four type theories:
+We imagine that we live in an \emph{ambient type theory} in which all of our constructions
+will take place.
+This type theory must be powerful enough to represent the syntaxes of the other
+type theory we use, and thus should support quotient inductive types (cf. Remark TODO).
+Then, we have what we call \emph{target type theory}, which is the language in
+which the reduced types should be available.
+This language must at least contain indexed W-types.
+At last, we also have the two ``domain specific'' type theories which we use
+to encode inductive-inductive types and inductive families.
+A graphical overview of the relations between these last three type theories
+can be seen in \Cref{fig:red-schema}
+
+\section{Example: Type Theory Syntax}\label{sec:red-ex}
 
 Before we explain the reduction in the general case, it is useful to first
 look at how it works in a special case.
