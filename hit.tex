@@ -1,6 +1,6 @@
 \section{Examples of Higher Inductive Types}
 
-The typal equality discussed in the last chapter works just fine if we want
+The propositional equality discussed in the last chapter works just fine if we want
 to \emph{prove} things to be equal.
 But in mathematics as well as computer science, we also often want to
 \emph{make things equal}, in the sense that we might want to consider a type
@@ -21,13 +21,15 @@ are \emph{path constructors}.
 Instead of adding new elements to the inductive type,
 these constructors are there to make instances of other constructors equal.
 In a setting where the K-rule is present, and every type is a set (see Remark~\ref{rmk:tt-uip}),
-this bigger class of inductive type is called \textbf{quotient inductive types},
+this bigger class of inductive types is called \textbf{quotient inductive types},
 while, as we will see, in homotopy type theory it is more
 fitting to call them \textbf{higher inductive types} (HITs) given the fact
 that equality types carry not only proofs but data.
 Higher inductive types
 allow the development of a synthetic version of homotopy theory inside HoTT (cf.~\cite{Buchholtz2018,Buchholtz2018CellularCI,buchholtz2016cayley,BuchRijke_projectiveSpaces,favonia:SvK,licataFinster_Eilenberg,licataBrunerie_s1again,Brunerie2017,rijke:join}).
-A main objective of this line of research is to describe, classify, and compare path spaces (i.e.\ equality types) or homotopy groups (i.e.\ truncated path spaces) of higher inductive types such as circles and spheres.
+A main objective of this line of research is to describe, classify, and compare
+path spaces (i.\,e.\ equality types) or homotopy groups (i.\,e.\ truncated path spaces)
+of higher inductive types such as circles and spheres.
 
 A minimal example for a higher inductive type could be the following definition of would be a
 type theoretic representation of the topological space of the interval $I$.
@@ -54,14 +56,15 @@ as in the higher inductive types goverened by the following rules?
 \inferrule*[left=$\Sph^1$-Intro1]{ }{\Sbase : \Sph^1} \qquad
 \inferrule*[left=$\Sph^1$-Intro2]{ }{\Sloop : \Sbase =_{\Sph^1} \Sbase} \\[.7em]
 \inferrule*[left=$\Sph^1$-Elim]
-	{C : \Sph^1 \to \UU \\ c : C(\Sbase) \\ p : \Sloop_*(c) = c \\ x : \Sph^1}
+	{C : \Sph^1 \to \UU \\ c : C(\Sbase) \\ p : \Sloop^*(c) = c \\ x : \Sph^1}
 	{\elim_{\Sph^1}(C,c,p,x) : C(x)}
 \end{gathered}
 \end{equation*}
 We can see that $\Sloop$ introduces a new path from $\Sbase$ to itself which
 cannot be reduced to $\refl_\Sbase$.
 This means that we can interpret it as a loop which is not homotopic
-to the identity, and so the type represents the topological space of the circle.
+to the identity, and so the type represents the topological space of the circle
+(cf. \Cref{fig:hit-circle}).
 The fact that $\Sloop$ is not equal to $\refl_\Sbase$ also makes it clear that
 this type is not a set.
 
@@ -69,7 +72,7 @@ In the same way in which we can add arbitrary paths between constructors,
 we can also use iterated equality types to express the addition
 of arbitrary higher dimensional cells (surfaces, volumes).
 An example for this is the definition of a twodimensional sphere, where we have
-one basepoint and one surface (see Figure~\ref{fig:hit-circle}):
+one basepoint and one surface:
 \begin{equation*}
 \begin{gathered}
 %\inferrule*[left=$\Sph^1$-Form]{ }{\Sph^1 : \UU} \qquad
@@ -95,7 +98,7 @@ one basepoint and one surface (see Figure~\ref{fig:hit-circle}):
 Besides these closed examples for higher inductive types, we can also
 have important constructions which are parametrized over an arbitrary type.
 One important operation in topology, especially in the field of homologies,
-is the one of the \textbf{suspension} $\Susp(A)$ of spaces $A$ which turn an $n$-dimensional
+is the one of the \textbf{suspension} $\Susp(A)$ of spaces $A$ which turns an $n$-dimensional
 type into a $(n+1)$-dimensional type.
 Suspensions will also provide a way to conveniently define all higher-dimensional
 spheres by setting $\Sph^{n + 1} :\equiv \Susp(\Sph^n)$.
@@ -117,7 +120,8 @@ south pole) and for each point in $A$ a path between those points:
 \end{gathered}
 \end{equation*}
 
-Another very general construction, which does not only depend on one a single
+Another very general construction is the \textbf{pushout of types}.
+It does not only depend on one a single
 type but instead has as input a whole \emph{span} of types, meaning
 three types $L$, $M$, and $N$, and functions $f : L \to M$ and $g : L \to N$.
 It consists of a type $P \equiv \pout{L}{M}{N}$ the point constructors of which are to functions
@@ -266,14 +270,14 @@ cube-overs have been described by \cite{licatacubical}.
 
 \begin{remark}[Coequalizer of Functions]
 In category theory, coequalizers are not defined on an object and a relation
-but instead are a universal construction on two functions $f, g : X \to A$
-which can be thought as an object in which for each $x : X$, $f(x)$ and $g(x)$ are identified.
+but instead are a universal construction on two functions $f, g : X \to A$.
+It can be thought as an object in which for each $x : X$, $f(x)$ and $g(x)$ are identified.
 This can be expressed in our variant of a coequalizers by setting the relation
 on $A$ to be
 \begin{equation*}
 a \sim b :\equiv (x : X) \times (f(x) = a) \times (g(x) = b) \text{,}
 \end{equation*}
-or, alternatively by defining $\_\sim\_$ inductively by $f(x) \sim g(x)$ for each
+or, alternatively, by defining $\_\sim\_$ inductively by $f(x) \sim g(x)$ for each
 $x : X$.
 It is then easy to see that the coequalizer of $f$ and $g$ is $\quot$.
 
@@ -342,15 +346,15 @@ are \emph{interderivable} in homotopy type theory.
 \section{Encode-Decode Proofs}\label{sec:hit-encode-decode}
 
 To motivate our results, which we will present in the next chapter,
-will will now look at some important problems which occur when
+we will now look at some important problems which occur when
 we want to prove facts about higher inductive types.
 Often, we want to find out what specific equality types of
 higher inductive types look like.
 For a very concrete example, one of the most basic results in homotopy theory
-is the calculation that \emph{the fundamental group of the circle is
+is the proof of the statement that \emph{the fundamental group of the circle is
 isomorphic to the group $\Z$ of integers}.
 It is an example of a proplem which in a classical, set theoretic setting,
-is solved in a very way which is very different from the approach which is needed
+is solved in a way which is very different from the approach which is needed
 in its type theoretic counterpart.
 \cite{licataShulman_circle} were the first to translate this fact into the
 setting of homotopy type theory.
@@ -436,8 +440,8 @@ We then have to prove that
 \begin{equation*}
 \Sloop^*(\lambda \_.\, \Sloop) = (\lambda\_.\, \Sloop) \text{,}
 \end{equation*}
-where the transport is over the type family $\lambda x'.\, code(x') \to (\Sbase = x')$,
-a calculation we don't want detail here. This defines $\mathsf{decode}$.
+where the transport is over the type family $\lambda x'.\, \code(x') \to (\Sbase = x')$,
+a calculation we don't want to detail here. This defines $\mathsf{decode}$.
 It is then left to prove by induction that
 \begin{align*}
 \mathsf{encode}(\mathsf{decode})(c) &= c \text{ for all $c : \code(x)$ and} \\
@@ -467,9 +471,9 @@ alternatingly in ${M}$ and ${N}$, separated by morphisms in $L$.
 \begin{defn}[Codes for Groupoid Pushouts, \cite{favonia:SvK}]
 We define a type family $\code : P \to P \to \UU$, by recursion on both arguments.
 That means that it suffices to give families $M \to M \to \UU$,
-$M \to N \to \UU$, $N \to M \to \UU$, and $N \to N \to \UU$ that agree on
+$M \to N \to \UU$, $N \to M \to \UU$, and $N \to N \to \UU$, which agree on
 $f(l)$ and $g(l)$ for all $l : L$ in either argument.
-We will omit proof of this agreement.
+We will omit proof of this consistency.
 For the first case, i.\,e.\ if we have $m, m' : N$, we want $\code(\inr(m), \inr(m'))$ to be
 the inductive type where elements are characterized as lists
 \begin{equation*}

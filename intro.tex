@@ -135,8 +135,8 @@ the essential steps of it are complete and formalized in Agda. %TODO re-read and
 
 While parts of this thesis consists of the review and introduction of constructions
 and knowledge which is already established,
-other parts offer new contributions which stands on the shoulders of these ``giants''.
-The major contributions of the thesis are the following:
+other parts offer new contributions which stand on the shoulders of these ``giants''.
+The contributions of this thesis include the following:
 \begin{itemize}
 \item The formalization of lots of homotopy theoretic notions in the theorem prover
 Lean as described in \Cref{sec:tt-lean}.
@@ -149,8 +149,8 @@ as stated in \Cref{thm:paths-higher-SvK}.
 \item The formalization of \Cref{sec:paths-main} and \Cref{thm:paths-main-pushout}
 in Lean.
 \item An adapation of the syntax for higher inductive-inductive types by
-\citet{ambrussyntax} to separate sort and point constructors, as described, including
-its semantics in \Cref{chp:iit}.
+\citet{ambrussyntax} to separate sort and point constructors, as described, together with
+its semantics, in \Cref{chp:iit}.
 \item A syntax of signatures for inductive families as given in \Cref{chp:if}.
 \item A formal specification of type erasure, wellformedness relation and eliminator
 relation given as syntactic translations as described in \Cref{sec:red-e},
@@ -181,22 +181,23 @@ In this endevour, \Cref{chp:tt} does not only serve to give the necessary backgr
 to readers unfamiliar with dependent types, it also sets notations and terminology
 which we will re-use in the later chapters.
 In \Cref{sec:tt-provers}, it furthermore gives a short characterization of the interactive
-theorem provers Lean and Agda.
+theorem pro\-vers Lean and Agda.
 
 \Cref{chp:hit} will then first introduce some examples of higher inductive types
 and will then go on to propose homotopy coequalizers as a fundamental higher
-inductive type which can serve to encode all of these examples.
+inductive type which can serve as a common generalization of all of these examples.
 Sketches for two proofs using the ``encode-decode'' method will be given in
 \Cref{sec:hit-encode-decode}.
 
 Following the introduction of homotopy coequalizers we will then (\Cref{chp:paths})
 see how we can
-characterize the path spaces of all instances to replace encode-decode proofs.
+characterize their path spaces in order to replace encode-decode proofs.
 Apart from proving this characterization (\Cref{sec:paths-main})
 we will demonstrate this use in some examples (\Cref{sec:paths-applications}
 and \Cref{sec:paths-svk}).
 
 Switching not only the type theoretical setting from homotopy type theory
+to set-truncated (or even extensional) type theory
 but also the focus of the thesis, the second half will explore types which
 instead of higher dimensional structure carry intricate dependencies between
 multiple types to be defined.
@@ -208,7 +209,7 @@ The latter will be reduced to indexed W-types in \Cref{sec:if-ex}.
 
 After reducing inductive families to indexed W-types we will try to reduce
 inductive-inductive types to inductive families:
-In \Cref{chp:red} we will a formal description about how to generate the
+In \Cref{chp:red} we will give a formal description about how to generate the
 inductive families which correspond to
 erasing the inductive-inductive typing information,
 recovering it with a wellformedness predicate, yielding a candidate for an inital

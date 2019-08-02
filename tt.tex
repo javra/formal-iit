@@ -5,26 +5,26 @@ how it differs from a set theoretic foundation,
 afterwards (Chapter~\ref{sec:tt-w}) we want to unify the notion of an inductive
 type using the concept of indexed W-types.
 Then (Chapter~\ref{sec:tt-hott}), we will explain how homotopy type theory was created to have a suitable
-language to reason about higher equalities and provides a synthetic way to
+language to reason about higher equalities and how it provides a synthetic way to
 formalize topological insights.
 Finally, in Chapter~\ref{sec:tt-provers}, we will give examples of two theorem
 provers based on dependent types, Agda and Lean, and point out some of their differences.
 
 \section{Dependent Type Theory}\label{sec:tt-dtt}
 
-While the term ``type theory'' stems from the early nineteenth centry, when
-Bertrand Russell sought to lay out an alternative to set theory which did
-suffer from the paradox which Russell discovered,
-todays versions of type theory have little in common with Russell's attempts
+The term ``type theory'' stems from the early nineteenth centry, when
+Bert\-rand Russell sought to lay out an alternative to set theory which did not
+suffer from the paradox which Russell discovered
+Todays versions of type theory have little in common with Russell's attempts
 but rather rely on the considerations of Per Martin-Löf (\cite{martin-lof2, martin-lof1})
 who, starting in the 1970's, built a new mathematical foundation based on the
 $\lambda$-calculus, himself drawing inspiration from previous logicians and
 mathematicians like Alonzo Church and Haskell Curry.
-Often, dependent type theory is also referred to as Martin-Löf type theory.
+Often, dependent type theory is also referred to as Martin-Löf type theory (MLTT).
 
-Based on a phenomenon knows as the ``Curry-Howard correspondence'', type theory
+Based on a phenomenon known as the ``Curry-Howard corres\-pon\-dence'', type theory
 can serve both as a theoretical foundation for a formal representation of mathematics,
-as well as the principle for  the specification for strongly typed functional
+as well as a principle for the specification for strongly typed functional
 programming languages.
 It was implemented in computer languages for programming and theorem proving which
 are used massively in the field of formal verification and in the formalization of
@@ -37,7 +37,7 @@ drawn considerable attention from researching mathematicians as a tool to
 formally verify their proofs.
 
 Type theory differs from a set theoretic mathematical foundation (let us, as a
-point of reference, consider set theories based on (higher-order) propositional logic
+point of reference, consider set theories based on first-order predicate logic
 like Zermelo-Fraenkel set theory) in several
 important aspects:
 \begin{itemize}
@@ -46,7 +46,7 @@ This means that statements like theorems and conjectures are represented
 using the same class of objects as other data like sets or (algebraic) structures.
 In contrast to this, most set theoretic foundations are built on a \emph{dichotomy between
 the propositions and the objects} they describe:
-They first start out with a logical frame work on which axiomatically a theory
+They first start out with a logical framework on which axiomatically a theory
 of sets is introduced.
 The coherence between these two levels must then be created using an axiom like
 the excision axiom in Zermelo-Fraenkel set theory.
@@ -60,10 +60,10 @@ Since this assignment, called typing, is decidable, we consider it a judgment
 rather than a provable proposition that a given term $t$ has type $A$.
 \item Type theory is inherently \emph{constructive} while most of the most
 well-known set theoretic foundations are \emph{non-construcitve}.
-This has great consequences for the computational use of represented mathematics:
+This has great consequences for the computational use of the mathematics represented:
 Every type theoretic function the domain of which are the natural numbers, can compute a
 numeral for any given input.
-\item While in set theory, \emph{sets ar the only primitives}, type theory
+\item While in set theory, \emph{sets are the only primitives}, type theory
 provides often-used objects like \emph{functions and inductively defined types
 as primitives}.
 This means that we can use these without having to care about how to assemble them
@@ -80,10 +80,10 @@ As mentioned, we will, whenever we talk about a certain piece of type theoretic
 data, accompany it with its type,
 we need a notation for this kind of \textbf{type judgment}:
 We write $t : A$ to state that the term $t$ is of type $A$.
-This is similar to elements in a set, but it also represents the fact
+This is similar to the element relation of a set, but it also represents the fact
 that $t$ is a proof for a proposition $A$.
 Sometimes, we want to express that two terms $s$ and $t$ of the same type $A$
-only differ an unfolding or folding of a definition, or that the application of
+only differ by an unfolding or folding of a definition, or that the application of
 a reduction rule to $s$ results in $t$.
 We will notate this by $s \equiv t$.
 Our type theory will then make no distinction between $s$ and $t$.
@@ -99,10 +99,11 @@ This statement also holds true for types itself.
 Types which themselves contain types, are called \textbf{universes} and we will
 denote them using $\UU$.
 The universe itself also needs a type, but
-assuming $\UU : \UU$ is inconsistent (this is often referred to as
-``Girard's paradox'' (\cite{girard72,hurkens95}) which can be seen as the type theoretic equivalent
-to Russell's paradox).
-So the solution we apply for the remainder of this text is
+assuming $\UU : \UU$ is inconsistent.
+This is often referred to as
+``Girard's paradox'' \citep{girard72,hurkens95} which can be seen as the type theoretic equivalent
+to Russell's paradox.
+The solution we assume for the remainder of this text is
 to assume that we have an infinte chain of universes
 \begin{equation*}
 \UU_0 : \UU_1,~~ \UU_1 : \UU_2,~~ \UU_2 : \UU_3,~~ \ldots \text{,}
@@ -117,13 +118,13 @@ Our constructions will not rely on cumulativity and they are formalized in
 non-cumulative type theories.
 
 Until now, we have not talked about any way to form types.
-In the following we will get to know the non-dependent version of some basic types,
+In the following, we will get to know the non-dependent version of some basic types,
 some of which will later be generalized to a dependent form.
 These type formers will be presented in a very similar way:
 We will give a rule on how to form the type itself (called formation rule),
 rules on how to construct elements of the type (called introduction rules),
 rules on how to use the elements of the type (called elimination rules),
-and some of them will be followed by some reduction rules offering definition
+and some of them will be followed by some reduction rules offering definitional
 equalities used to simplify terms.
 As we have mentioned in the comparison to set theory, functions are basic building
 blocks in type theory.
@@ -141,7 +142,7 @@ a function to any term of its domain:
 \end{gathered}
 \end{equation*}
 Here, $\Phi$ is a term that may have $x$ as a free variable.
-$\Phi[a/x]$ denotes the replacement by every appearance of $x$ by $a$.
+$\Phi[a/x]$ denotes the replacement of every appearance of $x$ by $a$.
 Additional to these rules we also have $\eta$-conversion and $\beta$-reduction:
 \begin{equation*} \label{eq:eta-beta}
 \begin{aligned}
@@ -152,7 +153,7 @@ Additional to these rules we also have $\eta$-conversion and $\beta$-reduction:
 \end{equation*}
 In type theory, these functions are used to represent
 both functions between sets as well as implications between propositions.
-A special kind of function are those of the form $A \to \UU$.
+A special kind of function are those of the form $B : A \to \UU$.
 These so called \textbf{type families} are used to represent set-valued
 functions as well as propositions with a free variable in $A$.
 
@@ -198,7 +199,8 @@ unit type, it suffices to consider its canonical element $\star$:
 with the reduction rule $\elim_\unit(C,p,\star) \equiv p$.
 
 To give an example for a type which contains more than just one element, we can
-consider the type of booleans $\twotype$, containing elements $0$ and $1$.
+consider the type of booleans $\twotype$, containing elements $0_\twotype$
+and $1_\twotype$.
 This time, we have more than just one constructor, and the elimination rule
 requires us to give proofs for both of the two elements:
 \begin{equation*}
@@ -218,7 +220,7 @@ would be introduced axiomatically, we can take a look at the type of
 natural numbers.
 It is generated inductively by the zero element and the successor function.
 The eliminator provides the principle of induction on the natural numbers, which
-also makes that we can assume that every element of the natural numbers is a
+also makes sure that we can assume that every element of the natural numbers is a
 result of repeatedy applying the successor function to zero:
 \begin{equation*}
 \begin{gathered}
@@ -235,9 +237,9 @@ with the reduction rules
 \elim_\N(C, p, q, 0) &\equiv p \text{ and} \\
 \elim_\N(C, p, q, S(x)) &\equiv q(x, \ind_\N(C, p, q, x)) \text{.}
 \end{align*}
-Note that we regain, by restricting $\elim_N$ to the \emph{non-dependent
-eliminator} or \emph{recursor},
-the usual way to recursively define functions $f : \N \to A$ for
+Note that we regain, by restricting $\elim_N$ to constant type families,
+the \emph{non-dependent eliminator} or \emph{recursor},
+corresponding to the usual way to recursively define functions $f : \N \to A$ for
 a type $A : \UU$ by providing the value $f(0)$ and, for each $n : \N$ the
 recursive definition $f(n) \to f(S(n))$.
 It has the following type:
@@ -245,7 +247,7 @@ It has the following type:
 \rec_\N(A) \equiv \ind(\lambda x. A) : A \to (\N \to A \to A) \to \N \to A \text{.}
 \end{equation*}
 
-So far we haven't done the word ``dependent'' in the title of this chapter
+So far we did not do the word ``dependent'' in the title of this chapter
 much justice,
 but now we will move on to introduce some dependent type formers.
 The first of these will be \textbf{$\Pi$-types} or \text{dependent function types}.
@@ -253,7 +255,7 @@ When considering non-dependent functions, the codomain was a fixed type $B$
 such that for all inputs $a : A$, the output $f(a)$ is an element of $B$.
 For dependent functions, however, the codomain is a type family $B : A \to \UU$,
 and for each input $a : A$ the output $f(a)$ is of type $B(a)$.
-Considering we want to use type families to represent propositions depending on
+Considering that we want to use type families to represent propositions depending on
 a free variable, these functions represent the universal quantification over this
 free variable!
 While for application and $\lambda$-abstraction we don't introduce new notation
@@ -274,7 +276,7 @@ functions generalize the rules for non-dependent functions as follows:
 \end{gathered}
 \end{equation*}
 Again, we have the rules for $\beta$-reduction and $\eta$-conversion like in
-the non-dependent case, yielding judgmental equalities
+the non-dependent case, yielding reduction rules in the form of judgmental equalities
 $(\lambda x. f (x)) \equiv f$ and $(\lambda x. \Phi)(a) \equiv \Phi[a/x]$.
 Having $\Pi$-types at our disposal allows us to state the rules governing
 a couple of further essential type formers.
@@ -285,9 +287,9 @@ When iterating $\Pi$-types,
 we will often find that the arguement of a dependent function is already
 determined by an earlier argument, as in
 $f : (a : A)(b : B(a)) \to C(a, b)$.
-In this case, we lend the notation used by many theorem provers and
+In this case, we borrow the notation used by many theorem provers and
 use curly brackets to denote arguments which will be left implicit:
-If $f :\{a : A\}(b : B(a)) \to C(a, b)$,
+If $f :\{a : A\}(b : B(a)) \to C(a, b)$ and $b : B(a)$,
 we write $f(b) : C(a, b)$.
 If we later want to state these explicitly we will re-use curly brackets
 to denote that we reintroduce them: $f\{a\}(b) : C(a, b)$.
@@ -318,7 +320,8 @@ we provide proof for its left or its right type:
 \begin{equation*}
 \begin{gathered}
 \inferrule*[left=$+$-Form]{A : \UU \\ B : \UU}{A + B : \UU} \\[.7em]
-\inferrule*[left=$+$-Intro1]{a : A}{\inl(a) : A + B \\ \inr(b) : A + B} \\[.7em]
+\inferrule*[left=$+$-Intro1]{a : A}{\inl(a) : A + B} \qquad
+\inferrule*[left=$+$-Intro2]{b : B}{\inr(b) : A + B} \\[.7em]
 \inferrule*[left=$+$-Elim]
 	{C : (A + B) \to \UU \\  p : (a : A) \to C(\inl(a))
 		\\ q : (b : B) \to C(\inr(b)) \\ x : A + B}
@@ -331,21 +334,21 @@ For the sum type, we have the reduction rules
 \elim_{A + B}(C, p, q, \inr(b)) &\equiv q(b) \text{.}
 \end{align*}
 
-Looking at the sum type, we can find a slight generalization which is very useful
+Looking at the product type, we can find a slight generalization which is very useful
 when we want to model existential quantification of a type family $B : A \to \UU$
 in type theory:
-A version of the sum type where the type of the second component of a pair $(a, b)$
+A version of the product type where the type of the second component of a pair $(a, b)$
 may depend on $a : A$ via the type family, i.\,e. $b : B(a)$.
 The type holding this kind of pair for a fixed type family $B : A \to \UU$
-is called the \textbf{dependent sum type} or \textbf{$\Sigma$-type} over $B$.
-We will again three different notations for this type, of which in this text
+is called the \textbf{$\Sigma$-type} over $B$.
+We will again have three different notations for this type, of which in this text
 we will mostly prefer the latter one:
 The type is usually (e.\,g. in \cite{hottbook}) denoted by
 $\sum_{(a : A)} B(a)$, mimicing mathematical notation for sums.
 Furthermore there is the short variant of writing $\Sigma(B)$ and
 an Agda-inspired notation $(a : A) \times B(a)$.
 The inference rules for this type are just a slight generalization of the
-rules we have already seen for the non-dependent sum type:
+rules we have already seen for the non-dependent product type:
 \begin{equation*}
 \begin{gathered}
 \inferrule*[left=$\Sigma$-Form]{A : \UU \\ B : A \to \UU}
@@ -364,6 +367,8 @@ case of a sigma type where $B$ is a constant type family.
 Note that also the sum type $A + B$ can be defined as a special case of the sigma
 type over $C : \twotype \to \UU$ with $C(0_\twotype) :\equiv A$
 and $C(1_\twotype) :\equiv B$.
+This is why $\Sigma$-types are sometimes also referred to as
+\emph{dependent sum types}.
 By induction we can define the \textbf{projections}
 \begin{align*}
 \pr_1 &: ((a : A) \times B(a)) \to A \text{ and} \\
@@ -392,7 +397,7 @@ the following term:
 
 \section{Inductive Types}\label{sec:tt-w}
 
-So far, the presented type formers may seem like a wild zoo of unrelated,
+So far, the presented type formers may seem like a zoo of unrelated,
 random examples.
 Some are generalization of others (like $\Sigma$-types generalize sums),
 but the question one might ask is if there is any overarching principle behind
@@ -404,7 +409,7 @@ elements are those which are generated \emph{inductively} by their introduction
 rules, also called \emph{constructors}.
 
 Some of the type formers we have seen were \emph{parameterized} by other types,
-but more than that, dependently types allow us to specify \emph{indexed} inductive
+but more than that, dependent types allow us to specify \emph{indexed} inductive
 types.
 One example for this is the type of \emph{vectors} of a type $A$.
 Vectors are a variant of lists, where we use the typing to keep track of the
@@ -438,7 +443,7 @@ it is sufficient to prove it about the empty vector and that the statement is st
 under extending an arbitrary vector.
 Note that the natural number in the conclusion of both introduction rules
 is not a variable, and the $\cons$ even modifies the natural number.
-As such, we don't call the dependency on the natural numbers in the type of vectors
+As such, we call the dependency on the length in the type of vectors
 an \emph{index} instead of a parameter.
 
 While dependent and non-dependent functions were primitives needed to even talk
@@ -455,8 +460,7 @@ way to be able to present the inductive type as an instance of a very general
 form of a \emph{tree}.
 The types covered by this approach are called \emph{indexed W-Types}, and they
 cover a bigger fragment of inductive types than the non-indexed version of
-\emph{W-Types} which were introduced by foo, and which were,
-in a topos theoretic setting, discussed by \cite{moerdijkwellfounded}.
+which are, in a topos theoretic setting, discussed by \cite{moerdijkwellfounded}.
 The generalization to indexed W-Types, as presented here,
 was found by \cite{indexedcontainers}.
 
@@ -480,9 +484,9 @@ rules:
   c : (b : B(a)) \to \IW{A}{B}{o}{r}(r(a, b))}
   {\IWsup{a}{b} : \IW{A}{B}{o}{r}(o(a))} \\[.7em]
 \inferrule*[left=IW-Elim]{C : \{i : I\} \to \IW{A}{B}{o}{r}(i) \to \UU \\
-  p : \makecell{ (a : A)
+  \makecell{p :  (a : A)
       \left (c : (b : B(a)) \to \IW{A}{B}{o}{r}(r(a, b))\right) \\
-      \qquad \to \Bigl((b : B(a)) \to  C(c(b))\Bigr)
+      \qquad \qquad \to \Bigl((b : B(a)) \to  C(c(b))\Bigr)
       \to C(\IWsup{a}{c})  } }
   {\elim_\mathsf{IW}(C, p) : (i : I)(w : \IW{A}{B}{o}{r}(i)) \to C(w) }
 \end{gathered}
@@ -506,8 +510,7 @@ tree like structure it is enough to prove $C$ for $\IWsup{a}{c}$
 under the hypothesis that it holds for all recursive input data $c(b)$.
 
 Assuming that we already have $\emptytype$, $\unit$, $\twotype$ and $\Sigma$-types
-at our disposal (this allows us to define $A + B :\equiv (b : \twotype) \times C(b)$
-with $C(0_\twotype) :\equiv A$ and $C(1_\twotype) :\equiv B$),
+at our disposal (allowing us to define $A + B$),
 indexed W-types live up to our expectations of capturing
 all previously mentioned inductive types.
 To provide a translation of these, including indexed inductive types still to
@@ -519,7 +522,7 @@ $\unit \to A$ in place of a type $A$ itself.
 In Chapters~\ref{chp:iit} and \ref{chp:if} we will introduce two more calculi to
 replace indexed W-types.
 
-\begin{sidewaystable}\label{tbl:tt-iws}
+\begin{sidewaystable}
 \centering
 {$\begin{array}{r|lllll}
 \text{Type Former} & I : \UU & A : \UU & B : A \to \UU & o : A \to I & r : (a : A) \to B(a) \to I \\
@@ -535,7 +538,7 @@ replace indexed W-types.
   & \makecell[cl]{\unit \\ + A \times \N}
   & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(a, n) \mapsto \unit}
   & \makecell[cl]{\inl(\star) \mapsto 0          \\ \inr(a, n) \mapsto n + 1}
-  & \makecell[cl]{ - \\ \inr(a, n)(\star) \mapsto n} \\
+  & \makecell[cl]{ - \\ \inr(a, n) \mapsto (\star) \mapsto n} \\
 x =_A \_
   & A
   & \unit
@@ -544,7 +547,7 @@ x =_A \_
   & -
 \end{array}$}
 \caption{The input data for the indexed W-types corresponding to the type formers
-given in Chapter~\ref{sec:tt-dtt}.}\label{tbl:if-iws}
+given in Chapter~\ref{sec:tt-dtt}.}\label{tbl:tt-iws}
 \end{sidewaystable}
 
 \section{Typal Equality and Homotopy Type Theory}\label{sec:tt-hott}
@@ -558,7 +561,7 @@ To correct this,
 we introduce what is usually called \textbf{propositional equality} or
 \textbf{typal equality}.
 For each type $A : \UU$ and each two elements $a, b : A$ we want to have
-a type $(x =_A y) : \UU$ of proofs that $a$ and $b$ are equal.
+a type $(a =_A b) : \UU$ of proofs that $a$ and $b$ are equal.
 We can define this by induction, giving only the witness for this relation
 to be reflexive as a constructor:
 \begin{equation*}
@@ -573,17 +576,17 @@ to be reflexive as a constructor:
 \end{gathered}
 \end{equation*}
 with the reduction rule $\elim_{=_A}(C, c, a, p, \refl_a) \equiv c(a)$.
-It can be defined as an indexed W-type as per Table~\ref{tbl:tt-iws}.
-The elimination rule says that to prove a statement indexed over the right
+It can be defined as an indexed W-type as per \Cref{tbl:tt-iws}.
+The elimination rule says that to prove a statement indexed over varying right
 hand sides of an equality and corresponding equality proofs,
 we can assume it to be the reflexivity witness $\refl$.
 
 \begin{remark}\label{rmk:tt-k}
 Apart from the above elimination rule, which is sometimes referred to as
 \textbf{J-rule}, some type theories also assume the so called
-\textbf{K-rule}, which in proofs also allows us to simplify a given equality proof
+\textbf{K-rule}, which in proofs also allow us to simplify a given equality proof
 to $\refl$ if the type family which we want to inhabit varies both endpoints
-of the equality as in the following:
+of the equality simultaneously, as in the following:
 \begin{equation*}
 \inferrule*[left={$=$-K}]{C : (a : A) \to a =_A a \to \UU \\
     c : (a : A) \to C(a, \refl_a) \\
@@ -664,10 +667,10 @@ Equivalence $f : A \simeq B$
 \caption{Three interpretations}\label{tbl:tt-hott}
 \end{sidewaystable}
 
-But what does equality, as defined here, mean?
-The most important consequence is, that two equal objects are \emph{indiscernable}
+But what does equality, as defined here, entail?
+The most important observation is, that two equal objects are \emph{indiscernable}
 by any attribute in the sense that for any type family $C : A \to \UU$ if
-$C(a)$ and $a = b$, then we can prove $C(b)$ as we can prove in the following
+$C(a)$ and $a = b$, then we can prove $C(b)$, as we can prove in the following
 lemma which defines an operation to achieve this:
 \begin{lemma}[Transport]
 Let $A : \UU$ and $C : A \to \UU$.
@@ -684,7 +687,7 @@ $(\refl_a)^*(c) :\equiv c$.
 \end{proof}
 
 While it is obvious that equality should be an equivalence relation,
-we only added a witness for reflexivity.
+we only assume a witness for reflexivity.
 But what about its symmetry and transitivity?
 It turns out that these can be proven by induction without the need
 to add them as constructors:
@@ -764,7 +767,7 @@ $\ap_f$:
 Let $A : \UU$, $B : A \to \UU$ and $f : (a : A) B(a)$. Then, we can construct
 a dependent function
 \begin{equation*}
-\apd_f : \{a, b\}(p : a =_A b) \to p_*(f(a)) =_B(b) f(b) \text{,}
+\apd_f : \{a, b\}(p : a =_A b) \to p_*(f(a)) =_{B(b)} f(b) \text{,}
 \end{equation*}
 such that $\apd_f(a, a, \refl_a) \equiv \refl_{f(a)}$. \hfill $\square$
 \end{lemma}
@@ -778,18 +781,19 @@ if for all $a : A$ we have
 $f(a) = g(a)$.
 We define the notation
 \begin{equation*}
-f \sim g :\equiv (a : A) f(a) = g(a) \text{.}
+f \sim g :\equiv (a : A) \to f(a) = g(a) \text{.}
 \end{equation*}
 We can define the same for two dependent functions $f, g : \prod_{(a : A)} B(a)$
 over the same type family.
 \end{defn}
 
 \begin{remark}[Function Extensionality]\label{rmk:tt-funext}
-Since in homotopy theory, we can find a path $p : f = g$ whenever $f \sim g$,
+Since in homotopy theory, we can find a path $p : f = g$ in the space of
+functions, whenever $f \sim g$,
 we might ask if in homotopy type theory this holds as well --
 are two functions equal as soon as they are pointwise equal?
 In the setting of homotopy type theory we will be able to derive this from
-univalence, while in settings where we assum the K-rule, we will usually
+univalence, while in settings where we assume the K-rule, we will usually
 assume this property of the function space, which is called \textbf{function extensionality},
 axiomatically.
 \end{remark}
@@ -810,7 +814,7 @@ $\eta : g \circ f \sim \id_A$ and $\epsilon : f \circ g \sim \id_B$ and furtherm
 \tau : \prod_{a : A} \ap_f(\eta(a)) =_{f(g(f(a)))=a} \epsilon(f(a)) 
  \equiv \ap_f \circ \eta \sim \epsilon \circ f \text{.}
 \end{equation*}
-We need $\tau$ to make sure that each two witnesses $f$ is an equivalence are
+We need $\tau$ to make sure that each two witnesses for the fact that $f$ is an equivalence are
 equal.
 Since $\tau$ looks like the one of the two commutativity conditions for pairs
 of adjoint functors, this kind of equivalence is also called a \textbf{half
@@ -839,7 +843,7 @@ For each $A, B : \UU$ there is
 \end{equation*}
 But how about the other direction?
 It turns out that there is no way to obtain equality from equivalence,
-so once solution,
+so one solution,
 the consistency of which has been shown by \cite{kapulkinlumsdaine},
 is to assume axiomatically, that $\idtoeqv_{A, B}$ has an inverse function:
 \begin{axiom}[Univalence]
@@ -863,7 +867,7 @@ consider multiple elements, so we might want that for all $a, b : A$ we have $a 
 For types that should represent sets we \emph{do} want multiple elements, but
 we might not be interested in having different equality proofs --
 so for $a, b : A$ and $p, q : a =_A b$ we might want to have a proof for $p =_{a = b} q$.
-This effect that at a certain level of iteration, all (equality) proofs should become
+This effect, that at a certain level of iteration, all equality proofs should become
 equal is called \textbf{truncation}:
 \begin{defn}[$n$-types]
 For a type $A : \UU$ we set
@@ -937,8 +941,7 @@ for its capability to represent mathematics and logics, but also for its good
 computational behaviour.
 This suggests to have a look at how type theory is implemented in different languages
 the focus of which can be either to be a functional programming language based
-on dependent types or a theorem proving tool, or to be useful in both of these
-use cases.
+on dependent types or a theorem proving tool, or to be useful in both of these cases.
 With regards to this thesis, introducing different implementations is relevant
 in two ways:
 \begin{enumerate}
@@ -957,8 +960,8 @@ Au contraire -- the theorem prover Coq~\citep{coq} is not only the implementatio
 with the biggest user base but also has a lot of distinguishing features.
 
 Before we delve into the differences between Lean and Agda, we will first
-take a look at what these proves have \emph{in common}.
-The following list contains both fundamental design principle as well as
+take a look at what these provers have \emph{in common}.
+The following list contains both fundamental design principles as well as
 several features which are important to improve the usability of the
 implementation:
 \begin{itemize}
@@ -968,11 +971,11 @@ universe variables which are used as variable indices for the unvierses.
 \item Function types distinguish between explicit and \emph{implicit arguments}.
 The latter are useful to make definitions more succinct.
 \item Both languages are equipped with a system of \emph{modules} or \emph{name spaces}
-used to organize definitions and their accessability.
+used to organize definitions and their scope.
 \item There is a way to customize the implementation by the means of \emph{options}.
 This enables us to switch between a set-truncated setting and
 homotopy type theory.
-\item The implementations have an open source code which is reviewable and
+\item The implementations have an source code which open and thus reviewable and
 customizable by everybody.
 \item There are a one or several text editors which support an interactive
 and well-integrated use of the language.
@@ -985,7 +988,7 @@ Let us next concentrate on Lean as our first specimen.
 The development of the theorem prover Lean was started by
 Leonardo de Moura at Microsoft Research in 2013.
 It aims to be both a useful tool for the formalization of mathematics and
-the verification of programs written in other languaes as well as
+the verification of programs written in other languages, as well as to
 be a useful and performant programming language itself.
 Another goal of Lean is to make automated theorem proving (such as the solution
 for SMT-style problems) available in a dependently typed theorem prover.
@@ -993,7 +996,7 @@ As of now, Lean is in its third major version, after a lot of the system was
 overhauled in the transition from Lean 2.
 The fourth version is under development but not yet ready to be used as a prover.
 
-Lean -- as its name states -- relies on a relatively small trusted kernel to which
+Lean -- as its name alleges -- relies on a relatively small trusted kernel to which
 the user code is compiled to.
 This makes it easier to make claims about the consistency of the prover.
 Let us first take a look at some of the specifics of Lean's type theory.
@@ -1014,13 +1017,12 @@ inductive nat : Type 0
                    --   (Π (a : nat), C a → C (nat.succ a)) → C n
 \end{leancodebr}
 
- widely used subclass of inductive types are \textbf{structures}, which are
+A widely used subclass of inductive types are \textbf{structures}, which are
 similar to what is often referred to as ``records''.
 Structures are inductive types which are non-recursive and only have one constructor.
 That means that they are equivalent to iterated sigma types but, among other advantages,
 have named projections.
-Structures provide a basic inheritance mechanism as they can extend arbitrarily
-many other structures:
+Structures provide a basic inheritance mechanism as they can extend other structures:
 \begin{leancode}
 structure graph (V : Type) :=
   (E : V → V → Sort)
@@ -1097,7 +1099,9 @@ on \emph{dependent pattern matching}:
 The user can write (dependent) functions with an inductive domain, by pattern
 matching on its input.
 In the following example, an indexed type of vectors and its head function are
-defined:
+defined.
+Agda's pattern matching algorithm recognizes that it can exclude the case of the first
+constructor in the definition of the head function.
 \begin{agdacode}
 data Vec (A : Set) : N → Set where
   nil : Vec A Z
