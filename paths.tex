@@ -51,10 +51,10 @@ the standard equality constructor is $\refl$ and with \textsc{Coeq-Intro2}, we
 have one further path constructor $\glue$.
 Thus, we might try whether it is sufficient to assume terms
 \begin{align*}
-r &: P(\refl_{[a_0]}) \text{ and}\\
-p &: (b : A)(s : a_0 \sim b) \to P(\glue(s))
+r &: P(a_0, \refl_{[a_0]}) \text{ and}\\
+p &: (b : A)(s : a_0 \sim b) \to P(b, \glue(s))
 \end{align*}
-to conclude that $(b : A)(q : [a_0] = [b]) \to P(q)$?
+to conclude that $(b : A)(q : [a_0] = [b]) \to P(b, q)$?
 It turns out that this attempt fails:
 Consider the relation $\sim$ on the natural numbers defined by
 \begin{equation*}
@@ -64,7 +64,7 @@ We can look at the coequalizer $\specialquot{\N}$.
 Let us take $1 : \N$ as the base point and $P : (n : \N) \to ([0] = [n]) \to \UU$
 defined by $P(n,q) :\equiv (n \geq 1)$.
 The terms $r$ and $p$ are constructed easily, but at the same time, it is clear
-that $P(0, \glue(k)\inv)$ is empty (where $k$ is a proof for $0 + 1 = 1$).
+that $P(0, \glue(k)\inv)$ is empty (here, $k$ is a proof for $0 + 1 = 1$).
 
 The above naïve suggestion was easy to disprove, but let us try to understand
 why it was insufficient.
@@ -131,7 +131,7 @@ comment on in Chapter~\ref{sec:paths-lean}.
 
 \section{The Main Theorem: Path Spaces in Coequalizers}\label{sec:paths-main}
 
-We will first formulate and prove the non-dependent version of the main result,
+We will first formulate and prove the non-dependent version of the main result
 by developing the corresponding categorical framework inside type theory.
 This then allows us to derive the induction principle as stated in Theorem~\ref{thm:paths-main-thm}.
 
@@ -155,7 +155,7 @@ truncation levels on objects and morphisms (sometimes called a
 \emph{wild category}) is not always a well-behaved notion.
 For example the slice of a wild category is not a wild category anymore.
 The underlying reason is that the identity and associativity
-equalities do now behave like laws (or properties) but like higher morphisms
+equalities do not behave like laws (or properties) but like higher morphisms
 in a \emph{higher category} where additional coherences are required.
 One approach to higher categories in homotopy type theory
 is discussed by~\cite{Capriotti2017}.
@@ -195,9 +195,9 @@ f \circ \id &= f \text{, and}\\
 \end{align*}
 \end{defn}
 
-Initiality in wild categories is one of the few notions which are still well-behaved
+Initiality is one of the few notions which are still well-behaved
 in wild categories:
-We can define them in terms of contractability.
+We can define it in terms of contractability.
 \begin{defn}[Initiality]
 An object $X$ of a category $\CatA$ is called \textbf{initial} if for every other
 object $Y$ the type of morphisms $\CatA(X, Y)$ is contractible.
@@ -225,7 +225,7 @@ f &: (b : A) \to K(b) \to K'(b) \text{,} \\
 \gamma &: f_{a_0}(r) = r' \text{, and} \\
 \delta &: \{b, c : A\}(s : b \sim c) \to e'(s) \circ f_b = f_c \circ e(s) \text{.}
 \end{align*}
-It might be helpful to thing of $\gamma$ as an equality witnessing that, for any
+It might be helpful to think of $\gamma$ as an equality witnessing that, for any
 $s : b \sim c$ the following square commutes:
  \begin{equation} \label{eq:commuting-square}
   \begin{tikzpicture}[x=\diagx,y=-\diagy,baseline=(current bounding box.center)]
@@ -323,7 +323,7 @@ For example, the analogous statement about the natural numbers $\N$ is false
 In line with the strategy outlined above, we further consider the following
 category $\CatD$:
 \begin{defn}[Category $\CatD$]\label{def:paths-catD}
- $\DD$ is the category of pointed families over $\quot$.
+ $\CatD$ is the category of pointed families over $\quot$.
  Explicitly, objects in $\bproj {\CatD}$ are pairs $(L,p)$ as in
  \begin{align*}
   L &: \quot \to \UU \\
@@ -424,7 +424,7 @@ This gives us the following type which we want to inhabit:
  \end{equation}
 Let us use \Cref{lem:paths-quot-ind-equiv} again, this time with the
 type family $P(x) :\equiv (L(x) \to L'(x))$.
-Simply by pluggin this into \Cref{lem:paths-quot-ind-equiv} and renaming variables
+Simply by plugging this into \Cref{lem:paths-quot-ind-equiv} and renaming variables
 we obtain the following equivalence $\varphi_1$:
 \begin{equation}\label{eq:paths-phi1}
 \begin{gathered}
@@ -439,7 +439,8 @@ and as before, there are two steps.
 First, we need to add the equation for the points (i.\,e. the components $\epsilon$
 and $\delta$), but this is as simple and direct as before; we will not spell
 out the details here.
-Second, and more interestingly, we have to show that the $\gamma$'s of
+Second, and more interestingly, we have to show that the last components of
+the right hand side of
 \eqref{eq:paths-Phi1} and \eqref{eq:paths-phi1} coincide in the sense
 that their types are equivalent.
 As very often in homotopy type theory when we want to prove something for
@@ -566,7 +567,7 @@ $\psi^2$ allows us to show the first $\beta$-equation and $\psi^3$ gives us the
 second one.
 The main difficulty here are the many \emph{transports} or \emph{pathovers}
 which are involved, since the types of $\psi^2$ and $\psi^3$ depend on $\psi^1$.
-The trick is to split $f$ into $(f_1, f_2)$ anby setting $f_b^1 :\equiv \pr_1 \circ f_b$
+The trick is to split $f$ into $(f_1, f_2)$ by setting $f_b^1 :\equiv \pr_1 \circ f_b$
 and $f_b^2 :\equiv \pr_2 \circ f_b$, and similarly split $\gamma$ and $\delta$.
 Using this, and calculating the left side of \eqref{eq:section-retraction}, we get
  \begin{equation*}
@@ -749,7 +750,7 @@ Equivalently, $h$ is an embedding if and only if
 is a family of equivalences between path spaces.
 \end{defn}
 
-As formalized by Finster~\cite{eric:embedding-pushout} via an encode-decode construction,
+As formalized by \citet{eric:embedding-pushout} via an encode-decode construction,
 embeddings are closed under pushout.
 In the following, we present an alternative (and significantly shorter) argument.
 
@@ -774,9 +775,9 @@ In the following, we present an alternative (and significantly shorter) argument
 \begin{proof}
  Using \eqref{eq:ap}, we need to show that $\ap_\inr : (n_0 = n) \to (\inr(n_0) = \inr(n))$
  is an equivalence for all points $n_0, n$.
- Thus, for any $q : \inr(n_0) = \inr(n)$, we want to find something in the fiber over $q$.
+ Thus, for any $q : \inr(n_0) = \inr(n)$, we want to find something in the preimage of $q$.
  This tells us how we need to choose the type family $Q$ of \Cref{thm:paths-main-pushout}:
- we fix $n_0$ and define
+ We fix $n_0$ and define
  \begin{align*}
   Q &: (n : N) \to (\inr(n_0) = \inr(n)) \to \UU \\ 
   Q(n,q) &:\equiv \ap_\inr^{-1}(q).
@@ -816,7 +817,7 @@ In homotopy type theory, it is an open problem how this could be done.
 Our results of the current paper suggest one possible such higher Seifert-van Kampen theorem,
 which we present in this section.
 Note that the precise formulation of a theorem is part of the open question how
-to generalize the SvK theorem in HoTT,
+to generalize the Seifert-van Kampen theorem in homotopy type theory,
 since the analogue of the $\code$ family by Favonia and Shulman has to be defined
 (and a trivial solution exists: define this analogue to be the equality).
 Our justification for why the analogue we suggest is reasonable is that, by
@@ -876,12 +877,11 @@ the map $(\_)^*$ of type
 \begin{equation}
   \{l,l' : L\} \to (g(l) = g(l')) \to \big(C_0(g(l)) \to C_0(g(l'))\big)
 \end{equation}
-allows us to ``insert'' the upper horizontal components in \eqref{eq:linked-paths-drawing}
+allows us to ``insert'' the upper horizontal components in \Cref{fig:hit-svk-zigzag}
 and (exchanging $g$ by $f$) also the lower horizontal components.
 
 The type $C_0(x)$ encodes lists from $n_0$ to $x$, but we have not done the
-quotienting, i.e.\ the lists \eqref{eq:linked-paths-drawing} and
-\eqref{eq:linked-paths-drawing-simplified} are still different.
+quotienting, i.e.\ lists that should be the same are still different.
 To remedy this, we can turn $C_0$ into an indexed \emph{higher} inductive type 
 and add constructors ensuring that $\glconstr(l, \glconstr'(l, x)) = x$ and
 $\glconstr'(l,\glconstr(l,x)) = x$.
@@ -965,8 +965,7 @@ The category in which $C$ is initial is
 the category $\CatP$ from \Cref{thm:paths-mainresult-pushout-based}.%
 \footnote{To be precise, the object $(C \circ i_1, C \circ i_2, \nil, \glconstr)$ is initial in $\PP$.}
 This is easy to see when we use the general specification and definition of
-higher inductive-inductive types given by Kaposi and Kov{\'a}cs
-\cite{kaposi_et_al:LIPIcs:2018:9190,AAhiits},
+higher inductive-inductive types given by \citet{kaposi_et_al:LIPIcs:2018:9190,AAhiits},
 but see \Cref{rmk:paths-generalized-squid} below.
 
 By the uniqueness of the initial object and by \Cref{thm:paths-mainresult-pushout-based},
@@ -975,13 +974,13 @@ Letting $n_0$ vary, we get the statement of the theorem.
 \end{proof}
 
 It is relatively straightforward to recover the set-truncated SvK statement
-(\Cref{thm:hits-svk}) from the higher version (\Cref{thm:paths-higher-SvK}).
+from the higher version (\Cref{thm:paths-higher-SvK}).
 We can simply set-truncate both sides in \eqref{eq:thm-higher-svk} and then prove
 that $\trunc 0 {\mathfrak C(x,y)}$ is equivalent to $\code(x,y)$ by constructing
 maps in both directions.
 
-\begin{remark} \label{remark:generalized-squid}
-\Cref{thm:higher-SvK} and its proof 
+\begin{remark} \label{rmk:paths-generalized-squid}
+\Cref{thm:paths-higher-SvK} and its proof 
 deserve additional comments.
 We think it is fair to say that the formal theory of indexed higher inductive
 types is not yet well-established, but it is under very active development.

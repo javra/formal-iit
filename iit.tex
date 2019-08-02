@@ -1,3 +1,19 @@
+As we have mentioned in \Cref{sec:intro-iit}, we want to make a sharp pivot at
+this point of the thesis and want to explore \emph{inductive-inductive types}.
+This chapter will first introduce inductive-inductive types by a few illustrative
+examples, before we will start with its main purpose:
+Giving a formal specification of what inductive-inductive types are.
+
+Inductive-inductive types are a feature of type theories which comes naturally
+in provers like Agda, which are based on dependent pattern matching.
+A formal treatment of their syntax and semintics is still necessary to give
+grounds to their consistency as well as to implement them in theorem provers
+which are not based on pattern matching but on a derivation of elimination rules.
+
+The use case for inductive-inductive types is always of the following nature:
+We want to deine some data by the means of an inductive types, but we want
+its point constructors to refer to data from another type family which is indexed
+over the very type we are just defining.
 In the following, we will take a look at a few examples which we are going to
 revisit at various steps throughout this presentation:
 
@@ -39,6 +55,9 @@ postulating
 \end{align*}
 \end{example}
 
+
+\section{Signatures for Inductive-Inductive Types}\label{sec:ii-syntax}
+
 %TODO add waay more explanation
 Inductive-Inductive Types are specified by giving a context in  a small type
 theoretic syntax which we will refer to as \emph{source type theory}.
@@ -48,8 +67,6 @@ constructors to only allow for inductive-inductive types.
 In contrast to their presentation we will leave the context of the ambient type
 theory implicit and, instead of highlighting syntax of the ambient type theory,
 mark elements of the source type theory in \gr{green}.
-
-\section{Signatures for Inductive-Inductive Types}\label{sec:ii-syntax}
 
 We assume that the source type theory makes use of the standard syntax of type
 theory, using contexts, types, terms, and variables.
@@ -65,7 +82,7 @@ hold true for both \grm{\Sc} and \grm{\Pc}, or that the kind of a term's type
 has already been specified.
 
 It's important that contexts can be extended by sort and point types in any order
-(see Example~\ref{ex:tmnil}) to be able to capture sorts which depend on previously
+to be able to capture sorts which depend on previously
 defined point constructors.
 So we have the usual two rules for context formation:
 \begin{equation*}
@@ -75,8 +92,8 @@ So we have the usual two rules for context formation:
   {\grm{\vdash \Gamma, A}}
 \end{equation*}
 
-We need one atomic constructor for sort types:
-For plain types we and the codomain we need a type \grm{\UU} which serves as a
+We need one atomic building block for sort types:
+For plain types we and the codomain of function types we need a type \grm{\UU} which serves as a
 token for the \emph{universe}.
 We will call terms of this universe ``small types''.
 Positiviy requires that these are the only (internal) types which are allowed in
@@ -181,7 +198,7 @@ Empty substituition and extension simplify by the following laws:
   &\text{ for \grm{\IISub{\delta}{\Gamma}{\Delta}}, \grm{\IISub{\sigma}{\Sigma}{\Gamma}}.}
 \end{align*}
 A substitution into an extended context allows us to project out
-a ``shorter'' substitution and a term in the terminal component:
+a ``shorter'' substitution and a term as a terminal component:
 \begin{equation*}
 \inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta,A}}}
   {\grm{\IISub{\pi_1(\sigma)}{\Gamma}{\Delta}}}
@@ -469,8 +486,8 @@ initiality.
 Like for the algebra operator we again perform structural recursion over the
 syntax to define, what the type of morphisms between two of its algebras should
 be.
-Apart from contexts we will also give the operation on types, terms ans substitutions,
-consisting of foo.
+Apart from contexts we will also give the operation on types, terms and substitutions,
+consisting of data indexed over two algebras:
 \begin{equation*}
 \begin{gathered}
 \inferrule{\grm{\vdash \Gamma} \\
@@ -556,6 +573,7 @@ as the strict category of functions in the outer type theory:
 \grm{\pi_2(\sigma)}^\MM(\mu)
   &:\equiv \pr_2(\grm{\sigma}^\MM(\mu))
 \end{align*}
+Substitution laws hold strictly again.
 
 The definition of morphisms doesn't yet make the algebras over a given
 signature \grm{\Gamma} a category: For this we would still need to define
@@ -582,7 +600,7 @@ It is usually defined as the sections of an \emph{dependent morphism}
 or a \emph{displayed algebra},
 over the iniital algebra -- we will see this notion for the inductive families in the
 next chapter.
-But, as \citet{foo} have proven for their version of syntax for inductive-inductive
+But, as \citet{constructingqiits} have proven for their version of syntax for inductive-inductive
 types, the dependent version can be recovered from the non-dependent one,
 representing the dependent morphism as a non-dependent one by
 taking its $\Sigma$-type.
