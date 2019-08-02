@@ -1,23 +1,24 @@
 \section{Background}
 
-This thesis explores several problems in the field of type theory.
+This thesis explores several problems in the field of \emph{type theory}.
 By type theory we will always mean various flavors of what is usually
 referred to as Martin-Löf type theory or dependent type theory.
 Martin-Löf type theory (MLTT) can serve as a foundational framework for
 mathematics as well as an organization principle for functional programming languages.
 
-In the field of \emph{type theory}, many researchers either apply type theory to
+In the field of type theory, many researchers either apply theoretical considerations
 achieve cleaner formalizations of mathematical content,
 they create implementations of type theory which can be used as
 interactive theorem proving systems, and they try to extend type
 theory to improve its usability and justify these extensions with models.
 
-This thesis will also explore ways to make certain kinds of formalizations
+In this spirit, this thesis will also explore ways to make certain kinds of formalizations
 and certain constructions in type theory smoother and easier to use.
-While \emph{mainly theoretical work}, this has consequences for the application of
+While it is \emph{mainly theoretical work}, it has consequences for the application of
 interactive theorem provers, as they are used today.
 This thesis is broadly split in two halfs.
-Both halfs will explore different classes of language elements which are
+Both halfs will explore different classes of language elements both of which are generalizations
+of a language feature which is
 called \emph{inductive types}.
 Inductive types are a common way to define collections of data in mathematics
 as well as computer science.
@@ -39,7 +40,7 @@ In the second half, we will explore the topic of induction-indcution.
 allows us to define a data type simultaneously with data types depending on
 values of the former type.
 We will give an exact definition of what inductive-inductive types are,
-and, with a new definition of \emph{inductive family} provide a point of
+and, with a new definition of \emph{inductive families} provide a point of
 comparison which allows us to attempt to represent each example of
 an inductive-inductive type as a construction based on a series of
 inductive families.
@@ -49,8 +50,8 @@ inductive families.
 Homotopy type theory is a relatively new field which connects the study of
 dependent types with the field of higher category theory and homotopy theory.
 This synthesis has since offered a new perspective on how to constructively
-have formal representation of homotopy theory which is \emph{synthetic},
-i.e. it builds the spaces which are considered out of just a few fundamental
+have a formal representation of homotopy theory which is \emph{synthetic},
+i.\,e.\ builds the spaces which are considered out of just a few fundamental
 operations.
 
 The connection to homotopy theory is based on the observation that once might
@@ -58,19 +59,20 @@ consider equality types, which by the proposition-as-types interpretation of typ
 theory, represent the statement that two elements $x$ and $y$ of a type $A$
 are equal, as representing the spaces of \emph{paths modulo homotopy}.
 Extending on this equivalence, we can view types to represent spaces,
-types depending on the data of other types as fibrations.
+and types depending on the data of other types as fibrations.
 
 In this setting, we want to consider types, which are inductively defined,
-like for example the natural numbers, but which, besides of the \emph{points}
-of the type also allow the (free) generation of new paths and higher paths between
-points.
+like for example the natural numbers, but which, besides the \emph{points}
+of the type also allow the (free) generation of new paths between points
+and ``higher'' paths between
+other paths.
 These types are called \emph{higher inductive types}.
 
 To prove facts about higher inductive types, for example in order to get the
 type theoretic equivalent of the fact that the fundamental group of the circle
 is equivalent to the integers, or the type theoretic Seifert-van Kampen theorem,
 which characterizes the fundamental groupoid of a pushout of spaces,
-a proof strategy with the name ``encode-decode'' method is employed.
+a proof strategy with the name ``encode-decode method'' is employed.
 
 In this thesis we provide a theorem which can be seen a generalization of
 encode-decode proofs.
@@ -80,46 +82,54 @@ of higher inductive types.
 
 \section{The Concept of Induction-Induction}
 
-In the following, we will take a look at a few examples which we are going to
-revisit at various steps throughout this presentation:
+While the first half of this thesis is about ways to make inductive types carry
+higher-dimensional structure, the second half is about allowing for inductive types
+which are more \emph{interdependent}:
+There are situations in which we might not only want to define one single type
+or type family, but instead we want to define a type $A$ and a type family $B : A \to \UU$,
+or even a whole system of new types, indexed over each other,
+mutually.
+``Mutually'' here means that the point constructors, which specify which elements
+we can form can refer to any of the types being defined.
+And more than that, also the signature of the type families which we define can
+be indexed over other type families the definition of which is not finished.
 
-\begin{example}[Type Theory Syntax]\label{ex:ttintt}
-\cite{ttintt} showed how to internalise the syntax of type theory inside type
-theory itself, using a quotient inductive-inductive type.
-Leaving out terms and substitutions, we arrive at a fragment of type theoretical
-syntax specifying a type of contexts and a type of types over a certain contexts,
-together with type formers for a unit type and a $\Pi$-type:
-We want $\mathop{Con} : \UU$ to be inductively defined by
-\begin{align*}
-\mathop{nil}	&: \mathop{Con} \text{and } \\
-\mathop{ext}	&: (\Gamma : \mathop{Con})(A : \mathop{Ty}(\Gamma)) \to \mathop{Con} \text{,}
-\end{align*}
-while simultaneously defining a family $\mathop{Ty} : \mathop{Con} \to \UU$ with constructors
-\begin{align*}
-\mathop{unit}	&: (\Gamma : \mathop{Con}) \to \mathop{Ty}(\Gamma) \text{ and} \\
-\mathop{pi}	&: (\Gamma : \mathop{Con})(A : \mathop{Ty}(\Gamma))(B : \mathop{Ty}(\mathop{ext}(\Gamma, A))) \to \mathop{Ty}(\Gamma) \text{.}
-\end{align*}
-\end{example}
+To illustrate one main application, imagine we wanted to formalize and reason
+about the syntax of type theory in a type theoretic setting.
+The environment of variables which are at our disposal at a given point in a piece
+of type theoretic syntax are captured in what is called a \emph{context}.
+We can model contexts as a type $Con : \UU$.
+But at the same time we want to model types as existing in a context, so we want
+a simultaneous definition of a type family $Ty : Con \to \UU$.
+To see that we can not first define $Con$ and then move on to define $Ty$, consider
+the following data which $Con$ and $Ty$ should include:
 
-\begin{example}[Free Dense Completion]
-\citet{nordvallinductive} proposed the example of a ``free dense completion'' of
-an order (or, more general, any relation) which for any type $A : \UU$ and
-any type valued relation $\_<\_ : A \to A \to \UU$ on $A$ freely adds midpoints
-to all pairs of related elements by $\_<\_$.
-It does so by introducing a new type $A' : \UU$ inductively generated by the
-original points and their midpoints:
-\begin{align*}
-\iota_A		&: A \to A' \text{ and} \\
-\mathop{mid}	&: \{x, y : A'\}(p : x <' y) \to A' \text{.}
-\end{align*}
-But since our relation was only defined on $A$, we have to extend it to $A'$ by
-postulating
-\begin{align*}
-\iota_<		&: \{a, b : A\}(p : a < b) \to \iota_A(a) <' \iota_A(b) \text{,} \\
-\mathop{mid}_l	&: \{x, y : A'\}(p : x <' y) \to x < \mathop{mid}(p) \text{, and} \\
-\mathop{mid}_r	&: \{x, y : A'\}(p : x <' y) \to \mathop{mid}(p) < y \text{.}
-\end{align*}
-\end{example}
+Contexts can be seen as lists of types depending on previous entries in that
+list.
+In that sense, it is obvious that for a context $\Gamma : Con$ and a type
+$A : Ty(\Gamma)$ in that context, we want a context which represents the
+extension of $\Gamma$ by $A$.
+This means that $Con$ should have a constructor of the form
+\begin{equation*}
+ext: (\Gamma : Con) \to Ty(\Gamma) \to Con \text{,}
+\end{equation*}
+and the fact that this constructor mentions $Ty$ is already enough to exclude
+a sequential definition of $Con$ and $Ty$.
+
+Given the need for inductive-inductive types we can ask the question of whether
+this concept is really stronger than inductive families without dependencies
+between the sorts.
+At first glance it might seem as if they are more expressive,
+but on a closer look we can discover that we can actually reduce every
+example of an inductive-inductive type to an inductive family.
+
+The second half of this thesis is about making this reduction, which can easily
+be seen to work on specific examples, more general.
+To make it a formal statement we will have to give precise definitions of
+what inductive-inductive types are and what, as our reference point,
+inductive families are.
+While we don't succeed at providing a full formal proof for the reduction,
+the essential steps of it are complete and formalized in Agda. %TODO re-read and improve
 
 \section{Contributions and Publications}
 
