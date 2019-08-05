@@ -1515,9 +1515,52 @@ module TestVec (A : Set) (N : Set) (z : N) (s : N → N) where
 
 \section{Conclusions and Future Work}
 
-It is obvious that the work
+It is obvious that the work presented in this chapter is incomplete.
+While we succeeded in defining the eliminator relation, we do not show that it
+is actually a function.
+This step is not easy but we think that it is doable but someone with the necessary
+cognitive abilities and patience.
+The difficulties consist by a good part of the complexity and the amount of
+dependencies involved in dealing with all of the syntax elements.
+The generalization of the totality and uniqueness proof as in \Cref{sec:red-ex}
+also involves reasoning about the fact that for each point constructor of the input
+there is only one point constructor of the generated inductive families, yielding
+a witness for wellformedness and a witness for relatedness.
+This fact is quite hard to represent in our setting without first building
+a general theory about induction on inductive families.
 
+Another bit of future work on the topic of reduction is to implement it in a suitable
+theorem prover.
+While Agda already provides inductive-inductive types, Coq and Lean both
+do not come equipped with a way to define them, and they are both extensible
+enough to use this reduction strategy to define a command for the
+definition of inductive-inductive types as ``syntactic sugar''.
+In Lean 3, such an implementation has been attempted but it is still far away
+from being usable.
+Lean 4 will come with a more reasonable interface to automatically add definitions
+of inductive families to the environment, suggesting that we could process
+the use input of an inductive-inductive type as follows:
+\begin{enumerate}
+\item Reflect the input from Lean's own expression type \leani{expr} into
+a representation of the syntax of inductive-inductive types minus the
+substitutional equlities
+This is where we implicitely check the input for positivity.
+\item Add inductive families corresponding to type erasure, wellformedness
+predicate and eliminator relation to the environment.
+\item Define the constructors using the $\Sigma$-construction.
+\item Define the non-dependent eliminator using the eliminator relation.
+\item Prove its uniqueness using a proof of the relation's right-uniqueness.
+\item Derive the dependent eliminator from the non-dependent one with the
+strategy laid out in \citep{constructingqiits}.
+\end{enumerate}
 
+It is important to not, that there is an unpublished alternative approach to the
+reduction which uses an internalization of the syntax for inductive-inductive types
+and a term model, similar to our construction in \Cref{sec:if-ex}.
+Ambroise Lafont formalized this approach in Agda.
+The drawbacks of this approach might be that there is a bigger overhead
+in a potential implementation based on this idea,
+due to the indirect nature of the construction.
 
 
 
