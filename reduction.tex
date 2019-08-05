@@ -1413,7 +1413,109 @@ Definition~\ref{def:if-sort-subs}:
 This concludes our definition of the eliminator relation.
 \end{defn}
 
+\section{Formalization in Agda}
 
+Most parts of this chapter have been formalized in the theorem prover Agda.
+In the following, we will describe this formalization including the problems we faced.
+
+\begin{description}
+\item[The syntax of inductive families] has been straightforward to internalize
+in Agda, using indexed inductive types.
+One trick we had to apply was to define variables and terms as separate types,
+with an inclusion map from variables to types (cf.~\Cref{rmk:if-impl}).
+\item[Algebras of inductive families] including their morphisms, and furthermore
+their variant of displayed algebras and sections have been formalized by
+recursion on the syntax.
+We want the algebras to be as strict as possible, so we do not refrain from turning certain
+rules from the substitution calculus into rewrite rules, like in the following example
+of the mapping an algebra over a sort context along the identity substitution
+is without effect:
+\begin{agdacode}
+idᵃ : ∀{ℓ Γc} → (γc : _ᵃc {ℓ} Γc) → (id ᵃs) γc ≡ γc
+idᵃ {ℓ}{∙c}      γc       = refl
+idᵃ {ℓ}{Γc ▶c x} (γc , α) = ,≡ (idᵃ γc) refl
+{-# REWRITE idᵃ #-}
+\end{agdacode}
+\item[The syntax of inductive-inductive types] is, as mentioned in \Cref{rmk:iit-qit},
+only representable directly as a quotient inductive-inductive type.
+This is why we only postulate it like in the following excerpt:
+\begin{agdacode}
+postulate
+  Con : Set
+  Ty  : Con → PS → Set
+  Tm  : ∀ Γ → ∀ {k} → Ty Γ k → Set
+  Sub : Con → Con → Set
+
+  ∙     : Con
+  _▶_   : ∀{k}(Γ : Con) → Ty Γ k → Con
+...
+  ass   : ∀{Γ Δ Σ Ω}{σ : Sub Σ Ω}{δ : Sub Δ Σ}{ν : Sub Γ Δ}
+        → (σ ∘ δ) ∘ ν ≡ σ ∘ (δ ∘ ν)
+\end{agdacode}
+\item[Algebras and morphisms of inductive-inductive types] are fomalized in
+record which follow the definition of the syntax:
+\begin{agdacode}
+record Con : Set₂ where
+  field
+    ᴬ   : Set₁
+    ᴹ   : ᴬ → ᴬ → Set₁
+...
+_▶S_ : (Γ : Con) → TyS Γ → Con
+Γ ▶S B = record { 
+  ᴬ   = Σ Γ.ᴬ B.ᴬ ;
+  ᴹ   = λ { (γᴬ , αᴬ) (δᴬ , βᴬ) → Σ (Γ.ᴹ γᴬ δᴬ) λ γᴹ → B.ᴹ γᴹ αᴬ βᴬ } ;
+...
+\end{agdacode}
+We do not define a ``map'' from the postulated syntax to these records,
+but instead we work directly with the ``stack'' of construction \emph{on}
+the syntax, in the style of a shallow embedding (cf. \citet{kaposi2019shallow}).
+\item[The construction steps] of \tqm{\grm{\Gamma}^\EE}, \tqm{\grm{\Gamma}^\WW}
+$\grm{\Gamma}^\Sg$, and \tqm{\grm{\Gamma}^\RR} are just further entries
+in the above-mentioned records.
+At the time of writing a formalization of the fact that these constructions
+do respect the substitutional equalities in the syntax of inductive-inductive types,
+is still incomplete, since it is quite tedious without the presence of a proper
+extensional ambient type theory.
+The following code snippet shows the specification of all of these operations
+on sort types.
+The interpretation of the universe then is the core of the definitions
+as presented in the last chapter:
+\begin{agdacode}
+record TyS (Γ : Con) : Set₂ where
+  module Γ = Con Γ
+  field
+    ᴬ   : Γ.ᴬ → Set₁
+    ᴹ   : ∀{γᴬ δᴬ} → Γ.ᴹ γᴬ δᴬ → ᴬ γᴬ → ᴬ δᴬ → Set
+    w   : ∀(γc : Γ.Ec ᵃc) → Set → S.TyS
+    R   : ∀{γᴬ}(α : Set)(αᴬ : ᴬ γᴬ) → S.TyS
+    sg  : ∀{γc}(γ : (Γ.E ᵃC) γc){δc}(δ : (Γ.w γ ᵃC) δc)
+           (α : Set)(ω : _ᵃS {zero} (w γc α)) → ᴬ (Γ.sg γc γ δc δ)
+
+U : {Γ : Con} → TyS Γ
+U {Γ} = record { ᴬ   = λ γ → Set ;
+                 ᴹ   = λ γᴹ γᴬ δᴬ → γᴬ → δᴬ ;
+                 w   = λ γ α → α S.⇒̂S S.U ;
+                 R   = λ T Tᴬ → Tᴬ S.⇒̂S (T S.⇒̂S S.U) ;
+                 sg  = λ γ δ α ω → Σ α ω }
+\end{agdacode}
+\item[Several Examples] are formalized as a ``sanity check'' for the constructions.
+It might be helpful to the reader to check those for a good piece of insight
+into how the derivation of the running examples in this thesis work.
+Here is the encoding of the vector example:
+\begin{agdacode}
+module TestVec (A : Set) (N : Set) (z : N) (s : N → N) where
+
+Γ : Con
+Γ = ∙ ▶S Π̂S N (λ _ → U)
+      ▶P El (âppS vz z)
+      ▶P Π̂P A (λ a → Π̂P N (λ n' → ΠP (âppS (vs{S}{P} vz) n')
+           (El (âppS (vs{S}{P} (vs{S}{P} vz)) (s n')))))
+\end{agdacode}
+\end{description}
+
+\section{Conclusions and Future Work}
+
+It is obvious that the work
 
 
 
