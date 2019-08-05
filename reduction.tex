@@ -852,8 +852,8 @@ itself.
 In this section, this will amount to defining just one specific algebra over the
 given inductive-inductive signature.
 This corresponds to giving sorts with the correct \emph{point constructors}.
-What distinguishes this algebra from others is that we will in the later sections
-demonstrate how to show that, besides constructors, it also admits a dependent
+What distinguishes this algebra from others is that we have strong reasons to believe
+that, besides constructors, it also admits a dependent
 \emph{eliminator}, or, equivalently, that it is initial among all algebras.
 
 The construction of the initial object obviously presupposes the existence of
@@ -861,7 +861,7 @@ initial algebras of inductive families.
 Nevertheless, we need to apply the same strategy as in the definition of the
 wellformedness predicate:
 The construction will depend on arbitrary algebras of type erasure and wellformedness
-instead of just relying on the initial on.
+instead of just depending on the initial one.
 This allows us to descend recursively and still refer to the correct algebra
 of the respective inductive families.
 
@@ -914,9 +914,9 @@ c &= \lambda (a : A)(m : \N)((v', w_{v'}) : V).\, (c'(a, m, v'), w_c(a, m, v', w
 \end{align*}
 \end{example}
 
-\begin{example}[Type Theory Syntax]
-baz
-\end{example}
+%\begin{example}[Type Theory Syntax]
+%baz
+%\end{example} TODO
 
 Let us now consider the case of an arbitrary signature \grm{\vdash \Gamma}.
 The form which our operation will take is clear -- for each signature we need
@@ -996,7 +996,8 @@ inductive family syntax instead of syntax itself:
   \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
   \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
   \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC(\delta_\Sc) }
-  {\grm{t}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta)\right)
+  { \grm{t}^\Sg(\gamma, \delta) :
+    \grm{t}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta)\right)
     = \grm{B}^\Sg\left(\gamma, \delta,
       \tqm{\grm{t}^\WW(\blgamma)}^\CC(\delta_\Sc) \right)}
 \\[.7em]
@@ -1005,7 +1006,8 @@ inductive family syntax instead of syntax itself:
   \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
   \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
   \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC(\delta_\Sc) }
-  {\grm{t}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta)\right)
+  { \grm{t}^\Sg(\gamma, \delta) :
+    \grm{t}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta)\right)
     = \grm{A}^\Sg\left(\gamma, \delta, \grm{t}^\WW(\delta)\right)}
 \end{gathered}
 \end{equation*}
@@ -1027,10 +1029,10 @@ Let $(\alpha, \omega)$ be the result of
 $\left(\grm{a}^\Sg(\gamma, \delta)\right)^*(\xi)$, then
 we can set
 \begin{align*}
-\grm{\Pi(a, B :: \Sc)}^\Sg(\gamma, \delta, \phi, \xi)
+\grm{\Pi(a, B :: \Sc)}^\Sg(\gamma, \delta, \phi)(\xi)
   &:\equiv p^*\left(\grm{B}^\Sg((\gamma, \alpha), (\delta, \omega), \phi(\alpha))\right)
     \text{ and} \\
-\grm{\Pi(a, A :: \Pc)}^\Sg(\gamma, \delta, \phi, \xi)
+\grm{\Pi(a, A :: \Pc)}^\Sg(\gamma, \delta, \phi)(\xi)
   &:\equiv p^*\left(\grm{B}^\Sg((\gamma, \alpha), (\delta, \omega), \phi(\alpha, \omega))\right)
     \text{,}
 \end{align*}
@@ -1168,7 +1170,7 @@ to look like.
 \begin{example}[Natural Numbers]
 Continuing the construction from Example~\ref{ex:red-e-nat} and parallel to 
 Example~\ref{ex:red-w-nat}, we assume sort and point algebras
-$(\star,N') : \grm{\Gamma_{nat}}^\CC $ and $(\star,z',s') : \grm{\Gamma_{nat}}^\CC(\star, N)$.
+$(\star,N') : \grm{\Gamma_{nat}}^\CC $ and $(\star,z',s') : \grm{\Gamma_{nat}}^\CC(\star, N')$.
 Furthermore, our relation should relate these algebras to an arbitray algebra
 of \grm{\Gamma_{nat}}, so we assume that we are given
 \begin{align*}
@@ -1227,8 +1229,12 @@ constructors:
 \begin{gathered}
 \tqm{\grm{\Gamma_{vec}}^\RR}
   = \tqm{ \Bigl( \cdot ,\,} \tqm{ \El(R_V(\blm{0})(\blm{n})(\blm{n'})) ,\, } \\
- \tqm{ \ExtPiP{a : A}{\ExtPiP{n : \N}{\ExtPiP{v : V}{\ExtPiP{v' : V'}{R_V(\blm{n})(\blm{v})(\blm{v'})
-     \Rightarrow_\Pc R_V(\blm{n+1})(\blm{c(a,v)})(\blm{c'(a,v')})}}}} \Bigr) } \text{.} %TODO formatting
+% \tqm{ \ExtPiP{a : A}{\ExtPiP{n : \N}{\ExtPiP{v : V}{\ExtPiP{v' : V'}{
+%    R_V(\blm{n})(\blm{v})(\blm{v'}) 
+%     \Rightarrow_\Pc R_V(\blm{n+1})(\blm{c(a,v)})(\blm{c'(a,v')})  }}}} \Bigr) } \text{.} \\
+\tqm{\hat{\Pi}_\Pc(\blm{a : A}, \blm{n : \N}, \blm{v : V}, \blm{v' : V'}, 
+   R_V(\blm{n})(\blm{v})(\blm{v'}) 
+     \Rightarrow_\Pc R_V(\blm{n+1})(\blm{c(a,v)})(\blm{c'(a,v')}) ) \Bigr) } \text{.}
 \end{gathered}
 \end{equation*}
 \end{example}
@@ -1323,7 +1329,7 @@ definitions:
 \end{align*}
 
 To continue to recursive $\Pi$-types, we observe that we need sort-kinded
-$\Pi$-types to be translated $\Pi$-types which the generated relation is
+$\Pi$-types to be translated to $\Pi$-types which the generated relation is
 indexed over, including the appropriate application,
 while point-kinded $\Pi$-types are translated to the fact that
 relatedness is preserved for all point constructors.
@@ -1332,11 +1338,13 @@ relatedness is preserved for all point constructors.
   &:\equiv \tqm{\ExtPiS{\blalphaCC : \grm{a}^\CC(\blgammaCC)}
     {\grm{B}^\RR(\blphi, \blm{\blphiCC(\blalphaCC)})}} \\
 \tqm{\grm{\Pi(a, A :: \Pc)}^\RR(\blgamma, \blphi, \blphiCC)}
-  &:\equiv \tqm{\ExtPiP{\blalphaCC : \grm{a}^\CC(\blgammaCC)}
-    {\ExtPiP{\blalpha : \tqm{\grm{a}^\EE}^\CC(\gamma_\Sc)}
-    {\grm{a}^\RR(\blgamma,\blgammaCC)(\blalphaCC)(\blalpha)
-    \Rightarrow_\Pc \grm{B}^\RR(\blm{(\gamma, \alpha)}, \blm{\phi(\alpha)}, \blm{\blphiCC(\blalphaCC)}) }}  } \\[.7em]
-\tqm{\grm{(\IIapp(f) : B :: \Sc)}^\RR(\blm{(\gamma, \alpha)},\blm{(\blgammaCC,\blalphaCC)})}
+  &:\equiv 
+\tqm{\hat{\Pi}_\Pc\Bigl(\blm{\blalphaCC : \grm{a}^\CC(\blgammaCC), \blalpha : \tqm{\grm{a}^\EE}^\CC(\gamma_\Sc)}} \\
+  & \phantom{:\equiv\hat{\Pi}_\Pc\Bigl(}
+    \tqm{ \grm{a}^\RR(\blgamma,\blgammaCC)(\blalphaCC)(\blalpha)
+\Rightarrow_\Pc \grm{B}^\RR(\blm{(\gamma, \alpha)}, \blm{\phi(\alpha)}, \blm{\blphiCC(\blalphaCC)}) \Bigr) }
+\\[.7em]
+\tqm{\grm{\IIapp(f)}^\RR(\blm{(\gamma, \alpha)},\blm{(\blgammaCC,\blalphaCC)})}
   &:\equiv \tqm{\grm{f}^\RR(\blgamma, \blgammaCC)(\blalphaCC) }
 \end{align*}
 
