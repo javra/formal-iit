@@ -277,55 +277,9 @@ To prove, for example, that $\rec^{Con}(ext(\Gamma, A))
 and the right-hand side provide elements in $C$ which by $R_{Con}$ are related
 to $ext'(\Gamma, A)$, so the lemma give us the desired equality.
 
-
-\section{(OLD) -- Fragments of Inductive-Inductive Types}
-
-As we have seen in the previous sections, inductive-inductive types as specified
-allow for a very broad variety of definitions.
-We will now see that it is easy to carve out different subsets of specifications
-to obtain more restrictive fragments of inductive types.
-Starting from the largest of these subsets, we will first see that there is a
-straightforward way to restrict inductive-inductive types to those whose constructors
-are finitary in the sense that no point constructor depends on an infinite
-amount of data: %TODO improve that last sentence
-
-\begin{defn}[Finitary IITs]
-Given a specification \grm{\Gamma} for an inductive-inductive types we say that
-it is \textbf{finitary} if the infinitary $\Pi$-type is not used.
-\end{defn}
-
-One example of a specification which does not meet this requirement are the
-infinitely branching trees. %TODO cite example
-
-Instead of only preventing the use of external data in ``small functions''
-
-We want to reduce inductive-inductive types to inductive families.
-This means, we postulate that inductive families be admissible in our target
-type theory and show that this implies the existence of all inductive-inductive
-types.
-Since we want to reuse the way of specifying inductive-inductive types to specify
-instances which are as well inductive families, we want to rediscover the specifications
-of inductive families as a subset of all inductive-inductive specifications:
-
-\begin{defn}[Inductive families]
-A context \grm{\Gamma} is said to specify a \textbf{inductive family} if it is
-generated without using the inductive function type in the specification of sorts
-and thus, no sorts depend on other sorts but are only iterated function depending
-on external types.
-This means that the formation rule for inductive function types is restricted
-to the case where \grm{k \equiv \Pc}.
-\end{defn}
-
-We assume for the remainder of this chapter, that if \grm{\Gamma} specifies an
-inductive family, we are provided with $\con{\Gamma} : \grm{\Gamma}^\CC$ and
-$\elim_\grm{\Gamma} : \grm{\Gamma}^\EE(\con{\Gamma}, m)$ for each
-$m : \grm{\Gamma}^\MM$.
-
-TODO: explain reduction to W-types maybe
-
 \section{Type Erasure}\label{sec:red-e}
 
-As seen in the examples, the first step to prove the reducability is to formally
+As seen in the example, the first step to prove the reducability is to formally
 define the operation which we will call \emph{flattening} or -- inspired by
 the syntax example -- \emph{type erasure}.
 This operation strips away any dependencies between the sorts of a signature
@@ -363,7 +317,7 @@ index of the only sort under consideration:
  &= \tqm{(\cdot_\Sc,\, \UU)} \text{ and} \\
 \tqm{\grm{\Gamma_{vec}}^\EE}
   &= \tqm{(\cdot,\, \El(\var(\vz)),\, 
-    \ExtPiP{A}{\blm{\lambda a.\,}\ExtPiP{\N}{\blm{\lambda n.\,}
+    \ExtPiP{a : A}{\ExtPiP{n : \N}{
     \var(\vz) \Rightarrow_\Pc \El(\var(\vz))}})} \text{.}
 \end{align*}
 Note that the erasure of the vectors does not coincide with the vectors represented
@@ -448,7 +402,7 @@ Since we forgot about the indexing of sort types, erasure of sort-kinded applica
 is just erasure of its $\Pi$-type term:
 \begin{align*}
 \tqm{\grm{\IIapp(f)}^\EE}
-  &:\equiv \tqm{\grm{f}^\EE} \text{ for \grm{\Gamma \vdash t : \Pi(a, B) :: \Sc}.}
+  &:\equiv \tqm{\grm{f}^\EE} \text{ for \grm{\Gamma \vdash f : \Pi(a, B) :: \Sc}.}
 \end{align*}
 External $\Pi$-types convert directly into their
 respective counterparts in the syntax of inductive families.
@@ -520,14 +474,13 @@ We define the following operation on substitutions and terms of point types:
 \begin{equation*}
 \begin{gathered}
 \inferrule{\grm{\IISub{\sigma}{\Gamma}{\Delta}} \\
-  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc}^\AA \\
-  \gamma : \tqm{\grm{\Gamma}^\EE}^\AA(\gamma_\Sc) }
-  {\grm{\sigma}^\EE(\blgamma) : \tqm{\grm{\Delta}^\EE}^\AA\left(\grm{\sigma}^\EE_\Sc(\gamma_\Sc)\right)}
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc}^\AA }
+  {\grm{\sigma}^\EE : \tqm{\grm{\Gamma}^\EE}^\AA(\gamma_\Sc)
+    \to \tqm{\grm{\Delta}^\EE}^\AA\left(\grm{\sigma}^\EE_\Sc(\gamma_\Sc)\right)}
 \\[.7em]
 \inferrule{\grm{\Gamma \vdash t : A :: \Pc} \\
-  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc}^\AA \\
-  \gamma : \tqm{\grm{\Gamma}^\EE}^\AA(\gamma_\Sc) }
-  {\grm{t}^\EE(\blgamma) : \tqm{\grm{A}^\EE}^\CC(\gamma_\Sc)}
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc}^\AA }
+  {\grm{t}^\EE: \tqm{\grm{\Gamma}^\EE}^\AA(\gamma_\Sc) \to \tqm{\grm{A}^\EE}^\CC(\gamma_\Sc)}
 \end{gathered}
 \end{equation*}
 While in for \tqm{\grm{\sigma}^\EE_\Sc} we ignored point constructors,
@@ -605,7 +558,7 @@ the trivial (final) type family on $N$.
 \end{example}
 
 \begin{example}[Vectors]\label{ex:red-w-vec}
-For vectors on a type $A : \UU$, the duties of the wellformednes predicate are less trivial:
+For vectors on a type $A : \UU$, the duties of the wellformedness predicate are less trivial:
 We have to add back the length information which we erased, as described in
 \ref{ex:red-e-vec}:
 Empty vectors should have length zero and appending an element should increase its
@@ -631,7 +584,7 @@ Like for the type erasure, we will now proceed to generalize this to arbitrary
 inductive-inductive types.
 
 \begin{defn}[Wellformedness Predicates]
-Again, we start by considering what the resulting type on context.
+Again, we start by considering the resulting type on contexts.
 Clearly, we want the operation to result in the sort context and the point context
 of another signature of an inductive family.
 As we have alredy seen in the previous exapmles,
@@ -745,7 +698,7 @@ For each bit of input data from an algebra of the erasure, wellformedness of thi
 input data should imply wellformedness of the result.
 \begin{equation*}
 \tqm{\grm{\Pi(a, A :: \Pc)}^\WW\{\blm{\gamma_\Sc}\}(\blgamma, \blphi)}
-  :\equiv \tqm{\ExtPi{\blalpha : \tqm{\grm{a}^\EE}^\CC(\gamma_\Sc)}
+  :\equiv \tqm{\ExtPiP{\blalpha : \tqm{\grm{a}^\EE}^\CC(\gamma_\Sc)}
     { \grm{a}^\WW(\blgamma)(\blalpha)
       \Rightarrow_\Pc \grm{A}^\WW((\gamma, \alpha), \phi(\alpha))}}
 %\tqm{\grm{\IIapp(f)}^\WW\{\blm{\gamma_\Sc}\}
@@ -797,7 +750,7 @@ The pullback operations can afterwards defined by
   &:\equiv \tqm{\grm{A}^\WW(\blgamma, \blalpha)
     [\grm{\sigma}^\WW_\Sc(\blgamma)]} \text{, and} \\
 \tqm{\grm{t[\sigma]}^\WW(\blgamma)}
-  &:\equiv \tqm{\grm{t}^\WW_\Sc(\blm{\grm{\sigma}^\EE(\gamma)})
+  &:\equiv \tqm{\grm{t}^\WW(\blm{\grm{\sigma}^\EE(\gamma)})
     [\grm{\sigma}^\WW_\Sc(\blgamma)] } \text{ for \grm{\Gamma \vdash t : B :: \Sc}.}
 \end{align*}
 The remaining pieces of substitutional calculus are straightforward and look the

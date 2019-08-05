@@ -222,6 +222,7 @@ and the $\Pi$-types behave when pulled back along an arbitrary substitution
 \grm{\ExtPi{T}{B}[\sigma]} &= \grm{\ExtPi{T}{\blm{\lambda \tau. \grm{B(\bltau)[\sigma]}}}} \text{, and} \\
 \grm{f(\bltau)[\sigma]} &= \grm{f[\sigma](\bltau)} \text{.}
 \end{align*}
+This concludes the specification of the syntax for inductive-inductive types.
 
 \begin{defn}
 Above, \grm{\sigma \wedge A} is one of several auxiliary constructions on the syntax
@@ -274,6 +275,17 @@ Now we know that we can define this substitution by
 \end{equation*}
 and $\grm{\sigma} = \grm{\langle u \rangle}$.
 \end{defn}
+
+\begin{remark}\label{rmk:iit-qit}
+The syntax with its postulated equations itself on the one hand shows features
+of induction-induction itself
+-- types are dependent on contexts, etc. --
+but the equations turn it what is called a \emph{quotient inductive-inductive type},
+as \citet{constructingqiits} define it.
+Quotient inductive-inductive types are a very useful generalization of
+inductive-inductive types without path constructors, and they can be used, for example
+to represent the type of real numbers in type theory \citep{hottbook}.
+\end{remark}
 
 We will now look at a few example to make it clearer on how to encode inductive-inductive
 declarations in the syntax presented above. %TODO more fluff

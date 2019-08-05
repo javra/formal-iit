@@ -592,12 +592,12 @@ Having a specification for Inductive Families is not worth much if there is no
 way to know what it means for a type theory to actually ``support'' types of this
 specification.
 The intended meaning of the signatures is clear from the definition of their algebras
-as seen in Section~\ref{sec:if-alg} and as discussed in Section~\ref{sec:if-ds},
+as seen in \Cref{sec:if-alg} and as discussed in \Cref{sec:if-ds},
 candidates for their eliminators and computation rules are specified in the definition
 of sections displayed algebras.
-This means that we can formally say what the requirements are for inductive
-families to exist.
-In this section, we will prove that any metatheory as premised in Section~\ref{sec:meta}
+This means that we can formally say what it means for inductive
+families to exist in a type theory.
+In this section, we will prove that any metatheory as premised in \Cref{sec:if-ex}
 actually supports inductive families as specified here.
 
 \begin{thm}[Existence of Inductive Families]\label{thm:if-ex}
@@ -820,19 +820,19 @@ Again, substitution rules analogous to the ones in \ref{def:if-ex-psub-a} hold:
 \end{align*}
 \end{defn}
 
-\begin{defn}[Sections of Point Terms \& Substitutions]
-I'm not sure if we need these...
-\end{defn}
+%\begin{defn}[Sections of Point Terms \& Substitutions]
+%I'm not sure if we need these...
+%\end{defn}
 
 As a next step after having extended our syntax and defined the semantics of this
 extension, we will show that any type theory with indexed W-types is able
-to represent the whole syntax internally.
+to represent the whole syntax for inductive families internally.
 
 \begin{remark}
 While for the signatures of inductive-inductive types, contexts, types, and terms
 depend on each other, we can here define sort types, sort contexts, terms, point
 types, and contexts in the presented order without referring to later constructions.
-This means that unlike mentioned in Remark~\ref{rmk:iit-syntax}, we  can %TODO cite remark
+This means that unlike mentioned in \Cref{rmk:iit-qit}, we  can
 internalize this syntax just using inductive families, as shown in the
 following agda implementation:
 \begin{agdacode}
@@ -1063,7 +1063,7 @@ term: %TODO formulation
 \end{align*}
 \end{defn}
 
-This construction is already enought to give the sort constructor required in
+This construction is already enough to give the sort constructor required in
 Theorem~\ref{thm:if-ex} by pinning the substitution to be the identity:
 \begin{equation}\label{eq:if-ex-sorts}
 \IFconS{\Omega} :\equiv \IFconS{\id_{\Omega_\Sc}} : \tqm{\Omega_\Sc}^\CC
@@ -1105,7 +1105,7 @@ In this case, lets recurse on the term and see that
 \end{align*}
 \end{proof}
 
-We can now use this lemma to be able to do trick with $\IFcon{\Omega}$ similar
+We can now use this lemma to be able to do a trick with $\IFcon{\Omega}$ similar
 to the trick we did for $\IFconS{\Omega}$:
 Replace the fixed point context with a variable one, together with a substitution
 from \tqm{\Omega}, and define the constructor recursively on point types.
@@ -1208,7 +1208,7 @@ of sort types or sort contexts, respectively:
   {\IFelimS{t}{} : \tqm{B}^\SS(\tqm{t}^\DD(\omega_\Sc^\DD))}
 \end{gathered}
 \end{equation*}
-The first rule is definied by recursion using the second construction as usual:
+The first rule is defined by recursion using the second construction as usual:
 \begin{align*}
 \IFelimS{\epsilon}{}
   &:\equiv \star \text{ and} \\
