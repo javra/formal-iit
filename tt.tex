@@ -13,7 +13,7 @@ provers based on dependent types, Agda and Lean, and point out some of their dif
 \section{Dependent Type Theory}\label{sec:tt-dtt}
 
 The term ``type theory'' stems from the early nineteenth centry, when
-Bert\-rand Russell sought to lay out an alternative to set theory which did not
+Bert\-rand Russell sought to lay out an alternative form of set theory which did not
 suffer from the paradox which Russell discovered
 Todays versions of type theory have little in common with Russell's attempts
 but rather rely on the considerations of Per Martin-Löf (\cite{martin-lof2, martin-lof1})
@@ -27,7 +27,7 @@ can serve both as a theoretical foundation for a formal representation of mathem
 as well as a principle for the specification for strongly typed functional
 programming languages.
 It was implemented in computer languages for programming and theorem proving which
-are used massively in the field of formal verification and in the formalization of
+are massively used in the field of formal verification and in the formalization of
 mathematics.
 Among the most commonly used implementations are the theorem prover Coq (\cite{coq})
 which notably has a lot of users in the field of hardware verification,
@@ -49,21 +49,22 @@ the propositions and the objects} they describe:
 They first start out with a logical framework on which axiomatically a theory
 of sets is introduced.
 The coherence between these two levels must then be created using an axiom like
-the excision axiom in Zermelo-Fraenkel set theory.
+the comprehension axiom in Zermelo-Fraenkel set theory.
 \item Type theory is \emph{typed} while set theory is \emph{untyped}.
 While in set theory, objects can be an element of different sets --
 consider the number two which is an element both of the set of even integers
 as well as the set of all integers --
 type theory is based on the principle that every piece of data (every term)
 is assigned a unique type which is known at the point of the creation of the data.
-Since this assignment, called typing, is decidable, we consider it a judgment
+This assignment, called typing, is decidable, and we consider it a judgment
 rather than a provable proposition that a given term $t$ has type $A$.
-\item Type theory is inherently \emph{constructive} while most of the most
-well-known set theoretic foundations are \emph{non-construcitve}.
+\item Type theory is inherently \emph{constructive} while many
+set theoretic foundations, such as Zermelo-Fraenkel, are \emph{non-construcitve}.
 This has great consequences for the computational use of the mathematics represented:
 Every type theoretic function the domain of which are the natural numbers, can compute a
 numeral for any given input.
-\item While in set theory, \emph{sets are the only primitives}, type theory
+\item While in set theory, \emph{sets are the only primitives} and all data is
+encoded as sets, type theory
 provides often-used objects like \emph{functions and inductively defined types
 as primitives}.
 This means that we can use these without having to care about how to assemble them
@@ -164,7 +165,7 @@ Often, when presenting the syntax of a type theory, rules on how
 to form these contexts $\vdash \Gamma$ are given together with rules for the
 formation of types $\Gamma \vdash A$ in a given context $\Gamma$ and the
 treatment of terms $\Gamma \vdash t : A$ of a given type $A$ in context $\Gamma$.
-We will choose to be immplicit about the variable context in this chapter, while
+We will choose to be implicit about the variable context in this chapter, while
 being more explicit about them when we introduce other syntaxes in later chapter,
 for which a more formal treatment is appropriate.
 \end{remark}
@@ -247,7 +248,7 @@ It has the following type:
 \rec_\N(A) \equiv \ind(\lambda x. A) : A \to (\N \to A \to A) \to \N \to A \text{.}
 \end{equation*}
 
-So far we did not do the word ``dependent'' in the title of this chapter
+So far we did not do the word ``dependent'' in the name of the type theory
 much justice,
 but now we will move on to introduce some dependent type formers.
 The first of these will be \textbf{$\Pi$-types} or \text{dependent function types}.
@@ -334,7 +335,7 @@ For the sum type, we have the reduction rules
 \elim_{A + B}(C, p, q, \inr(b)) &\equiv q(b) \text{.}
 \end{align*}
 
-Looking at the product type, we can find a slight generalization which is very useful
+Looking at the product type, we can find a generalization which is very useful
 when we want to model existential quantification of a type family $B : A \to \UU$
 in type theory:
 A version of the product type where the type of the second component of a pair $(a, b)$
@@ -343,7 +344,7 @@ The type holding this kind of pair for a fixed type family $B : A \to \UU$
 is called the \textbf{$\Sigma$-type} over $B$.
 We will again have three different notations for this type, of which in this text
 we will mostly prefer the latter one:
-The type is usually (e.\,g. in \cite{hottbook}) denoted by
+The type is usually \citepalias{hottbook} denoted by
 $\sum_{(a : A)} B(a)$, mimicing mathematical notation for sums.
 Furthermore there is the short variant of writing $\Sigma(B)$ and
 an Agda-inspired notation $(a : A) \times B(a)$.
@@ -363,7 +364,7 @@ rules we have already seen for the non-dependent product type:
 \end{gathered}
 \end{equation*}
 As our notation already suggests, we can view the product $A \times B$ as a special
-case of a sigma type where $B$ is a constant type family.
+case of a $\Sigma$-type where $B$ is a constant type family.
 Note that also the sum type $A + B$ can be defined as a special case of the sigma
 type over $C : \twotype \to \UU$ with $C(0_\twotype) :\equiv A$
 and $C(1_\twotype) :\equiv B$.
@@ -418,7 +419,7 @@ The type of vectors on $A$, is not a type but a type family:
 \begin{equation*}
 \vecty_{A} : \N \to \UU \text{.}
 \end{equation*}
-It has two constructors and eliminators of the following form:
+It has two constructors and an eliminator of the following form:
 \begin{equation*}
 \begin{gathered}
 \inferrule{ }
@@ -450,9 +451,9 @@ While dependent and non-dependent functions were primitives needed to even talk
 about other type formers,
 all other examples which we have seen, can be captured by the concept of
 \emph{indexed inductive type}.
-But since it is not formally strict to just assume the presence of indexed
-inductive types based on giving examples,
-different attempts have been made to make precise a definition of what
+But since we want to be more formal than to just assume the presence of indexed
+inductive types based on giving a few examples,
+we will present different attempts to make precise a definition of what
 an indexed inductive type is.
 One schematic approach was made by \cite{dybjer94}, while the approach which
 we want to introduce here requires an encoding of the constructors in a very specific
@@ -562,7 +563,7 @@ we introduce what is usually called \textbf{propositional equality} or
 \textbf{typal equality}.
 For each type $A : \UU$ and each two elements $a, b : A$ we want to have
 a type $(a =_A b) : \UU$ of proofs that $a$ and $b$ are equal.
-We can define this by induction, giving only the witness for this relation
+We can view this as an inductive definition, giving only the witness for this relation
 to be reflexive as a constructor:
 \begin{equation*}
 \begin{gathered}
@@ -816,7 +817,7 @@ $\eta : g \circ f \sim \id_A$ and $\epsilon : f \circ g \sim \id_B$ and furtherm
 \end{equation*}
 We need $\tau$ to make sure that each two witnesses for the fact that $f$ is an equivalence are
 equal.
-Since $\tau$ looks like the one of the two commutativity conditions for pairs
+Since $\tau$ is one of the two commutativity conditions for pairs
 of adjoint functors, this kind of equivalence is also called a \textbf{half
 adjoint equivalence}.
 %The type of witnesses for $f$ to be an equivalence shall be
@@ -913,8 +914,8 @@ is contractible. \hfill $\square$
 Truncation levels are a notion which behaves quite differently
 depending on whether we assume presence of the K-rule or not.
 
-If, as in homotopy type theory, we only assume the J-rule, it is an easy exercise
-to find types which are not sets:
+If, as in homotopy type theory, we assume univalence and only the J-rule,
+it is an easy exercise to find types which are not sets.
 In fact the universe $\UU$ itself is not a set:
 We can construct
 at least two different automorphisms of $\twotype$: The identity function
@@ -946,7 +947,7 @@ With regards to this thesis, introducing different implementations is relevant
 in two ways:
 \begin{enumerate}
 \item A good part of the new results in the form of definitions, lemmas,
-and theorems, has been formalized in a one of these lanuages, and
+and theorems, has been formalized in a one of these languages, and
 \item both the higher Seifert-van Kampen theorem presented in~\Cref{sec:paths-svk}
 as well as the attempted reduction from inductive-inductive type to inductive
 families in ~\Cref{chp:red} suggest useful new features or extensions of implementations
@@ -996,7 +997,7 @@ As of now, Lean is in its third major version, after a lot of the system was
 overhauled in the transition from Lean 2.
 The fourth version is under development but not yet ready to be used as a prover.
 
-Lean -- as its name alleges -- relies on a relatively small trusted kernel to which
+Lean -- as its name suggests -- relies on a relatively small trusted kernel to which
 the user code is compiled to.
 This makes it easier to make claims about the consistency of the prover.
 Let us first take a look at some of the specifics of Lean's type theory.
