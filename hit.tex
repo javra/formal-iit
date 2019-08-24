@@ -161,7 +161,7 @@ as the pushout where both $f$ and $g$ are the unique map $A \to \unit$.
 
 An example for a higher inductive types, the importance of which is easily recognizable
 even we only care for propositions and sets is the one of the \textbf{truncation operator}.
-It is a tool to bring types to the desired level of trunction,
+It is a tool to bring types to the desired level of truncation,
 as we can see in the following example:
 Remember that we represented the disjunctive logical connective with
 the sum type.
@@ -170,7 +170,7 @@ For example we have $\unit + \unit \simeq \twotype$.
 So how can we make it a proposition?
 The solution is to add equations between \emph{all} the points in the sum type
 and additionaly make sure that no trivial higher equality proofs exist.
-Similar situations can obviously happen for every truncation level.
+Similar situations can happen for every truncation level.
 The elimination principle for this operation has to make sure that only
 functions on the truncated type, which represent continuous maps, can
 be created, and so it has to require that the fibers of the type family which
@@ -180,7 +180,7 @@ we want to inhabit are truncated:
 \inferrule*[left=Trunc-Intro]{a : A}
   {\tproj{n}{a}{} : \trunc{n}{A}} \\[.7em]
 \inferrule*[left=Trunc-Elim]{C : \trunc{n}{A} \to \UU \\
-  p : (x : \trunc{n}{A}) \to \isntype{n}{(A)} \\
+  p : (x : \trunc{n}{A}) \to \isntype{n}{(C(x))} \\
   q : (a : A) \to C(\tproj{n}{a}{}) }
   {\elim_{\trunc{n}{A}}(C,p,q) : (x : \trunc{n}{A}) \to C(x) }
 \end{gathered}
@@ -402,7 +402,7 @@ following equivalences:
 after which we can get the desired result by plugging in $x \equiv \Sbase$.
 The definition of this type family is the following:
 \begin{equation*}
-\code(x) :\equiv \elim_{\Sph^1}(\lambda \_.\UU, \Z, \ua(S)) \text{,}
+\code :\equiv \elim_{\Sph^1}(\lambda \_.\UU, \Z, \ua(S)) \text{,}
 \end{equation*}
 with $S : \Z \to \Z$ being the successor function on the integers, which
 is obviously an equivalence.
@@ -416,7 +416,7 @@ We can then calculate that
 and that, by the same reasoning, $(\Sloop\inv)^*(z) = P(z)$ where
 $P = S\inv$ is the predecessor function on $\Z$.
 After we gave the definition of $\code$, the second equivalence of \eqref{eq:hit1}
-is immediate by induction on $x$, while the first one is more involved.
+is straightforward to prove by induction on $x$, while the first one is more involved.
 We call the map into $\code(x)$, which we have to define,
 the \emph{encoding} map and the inverse the \emph{decoding}.
 
@@ -431,7 +431,9 @@ It is easy to check via \eqref{eq:hit2} that $\mathsf{encode}(\Sloop)$
 calculates to $S(z)$, $\mathsf{encode}(\Sloop \ct \Sloop)$ to
 $S(S(z))$ etc.
 
-Defining the decoding function goes by induction on the circle element
+Defining the decoding function 
+$\mathsf{decode}(x) : \code(x) \to (\Sbase = x)$
+goes by induction on the circle element
 $x$ involved.
 For the induction we first have to give the base case
 $\mathsf{decode}(\Sbase) : \code(\Sbase) \to (\Sbase = \Sbase)$ which we set to the function which is
@@ -474,12 +476,14 @@ That means that it suffices to give families $M \to M \to \UU$,
 $M \to N \to \UU$, $N \to M \to \UU$, and $N \to N \to \UU$, which agree on
 $f(l)$ and $g(l)$ for all $l : L$ in either argument.
 We will omit proof of this consistency.
+
 For the first case, i.\,e.\ if we have $m, m' : N$, we want $\code(\inr(m), \inr(m'))$ to be
 the inductive type where elements are characterized as lists
 \begin{equation*}
  (p_0, x_1, q_1, y_1, p_1, x_2, q_2, y_2, p_2, \ldots, y_k, p_k) \text{,}
 \end{equation*}
-the entries of which have the following type for each $0 < i \leq k$: (cf. \Cref{fig:hit-svk-zigzag}):
+the entries of which (cf. \Cref{fig:hit-svk-zigzag}) have the following type for
+each $i : \N$ with $0 < i \leq k$:
 \begin{align*}
 x_i, y_i &: L \\
 p_0 &: \trunc{0}{m = f(x_1)} \\
@@ -537,7 +541,7 @@ With this definition, the statement of the theorem can be stated as the followin
 \begin{thm}[Seifert-van Kampen, \cite{favonia:SvK}]\label{thm:paths-svk}
 For each $x, y : P$ we have
 \begin{equation*}
-\trunc{0}{x = y} \equiv \code(x, y) \text{.}
+\trunc{0}{x = y} \simeq \code(x, y) \text{.}
 \end{equation*}
 \end{thm}
 
@@ -566,8 +570,17 @@ pushout which it represents, as for example
 The proof that these functions are inverse to each other is again done by induction.
 \end{proof}
 
-
-
+%TODO by thorsten: explain how this relates to the classical statement
+\begin{remark}[The classical Seifert-van Kampen Theorem]
+How does the statement of \Cref{thm:paths-svk} relate to the classical
+version of the theorem?
+The left side of the equivalence clearly correponds to morphisms between
+$x$ and $y$ in the fundamental groupoid (i.\,e. the equalities) of the pushout
+of the spaces, but what about the right-hand side?
+We can show that $\code(x,y)$ is not some arbitrary construction but that
+its definition as a quotient of lists can be straightforwardly generalized
+to a characterization of morphisms in the pushout of any two groupoids.
+\end{remark}
 
 
 
