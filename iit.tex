@@ -4,14 +4,27 @@ This chapter will first introduce inductive-inductive types by a few illustrativ
 examples, before we will start with its main purpose:
 Giving a formal specification of what inductive-inductive types are.
 
+The treatment of inductive-inductive types, which includes
+all the subsequent chapters, will happen in a type theory which
+admits the K-rule (cf. \Cref{rmk:tt-k}) and thus we will not have any meaningful
+higher equalities in types.
+While some of the constructions are easily transferable to homotopy type theory,
+others rely on the K-rule and it is not obvious how to make them \emph{coherent}
+with respect to higher equalities.
+Further than having the K-rule we will also take the liberties in regarding some
+equalities as \emph{strict}.
+We will use $\equiv$ instead of $=$ to denote strict equality.
+
 Inductive-inductive types are a feature of type theories which comes naturally
 in provers like Agda, which are based on dependent pattern matching.
-A formal treatment of their syntax and semintics is still necessary to give
-grounds to their consistency as well as to implement them in theorem provers
+A formal treatment of their syntax and semantics is still interesting for
+several reasons:
+We to give
+grounds to their soundness, and we might want to implement them in theorem provers
 which are not based on pattern matching but on a derivation of elimination rules.
 
 The use case for inductive-inductive types is always of the following nature:
-We want to deine some data by the means of an inductive types, but we want
+We want to define some data by the means of an inductive types, but we want
 its point constructors to refer to data from another type family which is indexed
 over the very type we are just defining.
 In the following, we will take a look at a few examples which we are going to
@@ -70,6 +83,15 @@ mark elements of the source type theory in \gr{green}.
 
 We assume that the source type theory makes use of the standard syntax of type
 theory, using contexts, types, terms, and variables.
+We regard the presentation to be \emph{intrinsic} meaning that
+we will only ever consider wellformed contexts, types, and terms.
+We will nevertheless use the turnstile notation of syntax, and, for example
+write \grm{\vdash \Gamma}, to say that \grm{\Gamma} is a context -- instead of
+writing something like \grm{\Gamma : Con}.
+We hope that this makes it less confusing to the reader since we will also have
+type theoretical syntax as one of our \emph{main examples} for inductive-inductive
+types.
+
 Types and terms are uniquely ascribed to one of two \emph{kinds}:
 Either their kind is \grm{\Sc} which indicates that the type contains sort
 constructors, or their kind is \grm{\Pc} because elements of it describe
@@ -180,7 +202,7 @@ in the categorical structure:
 \end{align*}
 
 We have a canonical substitution into the empty context and we can extend substitutions
-by giving a term in a type bulled back to their domain.
+by giving a term in a type pulled back to their domain.
 \begin{equation*}
 \inferrule{\grm{\vdash \Gamma}}
   {\grm{\IISub{\epsilon}{\Gamma}{\cdot}}}
@@ -283,7 +305,9 @@ of induction-induction itself
 but the equations turn it what is called a \emph{quotient inductive-inductive type},
 as \citet{constructingqiits} define it.
 Quotient inductive-inductive types are a very useful generalization of
-inductive-inductive types without path constructors, and they can be used, for example
+inductive-inductive types,
+featuring \emph{path constructors} beside sort and point constructors.
+They can be used, for example
 to represent the type of real numbers in type theory \citep{hottbook}.
 \end{remark}
 
@@ -479,7 +503,7 @@ Referring to \Cref{ex:iit-nat-alg} above, any type $N$ with a point $z : N$ and
 a function $s : N \to N$ is an algebra for the definition of the natural numbers,
 even types which are either ``too large'' and contain much more points,
 think for example of the real numbers,
-or too ``too small'' -- the unit type $\unit$ is an algebra for the natrual numbers
+or too ``too small'' -- the unit type $\unit$ is an algebra for the natural numbers
 as well.
 What we want is an algebra which is just large enough that all
 constructors are injective.
@@ -610,7 +634,7 @@ We now defined what it means for an algebra to admit a non-dependent eliminator
 and its $\beta$-rules, but what about the dependent eliminator?
 It is usually defined as the sections of an \emph{dependent morphism}
 or a \emph{displayed algebra},
-over the iniital algebra -- we will see this notion for the inductive families in the
+over the inital algebra -- we will see this notion for the inductive families in the
 next chapter.
 But, as \citet{constructingqiits} have proven for their version of syntax for higher
 inductive-inductive
