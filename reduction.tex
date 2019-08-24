@@ -59,14 +59,14 @@
 \end{sidewaysfigure}
 
 We have now learned how we can express all inductive-inductive types
-and all inductive family by the means of signature consisting of the contexts
+and all inductive families by the means of signature consisting of the contexts
 of type theories which are made specifically for this purpose.
 Now we want to pursue the question of whether every inductive-inductive type
-can be represented in a type theory that only supports indexed W-types, and thus
+can be represented in a type theory that only supports (indexed) W-types, and thus
 inductive families.
 
 To explore how we can transform an inductive-inductive signature into a sequence
-of constructions in inductive families, we will have to deal with four type theories:
+of constructions of inductive families, we will have to deal with four type theories:
 We imagine that we live in an \emph{ambient type theory} in which all of our constructions
 will take place.
 This type theory must be powerful enough to represent the syntaxes of the other
@@ -664,7 +664,7 @@ The each sort of the input signature should become a predicate.
 Since a predicate is the same as a type family with propositional values,
 we set the wellformedness on the universe to be a type family, the domain of which
 is given by the set we obtain from the algebra of the erased context.
-Not that this type family is a non-dependent, \emph{non-recursive} $\Pi$-type.
+Note that this type family is a non-dependent, \emph{non-recursive} $\Pi$-type.
 The interpretation of \grm{\El(a)} has to make up for this shift by applying
 to the wellformedness predicate corresponding the sort term \grm{a} the
 element we get from the erasure of \grm{\El(a)}: %TODO this still reads horrible
@@ -1518,7 +1518,7 @@ module TestVec (A : Set) (N : Set) (z : N) (s : N → N) where
 It is obvious that the work presented in this chapter is incomplete.
 While we succeeded in defining the eliminator relation, we do not show that it
 is actually a function.
-This step is not easy but we think that it is doable but someone with the necessary
+This step is not easy but we think that it is doable by someone with the necessary
 cognitive abilities and patience.
 The difficulties consist by a good part of the complexity and the amount of
 dependencies involved in dealing with all of the syntax elements.
