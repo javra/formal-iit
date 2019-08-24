@@ -735,7 +735,7 @@ Of course, the difficulty of a concrete proof for the initiality property depend
 on the concrete definition of $\Z$ that one uses.
 With the definition used by Licata and Shulman (essentially $\N + \unit + \N$),
 this is easy albeit some work.
-We will come back to definitions of the integers in \Cref{remark:generalized-squid}.
+We will come back to definitions of the integers in \Cref{rmk:paths-generalized-squid}.
 
 As a second application we will prove that a certain class of functions,
 called embeddings, is preserved under pushouts.
@@ -809,7 +809,7 @@ In the following, we present an alternative (and significantly shorter) argument
 
 Fundamental groups in topology are \emph{quotients} of spaces --
 in homotopy type theory we represented them as 0-truncations of equality types.
-Thus, it is natural to ask for a \emph{higher dimensional} verion of the theorem
+Thus, it is natural to ask for a \emph{higher dimensional} version of the theorem
 which does not quotient or truncate.
 In homotopy theory, different versions have been proved by \cite{lurie18derived}
 and \cite{brown2011nonabelian}.
@@ -870,7 +870,7 @@ Clearly, $\nil$ gives us the empty list.
 The other two constructors allow us to switch between lists ending in a point in $M$
 to lists ending in a point in $N$ and vice versa.
 Intuitively, this is done simply by adding a $\glue$ at the end of the list.
-This explains how to add the \emph{vertical} lines of a list as drawn in \eqref{eq:linked-paths-drawing}.
+This explains how to add the \emph{vertical} lines of a list as drawn in \Cref{fig:hit-svk-zigzag}.
 It may be surprising that we do not add the \emph{horizontal} components $p_i$ and $q_i$ explicitly.
 The reason is that they are automatically and implicitly present in this encoding:
 the map $(\_)^*$ of type
@@ -911,7 +911,7 @@ inductive types.
 If we allow ourselves to fold the last five constructors into a single one,
 its introduction rule could look as follows:
 \begin{equation*}
-\inferrule*[left=$C$-Intro7]{l : L}{C(f(l)) \simeq C(g(l))}
+\inferrule*[left=$C$-Intro2--6]{l : L}{C(f(l)) \simeq C(g(l))}
 \end{equation*}
 
 It may also be interesting to do this in the formulation for a coequalizer
@@ -943,10 +943,10 @@ To remove this dependency, let us consider a version of $C$ which is indexed
 twice over $(M+N)$:
 we write $\mathfrak C(n_0, y)$ for $C(y)$.
 This expression plays the role of $\code$ in our higher analogue of
-the Favonia-Shulman result, \Cref{thm:favonia:SvK}.
+the Favonia-Shulman result, \Cref{thm:paths-svk}.
 While it can be extended to a family $P \to P \to \UU$ in a straightforward way,
 we choose the following formulation for simplicity
-(and to match \Cref{thm:favonia:SvK} more closely):
+(and to match \Cref{thm:paths-svk} more closely):
 
 \begin{thm}[Higher Seifert-van Kampen Theorem]\label{thm:paths-higher-SvK}
  For $x,y : M+N$, we have an equivalence:
