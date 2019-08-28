@@ -171,14 +171,18 @@ So how can we make it a proposition?
 The solution is to add equations between \emph{all} the points in the sum type
 and additionaly make sure that no trivial higher equality proofs exist.
 Similar situations can happen for every truncation level.
+For example, a collection of sets is generelly not a set itself.
 The elimination principle for this operation has to make sure that only
 functions on the truncated type, which represent continuous maps, can
 be created, and so it has to require that the fibers of the type family which
 we want to inhabit are truncated:
 \begin{equation*}
 \begin{gathered}
-\inferrule*[left=Trunc-Intro]{a : A}
-  {\tproj{n}{a}{} : \trunc{n}{A}} \\[.7em]
+\inferrule*[left=Trunc-Intro1]{a : A}
+  {\tproj{n}{a}{} : \trunc{n}{A}}
+\qquad
+\inferrule*[left=Trunc-Intro2]{	}
+  {\isntype{n}{\left(\trunc{n}{A}\right)}} \\[.7em]
 \inferrule*[left=Trunc-Elim]{C : \trunc{n}{A} \to \UU \\
   p : (x : \trunc{n}{A}) \to \isntype{n}{(C(x))} \\
   q : (a : A) \to C(\tproj{n}{a}{}) }
@@ -400,15 +404,17 @@ following equivalences:
 (\Sbase = x) \simeq \code(x) \simeq \Z \text{,}
 \end{equation}
 after which we can get the desired result by plugging in $x \equiv \Sbase$.
-The definition of this type family is the following:
-\begin{equation*}
-\code :\equiv \elim_{\Sph^1}(\lambda \_.\UU, \Z, \ua(S)) \text{,}
-\end{equation*}
+The definition of this type family is determined by the following two equations:
+\begin{align*}
+\code(\Sbase) &\equiv \Z \\
+\ap_\code(\Sloop) &= \ua(S) \text{,}
+\end{align*}
 with $S : \Z \to \Z$ being the successor function on the integers, which
 is obviously an equivalence.
-The definition means that we will, by the reduction rules,
-have $\code(\Sbase) \equiv \Z$ and
-$\ap_\code(\Sloop) = \ua(S)$.
+Formally speaking, we can achieve this by setting
+\begin{equation*}
+\code :\equiv \elim_{\Sph^1}(\lambda \_.\UU, \Z, \ua(S)) \text{.}
+\end{equation*}
 We can then calculate that
 \begin{equation}\label{eq:hit2}
 \Sloop^*(z) \equiv (\ap_\code(\Sloop))^*(z) \equiv (\ua(S))^*(z) \equiv S(z) \text{,}

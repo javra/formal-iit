@@ -857,24 +857,24 @@ data TyS : Set₁ where
   U  : TyS
   Π̂S : (T : Set) → (T → TyS) → TyS
 
-data SCon : Set₁ where
-  ∙c   : SCon
-  _▶c_ : SCon → TyS → SCon
+data ConS : Set₁ where
+  ∙c   : ConS
+  _▶c_ : ConS → TyS → ConS
 
-data Var : SCon → TyS → Set₁ where
+data VarS : ConS → TyS → Set₁ where
   vvz : ∀{Γc B} → Var (Γc ▶c B) B
   vvs : ∀{Γc B B'} → Var Γc B → Var (Γc ▶c B') B
 
-data Tm (Γc : SCon) : TyS → Set₁ where
-  var  : ∀{A} → Var Γc A → Tm Γc A
-  _@S_ : ∀{T B} → Tm Γc (Π̂S T B) → (τ : T) → Tm Γc (B τ)
+data TmS (Γc : ConS) : TyS → Set₁ where
+  var  : ∀{A} → Var Γc A → TmS Γc A
+  _@S_ : ∀{T B} → TmS Γc (Π̂S T B) → (τ : T) → TmS Γc (B τ)
 
-data TyP (Γc : SCon) : Set₁ where
-  El   : Tm Γc U → TyP Γc
+data TyP (Γc : ConS) : Set₁ where
+  El   : TmS Γc U → TyP Γc
   Π̂P   : (T : Set) → (T → TyP Γc) → TyP Γc
-  _⇒P_ : Tm Γc U → TyP Γc → TyP Γc
+  _⇒P_ : TmS Γc U → TyP Γc → TyP Γc
 
-data Con (Γc : SCon) : Set₁ where
+data Con (Γc : ConS) : Set₁ where
   ∙    : Con Γc
   _▶P_ : Con Γc → TyP Γc → Con Γc
 \end{agdacodebr}
@@ -885,9 +885,9 @@ The extension of the syntax by sort subtitutions of Definition~\ref{def:if-sort-
 as well as the subsequent extension by point terms and point substitutions as presented in
 Definition~\ref{def:if-ex-subp} is implementable as well:
 \begin{agdacodebr}
-data Sub : SCon → SCon → Set₁ where
-  ε   : ∀{Γc} → Sub Γc ∙c
-  _,_ : ∀{Γc Δc B} → Sub Γc Δc → Tm Γc B → Sub Γc (Δc ▶c B)
+data SubS : ConS → ConS → Set₁ where
+  ε   : ∀{Γc} → SubS Γc ∙c
+  _,_ : ∀{Γc Δc B} → SubS Γc Δc → TmS Γc B → SubS Γc (Δc ▶c B)
 
 data VarP {Γc} : Con Γc → TyP Γc → Set₁ where
   vvzP : ∀{Γ A} → VarP (Γ ▶P A) A
@@ -906,28 +906,28 @@ data SubP {Γc} : Con Γc → Con Γc → Set₁ where
 
 To make this proof of internalizability formal, we will present the exact definition
 of all the parts of the extended syntax as indexed W-types.
-This means giving a type $W_{Con_\Sc} : \UU$ of sort contexts,
-a type $W_{Ty_\Sc} : \UU$ of sort types,
-a family $W_{Var_\Sc} : W_{Con_\Sc} \to W_{Ty_\Sc} \to \UU$ of variables of a given
+This means giving a type ${Con_\Sc} : \UU$ of sort contexts,
+a type ${Ty_\Sc} : \UU$ of sort types,
+a family ${Var_\Sc} : {Con_\Sc} \to {Ty_\Sc} \to \UU$ of variables of a given
 sort context and sort type,
-extending the latter, a family $W_{Tm_\Sc} : W_{Con_\Sc} \to W_{Ty_\Sc} \to \UU$
+extending the latter, a family $W_{Tm_\Sc} : {Con_\Sc} \to {Ty_\Sc} \to \UU$
 of sort terms,
-a family $W_{Ty_\Pc} : W_{Con_\Sc} \to \UU$ of point types in a given sort context,
-and finally a type $W_{Con_\Pc} : W_{Con_\Sc} \to \UU$ of point contexts over a
+a family ${Ty_\Pc} : {Con_\Sc} \to \UU$ of point types in a given sort context,
+and finally a type ${Con_\Pc} : {Con_\Sc} \to \UU$ of point contexts over a
 given sort context.
 Afterwards, we will give the same treatment to the extensions with
 sort substitutions between two sort contexts, with variables
 of a point type, terms of a point type and point substitution between two point
 contexts over the same sort context in the form of
 \begin{align*}
-W_{Sub_\Sc}
-  &: W_{Con_\Sc} \to W_{Con_\Sc} \to \UU \text{,} \\
-W_{Var_\Pc}
-  &: \{\Gamma_\Sc : W_{Con_\Sc}\} \to W_{Con_\Pc}(\Gamma_\Sc) \to W_{Ty_\Pc}(\Gamma_\Sc) \to \UU \text{,}\\
-W_{Tm_\Pc}
-  &: \{\Gamma_\Sc : W_{Con_\Sc}\} \to W_{Con_\Pc}(\Gamma_\Sc) \to W_{Ty_\Pc}(\Gamma_\Sc) \to \UU \text{, and}\\
-W_{Sub_\Pc}
-  &: \{\Gamma_\Sc : W_{Con_\Sc}\} \to W_{Con_\Pc}(\Gamma_\Sc) \to W_{Con_\Pc}(\Gamma_\Sc) \to \UU \text{.}
+{Sub_\Sc}
+  &: {Con_\Sc} \to {Con_\Sc} \to \UU \text{,} \\
+{Var_\Pc}
+  &: \{\Gamma_\Sc : {Con_\Sc}\} \to {Con_\Pc}(\Gamma_\Sc) \to {Ty_\Pc}(\Gamma_\Sc) \to \UU \text{,}\\
+{Tm_\Pc}
+  &: \{\Gamma_\Sc : {Con_\Sc}\} \to {Con_\Pc}(\Gamma_\Sc) \to {Ty_\Pc}(\Gamma_\Sc) \to \UU \text{, and}\\
+{Sub_\Pc}
+  &: \{\Gamma_\Sc : {Con_\Sc}\} \to {Con_\Pc}(\Gamma_\Sc) \to {Con_\Pc}(\Gamma_\Sc) \to \UU \text{.}
 \end{align*}
 In the following definition we will give all of these ten types and type families
 in general by giving the respective input data for indexed W-types as described
@@ -937,27 +937,27 @@ in Chapter~\ref{sec:tt-w}.
 We define the types mentioned above as follows:
 \begin{align*}
 \begin{split}
-W_{Ty_\Sc}
+{Ty_\Sc}
   &:\equiv \IW{A_{Ty_\Sc}}{B_{Ty_\Sc}}{o_{Ty_\Sc}}{r_{Ty_\Sc}}(\star) \text{,} \\
-W_{Con_\Sc}
+{Con_\Sc}
   &:\equiv \IW{A_{Con_\Sc}}{B_{Con_\Sc}}{o_{Con_\Sc}}{r_{Con_\Sc}}(\star) \text{,} \\
-W_{Var_\Sc}(\_, B)
+{Var_\Sc}(\_, B)
   &:\equiv \IW{A_{Var_\Sc}(B)}{B_{Var_\Sc}(B)}{o_{Var_\Sc}(B)}{r_{Var_\Sc}(B)} \text{,} \\
 W_{Tm_\Sc}(\Gamma_\Sc)
   &:\equiv \IW{A_{Tm_\Sc}(\Gamma_\Sc)}{B_{Tm_\Sc}(\Gamma_\Sc)}{o_{Tm_\Sc}(\Gamma_\Sc)}{r_{Tm_\Sc}(\Gamma_\Sc)} \text{,} \\
-W_{Sub_\Sc}(\Gamma_\Sc)
+{Sub_\Sc}(\Gamma_\Sc)
   &:\equiv \IW{A_{Sub_\Sc}(\Gamma_\Sc)}{B_{Sub_\Sc}(\Gamma_\Sc)}{o_{Sub_\Sc}(\Gamma_\Sc)}{r_{Sub_\Sc}(\Gamma_\Sc)} \text{,}
 \end{split}
 \begin{split}
-W_{Ty_\Pc}(\Gamma_\Sc)
+{Ty_\Pc}(\Gamma_\Sc)
   &:\equiv \IW{A_{Ty_\Pc}}{B_{Ty_\Pc}}{o_{Ty_\Pc}}{r_{Ty_\Pc}}(\star) \text{,} \\
-W_{Con_\Pc}(\Gamma_\Sc)
+{Con_\Pc}(\Gamma_\Sc)
   &:\equiv \IW{A_{Con_\Pc}}{B_{Con_\Pc}}{o_{Con_\Pc}}{r_{Con_\Pc}}(\star) \text{,} \\
-W_{Var_\Pc}(\_, A)
+{Var_\Pc}(\_, A)
   &:\equiv \IW{A_{Var_\Pc}(A)}{B_{Var_\Pc}(A)}{o_{Var_\Pc}(A)}{r_{Var_\Pc}(A)} \text{,} \\
-W_{Tm_\Pc}(\Gamma)
+{Tm_\Pc}(\Gamma)
   &:\equiv \IW{A_{Tm_\Pc}(\Gamma)}{B_{Tm_\Pc}(\Gamma)}{o_{Tm_\Pc}(\Gamma)}{r_{Tm_\Pc}(\Gamma)} \text{,} \\
-W_{Sub_\Pc}(\Gamma)
+{Sub_\Pc}(\Gamma)
   &:\equiv \IW{A_{Sub_\Pc}(\Gamma)}{B_{Sub_\Pc}(\Gamma)}{o_{Sub_\Pc}(\Gamma)}{r_{Sub_\Pc}(\Gamma)} \text{,}
 \end{split}
 \end{align*}
@@ -977,25 +977,25 @@ Ty_\Sc
   & \_ \mapsto \star \\
 Con_\Sc
   & \unit
-  & \makecell[cl]{\unit \\ + W_{Ty_\Sc}}
+  & \makecell[cl]{\unit \\ + {Ty_\Sc}}
   & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(B) \mapsto \unit}
   & \_ \mapsto \star
   & \_ \mapsto \star \\
 Var_\Sc
-  & W_{Con_\Sc}
-  & \makecell[cl]{W_{Con_\Sc} \\ + W_{Con_\Sc} \times W_{Ty_{\Sc}} }
+  & {Con_\Sc}
+  & \makecell[cl]{{Con_\Sc} \\ + {Con_\Sc} \times W_{Ty_{\Sc}} }
   & \makecell[cl]{\inl(\Gamma_\Sc) \mapsto \emptytype \\ \inr(\Gamma_\Sc, B') \mapsto \unit}
   & \makecell[cl]{\inl(\Gamma_\Sc) \mapsto \tqm{(\Gamma_\Sc,\,B)} \\ \inr(\Gamma_\Sc, B') \mapsto \tqm{(\Gamma_\Sc,\,B')} }
   & \makecell[cl]{ - \\ \inr(\Gamma_\Sc, B')(\star) \mapsto \Gamma_\Sc } \\
 Tm_\Sc(\Gamma_\Sc)
-  & W_{Ty_\Sc}
-  & \makecell[cl]{W_{Ty_\Sc} \\ + (T : \UU) \times (T \to W_{Ty_\Sc}) \times T }
+  & {Ty_\Sc}
+  & \makecell[cl]{{Ty_\Sc} \\ + (T : \UU) \times (T \to {Ty_\Sc}) \times T }
   & \makecell[cl]{\inl(B) \mapsto \emptytype \\ \inr(\_) \mapsto \unit}
   & \makecell[cl]{\inl(B) \mapsto \emptytype \\ \inr(T, B, \tau) \mapsto B(\tau) }
   & \makecell[cl]{ - \\ \inr(T, B, \tau)(\star) \mapsto \tqm{\ExtPiS{T}{B}} } \\
 Sub_\Sc(\Gamma_\Sc)
   & \unit
-  & \makecell[cl]{\unit \\ + (B : W_{Ty_\Sc}) \times W_{Tm_\Sc}(\Gamma_\Sc, B) }
+  & \makecell[cl]{\unit \\ + (B : {Ty_\Sc}) \times W_{Tm_\Sc}(\Gamma_\Sc, B) }
   & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(B, t) \mapsto \unit }
   & \_ \mapsto \star
   & \_ \mapsto \star \\
@@ -1012,20 +1012,20 @@ Con_\Pc(\Gamma_\Sc)
   & \_ \mapsto \star
   & \_ \mapsto \star \\
 Var_\Pc(A)
-  & W_{Con_\Pc}(\Gamma_\Sc)
-  & \makecell[cl]{W_{Con_\Pc}(\Gamma_\Sc) \\ + W_{Con_\Pc}(\Gamma_\Sc) \times W_{Ty_\Pc}(\Gamma_\Sc)}
+  & {Con_\Pc}(\Gamma_\Sc)
+  & \makecell[cl]{{Con_\Pc}(\Gamma_\Sc) \\ + {Con_\Pc}(\Gamma_\Sc) \times {Ty_\Pc}(\Gamma_\Sc)}
   & \makecell[cl]{\inl(\Gamma) \mapsto \emptytype \\ \inr(\Gamma, A') \mapsto \unit}
   & \makecell[cl]{\inl(\Gamma) \mapsto \tqm{(\Gamma,\,A)} \\ \inr(\Gamma,A') \mapsto \tqm{(\Gamma,\,A')}}
   & \makecell[cl]{ - \\ \inr(\Gamma, A')(\star) \mapsto \Gamma} \\
 Tm_\Pc(\Gamma)
-  & W_{Ty_\Pc}(\Gamma_\Sc)
-  & \makecell[cl]{(A : W_{Ty_\Pc}(\Gamma_\Sc)) \times W_{Var_\Pc}(\Gamma, A)}
+  & {Ty_\Pc}(\Gamma_\Sc)
+  & \makecell[cl]{(A : {Ty_\Pc}(\Gamma_\Sc)) \times {Var_\Pc}(\Gamma, A)}
   & \makecell[cl]{\inl(A, v) \mapsto \emptytype \\ \inr(\inl(\_)) \mapsto \twotype \\ \\ \inr(\inr(\_)) \mapsto \unit }
   & \makecell[cl]{\inl(A, v) \mapsto A          \\ \inr(\inl(A, a)) \mapsto A      \\ \\ \inr(\inr(T, A, \tau)) \mapsto A(\tau)}
   & \makecell[cl]{ -                            \\ \inr(\inl(A,a))(0) \mapsto \tqm{(a \Rightarrow_\Pc A)} \\ \inr(\inl(A,a))(1) \mapsto \tqm{\El(a)}  \\ \inr(\inr(T, A, \tau))(\star) \mapsto \tqm{\ExtPiP{T}{A}} } \\
 Sub_\Pc(\Gamma)
   & \unit
-  & \makecell[cl]{\unit \\ + (A : W_{Ty_\Pc}(\Gamma_\Sc)) \times W_{Tm_\Pc}(\Gamma, A) }
+  & \makecell[cl]{\unit \\ + (A : {Ty_\Pc}(\Gamma_\Sc)) \times {Tm_\Pc}(\Gamma, A) }
   & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(A, t) \mapsto \unit }
   & \_ \mapsto \star
   & \_ \mapsto \star
@@ -1074,7 +1074,7 @@ on external sort functions, it will return a function with constructor of the ap
 term: %TODO formulation
 \begin{align*}
 \IFconS{a}
-  &:\equiv W_{Tm_\Pc}(\tqm{\Omega}, \tqm{\El(a)})
+  &:\equiv {Tm_\Pc}(\tqm{\Omega}, \tqm{\El(a)})
   & \text{ for \tqm{\Omega_\Sc \SCon a : \UU :: \Sc} and} \\
 \IFconS{f}
   &:\equiv \lambda \tau.\, \IFconS{f(\bltau)}
