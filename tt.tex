@@ -520,6 +520,18 @@ arguments for the respective indexed W-types in Table~\ref{tbl:tt-iws},
 while often, in the case of $I \equiv \unit$ describe
 $\unit \to A$ in place of a type $A$ itself.
 
+\begin{remark}[Plain W-Types]
+Indexed W-types can be reduced to the simpler class of \emph{W-types},
+which only are specified by giving a type $A : \UU$ and a family $B : A \to \UU$,
+without having a type of indices $I : \UU$, together with $o$ and $r$.
+We can think of them as the class of indexed W-types where $I \equiv \unit$.
+
+The fact that we can present each indexed W-types by a non-indexed one was shown
+by \citet{indexedcontainers} using the K-rule,
+and by \citet{Sattler:indexedW} without presence of the K-rule and under assumption
+of functional extensionality.
+\end{remark}
+
 In Chapters~\ref{chp:iit} and \ref{chp:if} we will introduce two more calculi to
 replace indexed W-types.
 
