@@ -1244,11 +1244,11 @@ constructors:
 \end{equation*}
 \end{example}
 
-\begin{example}[Type Theory Syntax]
-For an example involving non-trivial dependency between the sorts, let us
-at last consider the example of contexts and types:
-foo
-\end{example}
+%\begin{example}[Type Theory Syntax]
+%For an example involving non-trivial dependency between the sorts, let us
+%at last consider the example of contexts and types:
+%foo
+%\end{example}
 
 \begin{defn}[Eliminator Relation]
 As we have noticed before, the specification of the eliminator relation bears
@@ -1529,13 +1529,46 @@ types.
 
 \begin{remark}[Functionality of the Relation]
 While we succeeded in defining the eliminator relation, we do not show that it
-is actually a function.
-The generalization of the totality and uniqueness proof as in \Cref{sec:red-ex}
-also involves reasoning about the fact that for each point constructor of the input
-there is only one point constructor of the generated inductive families, yielding
-a witness for wellformedness and a witness for relatedness.
+is actually the graph of a function.
+In \Cref{sec:red-ex}, we saw that the next step in the construction of the
+eliminator would be to show that for each algebra $\gamma^\CC$
+the initial algebra of the relation
+\tqm{\grm{\Gamma}^\RR(\blm{\IFcon{\grm{\Gamma}^\EE}}, \blm{\gamma^\CC})}
+is right-total and left-unique.
 
-TODO inversion or double induction
+While it is easy to \emph{state} this property as a predicate on the algebra,
+proving it poses major problems that still need to be solved,
+and the solution of which we consider to be beyond the scope of this thesis.
+
+As we can see in \Cref{lem:red-ex-right-unique}, the proof of uniqueness
+relies on the fact that if we are given two inhabitants $x^\CC_0, x^\CC_1 : \alpha^\CC$
+where $\alpha^\CC : \grm{\UU}^\CC \equiv \UU$ is some interpretation of a
+sort in the signature, and if we assume their relatedness to the same presyntactic
+datum in the form of $r_0 : \alpha^\RR(x^\CC_0, x)$ and $r_1 : \alpha^\RR(x^\CC_1, x)$,
+where $\alpha^\RR : \tqm{\grm{\UU}^\RR(\ldots)}^\CC \equiv (\alpha^\CC \to \alpha \to \UU)$
+is an interpretation of the relation itself,
+then we can conclude that $x_0 = x_1$.
+But to achieve this, we need to apply induction over \emph{two witnesses} of
+relatedness.
+But this \emph{double induction} over the inductive family which represents the
+relation is special in the sense that it only yield linearly many cases
+since the constructors of the relation are over different of its presyntactical
+indices.
+Capturing this phenomenon has not been done yet for inductive families and
+requires a broader analysis of their indexing.
+
+An alternative to the double induction would be to prove the uniqueness by
+\emph{inversion} on the relation:
+In the context of \Cref{sec:red-ex} this means that whenever we have
+$r : R_{Con}(ext'(\Gamma, a), \gamma)$
+we determine the form of $\gamma$ by finding an instance of the following
+$\Sigma$-type:
+\begin{equation*}
+(\gamma' : C) \times (\alpha : T(\gamma)) \times (\gamma = e(\gamma', \alpha)) \text{.}
+\end{equation*}
+This inversion can obviously replace the double induction needed in
+the proof of \Cref{lem:red-ex-right-unique}, but it turns out that it is similarly
+difficult to define and prove.
 
 TODO recursive defs as an alternative?
 \end{remark}
@@ -1543,8 +1576,10 @@ TODO recursive defs as an alternative?
 \begin{remark}[From Relations to Morphisms]
 Assuming that we have succeeded in proving that the initial algebra for
 \tqm{\grm{\Gamma}^\RR(\blm{\IFcon{\grm{\Gamma}^\EE}}, \blm{\gamma^\CC})} is
-the graph of a function, how do we turn it into an actual morphism
+the graph of a function, how do we turn it into an actual morphism in
+$\grm{\Gamma}^\MM(\con{\Gamma}, \gamma^\CC)$?
 
+TODO
 \end{remark}
 
 \begin{remark}[Implementation of IITs]
