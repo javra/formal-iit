@@ -70,19 +70,29 @@ of constructions of inductive families, we will have to deal with four type theo
 We imagine that we live in an \emph{ambient type theory} in which all of our constructions
 will take place.
 This type theory must be powerful enough to represent the syntaxes of the other
-type theory we use, and thus should support quotient inductive types (cf. Remark TODO).
+type theory we use, and thus should support quotient inductive types.
 Then, we have what we call \emph{target type theory}, which is the language in
 which the reduced types should be available.
 This language must at least contain indexed W-types.
 At last, we also have the two ``domain specific'' type theories which we use
 to encode inductive-inductive types and inductive families.
 A graphical overview of the relations between these last three type theories
-can be seen in \Cref{fig:red-schema}
+can be seen in \Cref{fig:red-schema}.
+
+The end goal of the reduction is to construct for any given signature \grm{\Gamma}
+of an inductive-inductive type an object $\con{\Gamma}$, such that it is \emph{initial}
+as defined in \Cref{def:ii-initiality}:
+For any other given algebra $\gamma^\CC : \grm{\Gamma}^\CC$ of the signature we
+get a morphism
+\begin{equation*}
+\mathsf{elim}(\grm{\Gamma}, \gamma^\CC) : \grm{\Gamma}^\MM(\con{\Gamma}, \gamma^\CC).
+\end{equation*}
+
+Before we attempt the reduction in the general case, it is useful to first
+look at how it works in a special case.
 
 \section{Example: Type Theory Syntax}\label{sec:red-ex}
 
-Before we explain the reduction in the general case, it is useful to first
-look at how it works in a special case.
 As a prime example we chose Example~\ref{ex:ttintt} which describes
 the contexts and types of a type theoretic syntax with a base type and $\Pi$-types.
 To recall the specifics of the example: We want to define a type
@@ -325,11 +335,6 @@ as an inductive family (Example~\ref{ex:if-natvec}), because its sort lacks the
 indexing over the natural numbers.
 In fact, it's easy to see that the algebras of this signature would not be isomorphic
 to the type of lists over the type \blm{A \times \N}.
-\end{example}
-
-\begin{example}[Type Theory Syntax]
-In our syntax we will now see why the operation is called ``type erasure'':
-%TODO
 \end{example}
 
 To go from examples to the general case, we will present the different components
@@ -1417,6 +1422,7 @@ This concludes our definition of the eliminator relation.
 
 Most parts of this chapter have been formalized in the theorem prover Agda.
 In the following, we will describe this formalization including the problems we faced.
+The formalizations can be found online at \url{https://github.com/javra/indind-agda}.
 
 \begin{description}
 \item[The syntax of inductive families] has been straightforward to internalize
@@ -1516,19 +1522,32 @@ module TestVec (A : Set) (N : Set) (z : N) (s : N → N) where
 \section{Conclusions and Future Work}
 
 It is obvious that the work presented in this chapter is incomplete.
+This chapter shall serve to address what is missing to obtain to complete
+the reduction of inductive-inductive types to inductive families,
+and to discuss how the constructions can be applied to implement inductive-inductive
+types.
+
+\begin{remark}[Functionality of the Relation]
 While we succeeded in defining the eliminator relation, we do not show that it
 is actually a function.
-This step is not easy but we think that it is doable by someone with the necessary
-cognitive abilities and patience.
-The difficulties consist by a good part of the complexity and the amount of
-dependencies involved in dealing with all of the syntax elements.
 The generalization of the totality and uniqueness proof as in \Cref{sec:red-ex}
 also involves reasoning about the fact that for each point constructor of the input
 there is only one point constructor of the generated inductive families, yielding
 a witness for wellformedness and a witness for relatedness.
-This fact is quite hard to represent in our setting without first building
-a general theory about induction on inductive families.
 
+TODO inversion or double induction
+
+TODO recursive defs as an alternative?
+\end{remark}
+
+\begin{remark}[From Relations to Morphisms]
+Assuming that we have succeeded in proving that the initial algebra for
+\tqm{\grm{\Gamma}^\RR(\blm{\IFcon{\grm{\Gamma}^\EE}}, \blm{\gamma^\CC})} is
+the graph of a function, how do we turn it into an actual morphism
+
+\end{remark}
+
+\begin{remark}[Implementation of IITs]
 Another bit of future work on the topic of reduction is to implement it in a suitable
 theorem prover.
 While Agda already provides inductive-inductive types, Coq and Lean both
@@ -1553,15 +1572,17 @@ predicate and eliminator relation to the environment.
 \item Derive the dependent eliminator from the non-dependent one with the
 strategy laid out in \citep{constructingqiits}.
 \end{enumerate}
+\end{remark}
 
-It is important to not, that there is an unpublished alternative approach to the
+\begin{remark}[Internalization-Based Approach]
+It is important to note that there is an unpublished alternative approach to the
 reduction which uses an internalization of the syntax for inductive-inductive types
 and a term model, similar to our construction in \Cref{sec:if-ex}.
 Ambroise Lafont formalized this approach in Agda.
 The drawbacks of this approach might be that there is a bigger overhead
 in a potential implementation based on this idea,
 due to the indirect nature of the construction.
-
+\end{remark}
 
 
 
