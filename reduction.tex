@@ -1522,8 +1522,8 @@ module TestVec (A : Set) (N : Set) (z : N) (s : N → N) where
 \section{Conclusions and Future Work}
 
 It is obvious that the work presented in this chapter is incomplete.
-This chapter shall serve to address what is missing to obtain to complete
-the reduction of inductive-inductive types to inductive families,
+This chapter shall serve to address what is missing to obtain a complete
+reduction of inductive-inductive types to inductive families,
 and to discuss how the constructions can be applied to implement inductive-inductive
 types.
 
@@ -1531,7 +1531,7 @@ types.
 While we succeeded in defining the eliminator relation, we do not show that it
 is actually the graph of a function.
 In \Cref{sec:red-ex}, we saw that the next step in the construction of the
-eliminator would be to show that for each algebra $\gamma^\CC$
+eliminator would be to show that, for each algebra $\gamma^\CC : \grm{\Gamma}^\CC$
 the initial algebra of the relation
 \tqm{\grm{\Gamma}^\RR(\blm{\IFcon{\grm{\Gamma}^\EE}}, \blm{\gamma^\CC})}
 is right-total and left-unique.
@@ -1551,10 +1551,12 @@ then we can conclude that $x_0 = x_1$.
 But to achieve this, we need to apply induction over \emph{two witnesses} of
 relatedness.
 But this \emph{double induction} over the inductive family which represents the
-relation is special in the sense that it only yield linearly many cases
+relation is special in the sense that it only yields needs to be supplied with
+linearly many inductive cases
 since the constructors of the relation are over different of its presyntactical
 indices.
-Capturing this phenomenon has not been done yet for inductive families and
+Capturing this phenomenon has not been done yet for our notion of
+inductive families and
 requires a broader analysis of their indexing.
 
 An alternative to the double induction would be to prove the uniqueness by
@@ -1567,7 +1569,7 @@ $\Sigma$-type:
 (\gamma' : C) \times (\alpha : T(\gamma)) \times (\gamma = e(\gamma', \alpha)) \text{.}
 \end{equation*}
 This inversion can obviously replace the double induction needed in
-the proof of \Cref{lem:red-ex-right-unique}, but it turns out that it is similarly
+the proof of \Cref{lem:red-ex-right-unique}, but it turns out that it is also
 difficult to define and prove.
 Instead of defining inversions, the same might be achieved by defining
 wellformedness predicate and eliminator relation \emph{recursively} instead of
@@ -1580,8 +1582,8 @@ Assuming that we have succeeded in proving that the initial algebra for
 \tqm{\grm{\Gamma}^\RR(\blm{\IFcon{\grm{\Gamma}^\EE}}, \blm{\gamma^\CC})} is
 the graph of a function, how do we turn it into an actual morphism in
 $\grm{\Gamma}^\MM(\con{\Gamma}, \gamma^\CC)$?
-It turns out while it is difficult to generalize a proof for the functionality of
-the eliminator relation, we can easily \emph{state} it by defining a type
+It turns out that while it is difficult to generalize a proof for the functionality of
+the eliminator relation, we can easily \emph{state} this property by defining a type
 $\grm{\Gamma}^\FF(\gamma, \gamma^\CC, \delta, \rho) : \UU$ for each
 algebra $\gamma$ of the type erasure, an arbitrary algebra $\gamma^\CC : \grm{\Gamma}^\CC$,
 an algebra over the wellformedness predicate $\delta$ and one over the relation itself
