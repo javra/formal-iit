@@ -1569,8 +1569,10 @@ $\Sigma$-type:
 This inversion can obviously replace the double induction needed in
 the proof of \Cref{lem:red-ex-right-unique}, but it turns out that it is similarly
 difficult to define and prove.
-
-TODO recursive defs as an alternative?
+Instead of defining inversions, the same might be achieved by defining
+wellformedness predicate and eliminator relation \emph{recursively} instead of
+an inductive definition, though a general definition for this recursive approach
+seems tricky as well.
 \end{remark}
 
 \begin{remark}[From Relations to Morphisms]
@@ -1578,8 +1580,28 @@ Assuming that we have succeeded in proving that the initial algebra for
 \tqm{\grm{\Gamma}^\RR(\blm{\IFcon{\grm{\Gamma}^\EE}}, \blm{\gamma^\CC})} is
 the graph of a function, how do we turn it into an actual morphism in
 $\grm{\Gamma}^\MM(\con{\Gamma}, \gamma^\CC)$?
-
-TODO
+It turns out while it is difficult to generalize a proof for the functionality of
+the eliminator relation, we can easily \emph{state} it by defining a type
+$\grm{\Gamma}^\FF(\gamma, \gamma^\CC, \delta, \rho) : \UU$ for each
+algebra $\gamma$ of the type erasure, an arbitrary algebra $\gamma^\CC : \grm{\Gamma}^\CC$,
+an algebra over the wellformedness predicate $\delta$ and one over the relation itself
+$\rho$.
+Using this, we can define an \emph{embedding} into the sets of morphisms in the
+form of an following operation with the following signature:
+\begin{equation*}
+\inferrule{\grm{\vdash \Gamma} \\
+  \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
+  \gamma : \tqm{\grm{\Gamma}^\EE }^\CC(\gamma_\Sc) \\
+  \gamma^\CC : \grm{\Gamma}^\CC \\
+  \delta_\Sc : \tqm{\grm{\Gamma}^\WW_\Sc(\blgamma)}^\CC \\
+  \delta : \tqm{\grm{\Gamma}^\WW(\blgamma)}^\CC(\delta_\Sc) \\
+  \rho_\Sc : \tqm{\grm{\Gamma}^\RR(\blgamma, \blgammaCC)}^\CC \\
+  \rho : \tqm{\grm{\Gamma}^\RR(\blgamma, \blgammaCC)}^\CC(\rho_\Sc) \\
+  \varphi : \grm{\Gamma}^\FF(\gamma, \gamma^\CC, \delta, \rho) }
+  {\grm{\Gamma}^\mm(\gamma, \gamma^\CC, \delta, \rho, \varphi)
+   : \grm{\Gamma}^\MM\left(\grm{\Gamma}^\Sg(\gamma, \delta), \gamma^\CC \right) }
+\end{equation*}
+This then gives us the desired non-dependent eliminator.
 \end{remark}
 
 \begin{remark}[Implementation of IITs]
