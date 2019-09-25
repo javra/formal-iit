@@ -1551,13 +1551,15 @@ then we can conclude that $x_0 = x_1$.
 But to achieve this, we need to apply induction over \emph{two witnesses} of
 relatedness.
 But this \emph{double induction} over the inductive family which represents the
-relation is special in the sense that it only yields needs to be supplied with
+relation is special in the sense that it only needs to be supplied with
 linearly many inductive cases
 since the constructors of the relation are over different of its presyntactical
 indices.
 Capturing this phenomenon has not been done yet for our notion of
 inductive families and
-requires a broader analysis of their indexing.
+it is unclear how to formally prove the necessary properties for the
+general case, even though they are intuitively fulfilled in every conceivable
+example.
 
 An alternative to the double induction would be to prove the uniqueness by
 \emph{inversion} on the relation:
@@ -1573,8 +1575,10 @@ the proof of \Cref{lem:red-ex-right-unique}, but it turns out that it is also
 difficult to define and prove.
 Instead of defining inversions, the same might be achieved by defining
 wellformedness predicate and eliminator relation \emph{recursively} instead of
-an inductive definition, though a general definition for this recursive approach
-seems tricky as well.
+an inductive definition, though 
+our version of the syntax for inductive-inductive types makes this
+this recursive approach difficult as well, and we have not suceeded in generalizing
+this construction.
 \end{remark}
 
 \begin{remark}[From Relations to Morphisms]

@@ -178,9 +178,9 @@ the following ``pullback'' operations:
   \tqm{\IFSub{\sigma}{\Gamma_\Sc}{\Delta_\Sc}}}
   {\tqm{\Gamma_\Sc \SCon t[\sigma] : B}}
 \\[.7em]
-\inferrule{\tqm{\vdash_{\Gamma_\Sc} \Gamma} \\
+\inferrule{\tqm{\vdash_{\Delta_\Sc} \Delta} \\
   \tqm{\IFSub{\sigma}{\Gamma_\Sc}{\Delta_\Sc}}}
-  {\tqm{\vdash_{\Delta_\Sc} \Gamma[\sigma]}}
+  {\tqm{\vdash_{\Gamma_\Sc} \Delta[\sigma]}}
 \end{gathered}
 \end{equation*}
 given by the defining rules for substitution
@@ -204,7 +204,7 @@ We can define the \emph{weakening} of a subsitution
 \tqm{\wk_\epsilon} 				&:\equiv \tqm{\epsilon} \text{ and} \\
 \tqm{\wk_{\sigma, t}}				&:\equiv \tqm{(\wk_\sigma, \vs(t))} \text{.}
 \end{align*}
-Using \tqm{\wk}, we can then recover the categorical structor of the substitutions
+Using \tqm{\wk}, we can then recover the categorical structure of the substitutions
 by defining the identity \tqm{\IFSub{\id_{\Gamma_\Sc}}{\Gamma_\Sc}{\Gamma_\Sc}}
 by recursion of the context \tqm{\Gamma_\Sc}:
 \begin{align*}
@@ -577,7 +577,7 @@ A section of a displayed algebra of a sort substitution is supposed to map
 sections of its domain to sections of its codomain:
 \begin{equation*}
 \inferrule{\tqm{\IFSub{\sigma}{\Gamma_\Sc}{\Delta_\Sc}}}
-  {\tqm{\sigma}^\DD :
+  {\tqm{\sigma}^\SS :
     \left\{\gamma_\Sc : \tqm{\Gamma_\Sc}^\CC\right\}
     \left\{\gamma_\Sc^\DD : \tqm{\Gamma_\Sc}^\DD(\gamma_\Sc)\right\}
     \to \tqm{\Gamma_\Sc}^\SS(\gamma_\Sc^\DD)
