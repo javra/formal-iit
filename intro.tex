@@ -4,10 +4,10 @@ This thesis explores several problems in the field of \emph{type theory}.
 By type theory we will always mean various flavors of what is usually
 referred to as Martin-Löf type theory or dependent type theory.
 Martin-Löf type theory (MLTT) can serve as a foundational framework for
-mathematics as well as an organization principle for functional programming languages.
+mathematics as well as an organization principle for functional programming languages \citep{martin-lof2}.
 
 In the field of type theory, many researchers either apply theoretical considerations
-achieve cleaner formalizations of mathematical content,
+to achieve cleaner formalizations of mathematical content,
 they create implementations of type theory which can be used as
 interactive theorem proving systems, and they try to extend type
 theory to improve its usability and justify these extensions with models.
@@ -16,16 +16,16 @@ In this spirit, this thesis will also explore ways to make certain kinds of form
 and certain constructions in type theory smoother and easier to use.
 While it is \emph{mainly theoretical work}, it has consequences for the application of
 interactive theorem provers, as they are used today.
-This thesis is broadly split in two halfs.
+This thesis is broadly split in two halves.
 Both halfs will explore different classes of language elements both of which are generalizations
 of a language feature which is
 called \emph{inductive types}.
 Inductive types are a common way to define collections of data in mathematics
 as well as computer science.
 
-In the first half, we will try to encapsulate a common proof strategy which
+In the first half, we will encapsulate a common proof strategy which
 is often used in the field of homotopy type theory and especially in
-synthetic homotopy thoery.
+synthetic homotopy theory \citep{hottbook}.
 We will do this by
 proving a very general result about \emph{higher inductive types}.
 These are inductive types in which statements about \emph{equality} between
@@ -33,15 +33,16 @@ elements of these data types carry a \emph{higher-dimensional structure},
 making them on the one hand an interesting object of study in terms of their topology,
 but on the other hand they are sometimes hard to handle.
 Our theorem allows an easier way to prove propositions about these
-equaities of elements.
+equalities of elements.
 
 In the second half, we will explore the topic of induction-induction.
-\emph{Inductive-inductive types} are a class of inductive types which
+\emph{Inductive-inductive types} \citep{nordvallinductive}
+are a class of inductive types which
 allows us to define a data type simultaneously with data types depending on
 values of the former type.
 We will give an exact definition of what inductive-inductive types are,
 and, with a new definition of \emph{inductive families} provide a point of
-comparison which allows us to attempt to represent each example of
+comparison which allows us to represent each example of
 an inductive-inductive type as a construction based on a series of
 inductive families.
 
@@ -98,7 +99,7 @@ To illustrate one main application, imagine we wanted to formalize and reason
 about the syntax of type theory in a type theoretic setting.
 The environment of variables which are at our disposal at a given point in a piece
 of type theoretic syntax are captured in what is called a \emph{context}.
-We can model contexts as a type $Con : \UU$.
+We can model contexts as a type $Con : \UU$ ($\UU$ being the universe of all types).
 But at the same time we want to model types as existing in a context, so we want
 a simultaneous definition of a type family $Ty : Con \to \UU$.
 To see that we can not first define $Con$ and then move on to define $Ty$, consider
@@ -148,7 +149,7 @@ as given in \Cref{sec:paths-main}.
 as stated in \Cref{thm:paths-higher-SvK}.
 \item The formalization of \Cref{sec:paths-main} and \Cref{thm:paths-main-pushout}
 in Lean.
-\item An adapation of the syntax for higher inductive-inductive types by
+\item An adaptation of the syntax for higher inductive-inductive types by
 \citet{ambrussyntax} to separate sort and point constructors, as described, together with
 its semantics, in \Cref{chp:iit}.
 \item A syntax of signatures for inductive families as given in \Cref{chp:if}.
@@ -175,9 +176,9 @@ Logic in Computer Science (LICS)} in 2019 \citep{paths}.
 
 \section{Structure of this Thesis}
 
-We will start off this thesis by giving a more detailled exposition of the
+We will start off this thesis by giving a more detailed exposition of the
 background in type theory, which is the basis for the further content.
-In this endevour, \Cref{chp:tt} does not only serve to give the necessary background
+In this endeavour, \Cref{chp:tt} does not only serve to give the necessary background
 to readers unfamiliar with dependent types, it also sets notations and terminology
 which we will re-use in the later chapters.
 In \Cref{sec:tt-provers}, it furthermore gives a short characterization of the interactive
