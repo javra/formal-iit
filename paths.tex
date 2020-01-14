@@ -806,6 +806,7 @@ In the following, we present an alternative (and significantly shorter) argument
 \end{proof}
 
 \section{Free Groupoids and a Higher Seifert-van Kampen Theorem}\label{sec:paths-svk}
+\sectionmark{Free Gruopoids and Seifert-van Kampen}
 
 Fundamental groups in topology are \emph{quotients} of spaces --
 in homotopy type theory we represented them as 0-truncations of equality types.
@@ -1110,7 +1111,7 @@ object of $\CatD$ and then mapping it to $\CatC$:
 \end{leancode}
 
 The non-dependent eliminator is manifested in the following:
-\begin{leancode}
+\begin{leancodebr}
 section elim'
 parameters {Q : A → Type (max u v)}
   (x : A)
@@ -1122,7 +1123,7 @@ include Qrefl Qeq
 
 @[hott, elab_as_eliminator] protected def path_elim' (y : A) (p : ι x = ι y)
   : Q y := ...
-\end{leancode}
+\end{leancodebr}
 
 The version of the dependent eliminator for pushouts is obtained by a simple
 specialization, as visble in the following snippet:
