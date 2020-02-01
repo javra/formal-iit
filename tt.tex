@@ -14,7 +14,7 @@ provers based on dependent types, Agda and Lean, and point out some of their dif
 
 The term ``type theory'' stems from the early nineteenth centry, when
 Bert\-rand Russell sought to lay out an alternative form of set theory which did not
-suffer from the paradox which Russell discovered
+suffer from the paradox which Russell discovered.
 Todays versions of type theory have little in common with Russell's attempts
 but rather rely on the considerations of Per Martin-Löf (\cite{martin-lof2, martin-lof1})
 who, starting in the 1970's, built a new mathematical foundation based on the
@@ -59,9 +59,9 @@ is assigned a unique type which is known at the point of the creation of the dat
 This assignment, called typing, is decidable, and we consider it a judgment
 rather than a provable proposition that a given term $t$ has type $A$.
 \item Type theory is inherently \emph{constructive} while many
-set theoretic foundations, such as Zermelo-Fraenkel, are \emph{non-construcitve}.
+set theoretic foundations, such as Zermelo-Fraenkel, are \emph{non-constructive}.
 This has great consequences for the computational use of the mathematics represented:
-Every type theoretic function the domain of which are the natural numbers, can compute a
+Every type theoretic function the codomain of which are the natural numbers, can compute a
 numeral for any given input.
 \item While in set theory, \emph{sets are the only primitives} and all data is
 encoded as sets, type theory
@@ -69,10 +69,10 @@ provides often-used objects like \emph{functions and inductively defined types
 as primitives}.
 This means that we can use these without having to care about how to assemble them
 from other primitives. 
-It also offers modularity in the follwowing sense: %TODO find a better word than modularity
-In constrast to a function in set theory, a function in type theory only reveals
-its constituing information:
-What is the resulting output for a given input?
+%It also offers modularity in the following sense: %TODO find a better word than modularity
+%In contrast to a function in set theory, a function in type theory only reveals
+%its constituing information:
+%What is the resulting output for a given input?
 \end{itemize} %TODO maybe say something about sizes
 
 Let us now fix some notation and some basic constructions which will occur
@@ -105,7 +105,7 @@ This is often referred to as
 ``Girard's paradox'' \citep{girard72,hurkens95} which can be seen as the type theoretic equivalent
 to Russell's paradox.
 The solution we assume for the remainder of this text is
-to assume that we have an infinte chain of universes
+to assume that we have an infinite chain of universes
 \begin{equation*}
 \UU_0 : \UU_1,~~ \UU_1 : \UU_2,~~ \UU_2 : \UU_3,~~ \ldots \text{,}
 \end{equation*}
@@ -143,7 +143,7 @@ a function to any term of its domain:
 \end{gathered}
 \end{equation*}
 Here, $\Phi$ is a term that may have $x$ as a free variable.
-$\Phi[a/x]$ denotes the replacement of every appearance of $x$ by $a$.
+$\Phi[a/x]$ denotes the replacement of every free appearance of $x$ by $a$.
 Additional to these rules we also have $\eta$-conversion and $\beta$-reduction:
 \begin{equation*} \label{eq:eta-beta}
 \begin{aligned}
@@ -159,7 +159,7 @@ These so called \textbf{type families} are used to represent set-valued
 functions as well as propositions with a free variable in $A$.
 
 \begin{remark}\label{rmk:tt-syntax}
-When giving inference rules as the ones above, we always assume an arbitray
+When giving inference rules as the ones above, we always assume an arbitrary
 \emph{context} of variables for their premises as well as their conclusion.
 Often, when presenting the syntax of a type theory, rules on how
 to form these contexts $\vdash \Gamma$ are given together with rules for the
@@ -198,6 +198,11 @@ unit type, it suffices to consider its canonical element $\star$:
 	{\elim_\unit(C,p,x) : C(x)}
 \end{equation*}
 with the reduction rule $\elim_\unit(C,p,\star) \equiv p$.
+Some type theories assume so called $\eta$-rules for types like $\unit$, which
+say that for every $x : \unit$, we have $x \equiv \star$.
+We will \emph{not} assume these rules to hold, but instead we will later be able to
+express the fact that all instances of $\unit$ are equal to $\star$ using propositional
+equality.
 
 To give an example for a type which contains more than just one element, we can
 consider the type of booleans $\twotype$, containing elements $0_\twotype$
@@ -221,16 +226,17 @@ would be introduced axiomatically, we can take a look at the type of
 natural numbers.
 It is generated inductively by the zero element and the successor function.
 The eliminator provides the principle of induction on the natural numbers, which
-also makes sure that we can assume that every element of the natural numbers is a
-result of repeatedy applying the successor function to zero:
+also makes sure that, when proving properties about the natural numbers,
+we can assume that every element of the natural numbers is equal to a repeated
+applying the successor function to zero:
 \begin{equation*}
 \begin{gathered}
 \inferrule*[left=$\N$-Form]{ }{\N : \UU} \qquad
 \inferrule*[left=$\N$-Intro]{ }{0 : \UU \\ S : \N \to \N} \\[.7em]
 \inferrule*[left=$\N$-Elim]
-	{C : \N \to \UU \\ p : C(0) \\ q : \textstyle{\prod_{(n : \N)}} C(n) \to C(S(n)) \\
+	{C : \N \to \UU \\ p : C(0) \\ q_n : C(n) \to C(S(n)) \text{ for all $n : \N$} \\
 		x : \N}
-	{\elim_\N(C, p, q, x) : C(x)}
+	{\elim_\N(C, p, q, x) : C(x)} %TODO find a better solution to replace the pi type
 \end{gathered}
 \end{equation*}
 with the reduction rules
@@ -285,7 +291,7 @@ Note that, once we have added dependent functions, we can rediscover
 non-dependent functions as the special case of dependent functions over
 a constant type family.
 When iterating $\Pi$-types,
-we will often find that the arguement of a dependent function is already
+we will often find that the argument of a dependent function is already
 determined by an earlier argument, as in
 $f : (a : A)(b : B(a)) \to C(a, b)$.
 In this case, we borrow the notation used by many theorem provers and
@@ -347,7 +353,7 @@ we will mostly prefer the latter one:
 The type is usually \citepalias{hottbook} denoted by
 $\sum_{(a : A)} B(a)$, mimicing mathematical notation for sums.
 Furthermore there is the short variant of writing $\Sigma(B)$ and
-an Agda-inspired notation $(a : A) \times B(a)$.
+an Agda-inspired notation \mbox{$(a : A) \times B(a)$}.
 The inference rules for this type are just a slight generalization of the
 rules we have already seen for the non-dependent product type:
 \begin{equation*}
@@ -415,7 +421,7 @@ types.
 One example for this is the type of \emph{vectors} of a type $A$.
 Vectors are a variant of lists, where we use the typing to keep track of the
 length of its elements:
-The type of vectors on $A$, is not a type but a type family:
+The type of vectors on $A$ is not a type but a type family:
 \begin{equation*}
 \vecty_{A} : \N \to \UU \text{.}
 \end{equation*}
@@ -460,8 +466,9 @@ we want to introduce here requires an encoding of the constructors in a very spe
 way to be able to present the inductive type as an instance of a very general
 form of a \emph{tree}.
 The types covered by this approach are called \emph{indexed W-Types}, and they
-cover a bigger fragment of inductive types than the non-indexed version of
-which are, in a topos theoretic setting, discussed by \cite{moerdijkwellfounded}.
+cover a bigger fragment of inductive types than the non-indexed version,
+which are also known as ``Petersson-Synek trees'' \citep{petersson1989set},
+and which are in a topos theoretic setting, discussed by \cite{moerdijkwellfounded}.
 The generalization to indexed W-Types, as presented here,
 was found by \cite{indexedcontainers}.
 
@@ -472,9 +479,9 @@ Assume that we are given the following data:
 \item a type $A : \UU$ encoding the number and non-recursive input \emph{data} or \emph{shapes} for contructors,
 \item a function $o : A \to I$ assigning to each piece of input data the corresponding \emph{output index} of
 the constructor,
-\item a type $B : A \to \UU$ of \emph{recursive occurences} or \emph{positions} for each
+\item a type $B : A \to \UU$ of \emph{recursive occurrences} or \emph{positions} for each
 bit of input data, and
-\item a function $r : (a : A) \to B(a) \to I$ of indices of \emph{recursive occurences}.
+\item a function $r : (a : A) \to B(a) \to I$ of indices of \emph{recursive occurrences}.
 \end{itemize}
 Then, we assume that we have
 a type $\IW{A}{B}{o}{r} : I \to \UU$ with the following introduction and elimination
@@ -483,7 +490,7 @@ rules:
 \begin{gathered}
 \inferrule*[left=IW-Intro]{a : A \\
   c : (b : B(a)) \to \IW{A}{B}{o}{r}(r(a, b))}
-  {\IWsup{a}{b} : \IW{A}{B}{o}{r}(o(a))} \\[.7em]
+  {\IWsup{a}{c} : \IW{A}{B}{o}{r}(o(a))} \\[.7em]
 \inferrule*[left=IW-Elim]{C : \{i : I\} \to \IW{A}{B}{o}{r}(i) \to \UU \\
   \makecell{p :  (a : A)
       \left (c : (b : B(a)) \to \IW{A}{B}{o}{r}(r(a, b))\right) \\
@@ -503,7 +510,7 @@ This definition may seem very confusing and overly complicated, but this is nece
 to capture all possible indexed inductive types in full generality.
 In words, the constructor describes that we chose a constructor and giving possible
 non-recursive input data by providing $a : A$,
-and then, based on this data, give data for all recursive occurences of the type
+and then, based on this data, give data for all recursive occurrences of the type
 in a constructor in the form of $c$, we get a new element $\IWsup{a}{c}$
 which is reminiscent of the \emph{supremum} of the given data.
 Conversely the elimination rule describes that to proof a statement $C$ about this
@@ -515,7 +522,7 @@ at our disposal (allowing us to define $A + B$),
 indexed W-types live up to our expectations of capturing
 all previously mentioned inductive types.
 To provide a translation of these, including indexed inductive types still to
-define in the next chapter, we will provide all the
+be defined in the next chapter, we will provide all the
 arguments for the respective indexed W-types in Table~\ref{tbl:tt-iws},
 while often, in the case of $I \equiv \unit$ describe
 $\unit \to A$ in place of a type $A$ itself.
@@ -632,8 +639,8 @@ in the next chapter, is the underlying insight of the field of \emph{homotopy ty
 This correspondence was first made precise by \cite{kapulkinlumsdaine},
 who, after an idea by Vladimir Voevodsky,
 modelled homotopy type theory using simplicial sets.
-In this correspondence -- a succinct list of which can be found in Table~\ref{tbl:tt-hott}) --
-equality proofs correspond to \textbf{paths}, a name which we not refrain
+In this correspondence -- a succinct list of which can be found in Table~\ref{tbl:tt-hott} --
+equality proofs correspond to \textbf{paths}, a name which we will use as a synonym
 from using from now on.
 
 \begin{sidewaystable}
@@ -644,7 +651,7 @@ from using from now on.
 (closed) Type $A : \UU$
   & Proposition
   & Set
-  & Topolocial Space \\
+  & Topological Space \\
 Function $f : A \to B$
   & Proof of implication
   & Function between sets
@@ -654,7 +661,7 @@ Type family $B : A \to \UU$
   & Family of sets indexed by $A$
   & Fibration over base $A$ \\
 Pair $(a, b) : A \times B$
-  & Proof of conjuction
+  & Proof of conjunction
   & Pair in cartesian product
   & Point in product space \\
 Element $\inl(a) : A + B$
@@ -696,7 +703,7 @@ p^* : C(a) \to C(b)
 \end{lemma}
 
 \begin{proof}
-By induction, we can assume $p$ to be $\refl_a$, on wich we can define
+By induction, we can assume $p$ to be $\refl_a$, on which we can define
 $(\refl_a)^*(c) :\equiv c$.
 \end{proof}
 
@@ -730,7 +737,7 @@ p \ct \refl_b :\equiv p \text{.}
 \end{proof}
 
 Having provided the proof that equality is an equivalence relation,
-we can already conclude that it makes types a \emph{setoid}.
+we can already conclude that it makes each type a \emph{setoid}.
 But more than that we can also prove that it carries the structure of a
 \emph{groupoid}:
 \begin{lemma}[Groupoid laws]
@@ -745,8 +752,8 @@ Then,
 \end{lemma}
 
 \begin{proof}
-All of these laws can be proven by induction on of the paths involved,
-in case of the associativity on $r$.
+The first three laws can be proven by induction on the path $p$, the last one
+by induction on $r$.
 \end{proof}
 
 As a suitable notion of equality, propositional equality is respected by
@@ -759,7 +766,7 @@ $\ap_f : (a = b) \to (f(a) = f(b))$ such that $\ap_f(\refl_a) \equiv \refl_{f(a)
 
 Under this notion $\ap_f$, every function is functorial with respect to
 equality.
-Besides this, it is also functorial with respect of function composition.
+Besides this, it is also functorial with respect to function composition.
 The following laws can be proved by induction on the paths involved:
 \begin{lemma}
 Let $A, B, C : \UU$, $f : A \to B$ and $g : B \to C$. For paths $p : a =_A b$ and
@@ -772,7 +779,7 @@ $q : b =_A c$ we have equalities
 \end{itemize}
 \end{lemma}
 
-If in the above considerations, $f$ is instead a dependent function, we can not
+If in the above considerations $f$ is instead a dependent function, we can not
 necessarily consider the type $f(a) = f(b)$ since the left and right hand side
 need not have the same type.
 For this situation, there is a dependent version of the above defined function
@@ -786,7 +793,7 @@ a dependent function
 such that $\apd_f(a, a, \refl_a) \equiv \refl_{f(a)}$. \hfill $\square$
 \end{lemma}
 
-We continue by consideren one of the representation of one of the most import
+We continue by considering one of the representation of one of the most import
 notions of homotopy theory:
 Homotopies between functions.
 \begin{defn}[Homotopy of functions]\label{def:tt-htpy}
@@ -874,6 +881,19 @@ and yields an inverse to $\idtoeqv_{A, B}$ which we call
 \end{equation*}
 \end{axiom}
 
+\begin{remark}
+Postulating axioms is avoided as often as possible in type theory, since it is detrimental
+to one of the desirable properties of the type theory: normalization.
+To give an example, with an axiom like $\ua$, not every closed term of the natural numbers
+can be reduced to a numeral any more.
+It is for this reason that type theorists have been looking for ways to achieve univalence
+without postulating it as an axiom.
+One approach is to not consider equality as an inductive type any more but to have it as
+a primitive in the language.
+This approach is used in a variety of type theory called ``cubical type theory''
+\citep{cohen2016cubical}.
+\end{remark}
+
 Another instance of equalities we have not explored so far are \emph{iterated equalities}:
 Equalities between equality proofs.
 Since for types $A : \UU$ representing propositions we might only care about whether
@@ -891,7 +911,7 @@ For a type $A : \UU$ we set
 \isntype{0}{(A)} \equiv \isSet(A)  &:\equiv (a, b : A)(p, q : a = b) \to p = q \text{, and} \\
 \isntype{(n + 1)}{(A)} &:\equiv (a, b : A) \to \isntype{n}{(a = b)} \text{ for $n : \N$.}
 \end{align*}
-and call $A$ a \textbf{proposition} if $\isProp(A)$, a \textbf{set} if $\isSet(A)$ and more
+and call $A$ a \textbf{(mere) proposition} if $\isProp(A)$, a \textbf{set} if $\isSet(A)$ and more
 general an
 \textbf{$n$-type} or $n$-truncated if $\isntype{n}{(A)}$.
 We also extend this definition to include what it means for a type to represent a
@@ -930,9 +950,9 @@ depending on whether we assume presence of the K-rule or not.
 
 If, as in homotopy type theory, we assume univalence and only the J-rule,
 it is an easy exercise to find types which are not sets.
-In fact the universe $\UU$ itself is not a set:
+In fact the universe $\UU$ itself is not a set \citepalias[Example 3.1.9]{hottbook}:
 We can construct
-at least two different automorphisms of $\twotype$: The identity function
+two different automorphisms of $\twotype$: The identity function
 and the map $f : \twotype \to \twotype$ with $f(0_\twotype) :\equiv 1_\twotype$
 and $f(1_\twotype) :\equiv 0_\twotype$.
 It is easy to prove that these are non-equal and as such, using univalence,
@@ -990,7 +1010,7 @@ used to organize definitions and their scope.
 \item There is a way to customize the implementation by the means of \emph{options}.
 This enables us to switch between a set-truncated setting and
 homotopy type theory.
-\item The implementations have an source code which open and thus reviewable and
+\item The implementations have an source code which is open and thus reviewable and
 customizable by everybody.
 \item There are a one or several text editors which support an interactive
 and well-integrated use of the language.
@@ -1027,7 +1047,7 @@ inductive nat : Type 0
 | succ : nat → nat
 
 #check nat.succ nat.zero -- Prints nat.succ nat.zero : nat
-#check @nat.rec_on -- Π {C : nat → Sort u} (n : nat),
+#check @nat.rec_on -- Π {C : nat → Type u} (n : nat),
                    --   C nat.zero →
                    --   (Π (a : nat), C a → C (nat.succ a)) → C n
 \end{leancodebr}
@@ -1040,7 +1060,7 @@ have named projections.
 Structures provide a basic inheritance mechanism as they can extend other structures:
 \begin{leancode}
 structure graph (V : Type) :=
-  (E : V → V → Sort)
+  (E : V → V → Type)
 
 structure refl_graph (V : Type) extends graph V :=
   (refl : Π (v : V), E v v)
