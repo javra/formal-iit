@@ -31,8 +31,8 @@ A main objective of this line of research is to describe, classify, and compare
 path spaces (i.\,e.\ equality types) or homotopy groups (i.\,e.\ truncated path spaces)
 of higher inductive types such as circles and spheres.
 
-A minimal example for a higher inductive type could be the following definition of would be a
-type theoretic representation of the topological space of the interval $I$.
+A minimal example for a higher inductive type could be the following definition of a
+type theoretic representation of the space of the interval $I$.
 Its constructors are two points, but furthermore also a path which
 connects these two points:
 \begin{equation*}
@@ -49,7 +49,7 @@ connects these two points:
 It is easy to check that the unique map $I \to \unit$ is an equivalence,
 and so $I$ is contractible and thus a set.
 But what if instead of two point constructors we only had one,
-as in the higher inductive types goverened by the following rules?
+as in the higher inductive types governed by the following rules?
 \begin{equation*}
 \begin{gathered}
 %\inferrule*[left=$\Sph^1$-Form]{ }{\Sph^1 : \UU} \qquad
@@ -63,7 +63,7 @@ as in the higher inductive types goverened by the following rules?
 We can see that $\Sloop$ introduces a new path from $\Sbase$ to itself which
 cannot be reduced to $\refl_\Sbase$.
 This means that we can interpret it as a loop which is not homotopic
-to the identity, and so the type represents the topological space of the circle
+to the identity, and so the type represents the circle
 (cf. \Cref{fig:hit-circle}).
 The fact that $\Sloop$ is not equal to $\refl_\Sbase$ also makes it clear that
 this type is not a set.
@@ -159,7 +159,7 @@ presented were just special cases of a pushout,
 for example the suspension $\Susp(A)$ can also be defined
 as the pushout where both $f$ and $g$ are the unique map $A \to \unit$.
 
-An example for a higher inductive types, the importance of which is easily recognizable
+An example of a higher inductive type, the importance of which is easily recognizable
 even we only care for propositions and sets is the one of the \textbf{truncation operator}.
 It is a tool to bring types to the desired level of truncation,
 as we can see in the following example:
@@ -169,9 +169,11 @@ But the sum of two propositional types is not necessarily a proposition itself:
 For example we have $\unit + \unit \simeq \twotype$.
 So how can we make it a proposition?
 The solution is to add equations between \emph{all} the points in the sum type
-and additionaly make sure that no trivial higher equality proofs exist.
+and additionally make sure that no trivial higher equality proofs exist -- the
+second introduction rule below is a short way of saying that all these paths should
+exist.
 Similar situations can happen for every truncation level.
-For example, a collection of sets is generelly not a set itself.
+For example, a collection of sets is generally not a set itself.
 The elimination principle for this operation has to make sure that only
 functions on the truncated type, which represent continuous maps, can
 be created, and so it has to require that the fibers of the type family which
@@ -197,7 +199,7 @@ find a general way to express all higher inductive types which we need.
 \section{Coequalizers as a Fundamental HIT}
 
 For a long time after homotopy type theory became its own field,
-the question about what could be a suitable syntax and sematics for
+the question about what could be a suitable syntax and semantics for
 higher inductive types remained open.
 To make up for the lack of core support for higher inductive types
 in interactive theorem provers, users of Coq, Agda, and Lean decided to come
@@ -222,7 +224,7 @@ we want a projection map from $A$ into the quotient and we need to make
 sure that any $a, b : A$ with $a \sim b$ are projected to equal elements
 of the quotient.
 An elimination principle should say that maps out of the quotient are
-the same as makes out of $A$ respecting the relation $\sim$.
+the same as maps out of $A$ respecting the relation $\sim$.
 And these are exactly the features of the type of \textbf{homotopy coequalizers}
 which we will now introduce.
 The reason why we refrain from calling them quotients
@@ -265,7 +267,7 @@ and a path $p : a = a'$, we will for $b : B(a)$ and $b' : B(a')$ define the
 type of
 \textbf{paths over} or \textbf{dependent paths over} $p$ to be
 \begin{equation*}
-(b =_p b') :\equiv (p*(b) = b') \text{.}
+(b =_p b') :\equiv (p_*(b) = b') \text{.}
 \end{equation*}
 These path-overs have proven to be useful for many formalizations and their
 attributes, as well as their generalizations to square-overs and
@@ -319,7 +321,8 @@ we have presented ways to encode all the higher inductive types
 which we have seen so far as coequalizers.
 
 \begin{remark}[Coequalizers as Pushouts]
-Basing all necessary higher inductive type is a somewhat arbitrary decision
+Basing all necessary higher inductive types on homotopy coequalizers
+is a somewhat arbitrary decision
 based on aesthetical considerations, since we can also derive coequalizers
 from pushouts in the following way:
 \begin{center}
@@ -357,7 +360,7 @@ higher inductive types look like.
 For a very concrete example, one of the most basic results in homotopy theory
 is the proof of the statement that \emph{the fundamental group of the circle is
 isomorphic to the group $\Z$ of integers}.
-It is an example of a proplem which in a classical, set theoretic setting,
+It is an example of a problem which in a classical, set theoretic setting,
 is solved in a way which is very different from the approach which is needed
 in its type theoretic counterpart.
 \cite{licataShulman_circle} were the first to translate this fact into the
@@ -369,12 +372,12 @@ isomorphic to the pushout of the fundamental groupoid of these spaces.
 This is an important help when trying to calculate homotopy groups of spaces
 which were ``glued'' together from more primitive spaces using pushouts.
 \cite{favonia:SvK} documented and formalized in Agda a type theoretic
-equivalent of the Seifert-van Kampen thoerem.
+equivalent of the Seifert-van Kampen theorem.
 In this chapter, we will revisit the proof ideas for both of these results
 and discover, what they have in common.
 
 The intuitive way to compare the integers with the loop space
-$\Omega(\Sph^1)$ of the sphere is the following:
+$\Omega(\Sph^1)$ of the circle is the following:
 Each loop can be reached by following the constructor $\Sloop$ a number of
 times either in its actual direction or by reversing the direction, i.\,e.\
 concatenating with $\Sloop \inv$.
