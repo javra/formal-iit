@@ -686,7 +686,7 @@ holds judgmentally in our formalization.
   J &: M \to \UU \\
   K &: N \to \UU \\
   r &: K(n_0) \\
-  e &: \Pi (l : L). J(f(l)) \simeq K(g(l))
+  e &: (l : L) \to J(f(l)) \simeq K(g(l))
  \end{align*}
 and a morphism between $(J,K,r,e)$ and $(J',K',r',e')$ consists of fiberwise
 functions which preserve $r$ and commute with $e$. %, $e'$.
@@ -718,7 +718,8 @@ We can use our main result to reprove \Cref{thm:hit-s1} stating that
 \end{equation*}
 
 \begin{proof}[New proof for \Cref{thm:hit-s1}]
-As discussed previously, $\Sone$ is the coequalizer of $\unit$ and
+As discussed in \Cref{sec:coeq-hit}, $\Sone$ can be expressed as
+the coequalizer of $\unit$ and
 the relation which has $\unit$ as its value.
 This allows us to apply \Cref{thm:paths-mainresult-cat-based} and, since all quantifications
 are now quantifications over the unit type, we can safely ignore them.
@@ -780,7 +781,7 @@ In the following, we present an alternative (and significantly shorter) argument
  We fix $n_0$ and define
  \begin{align*}
   Q &: (n : N) \to (\inr(n_0) = \inr(n)) \to \UU \\ 
-  Q(n,q) &:\equiv \ap_\inr^{-1}(q).
+  Q(n,q) &:\equiv (p : n_0 = n) \times \ap_\inr(p) = q. %%\fib_{\ap_\inr}(q).
  \end{align*}
  We also need to define the type family $P$.
  Given something in $M$, we ``move'' it back to $N$ by going via the fiber, which
@@ -798,7 +799,7 @@ In the following, we present an alternative (and significantly shorter) argument
  need in order to define the component $e$.
  Thus, we have 
  \begin{equation*}
-  \mathsf{ind}^Q_{r,e} : \{n : N\}(q : \inr(n_0) = \inr(n)) \to \ap_\inr\inv(q),
+  \mathsf{ind}^Q_{r,e} : \{n : N\}(q : \inr(n_0) = \inr(n)) \to (p : n_0 = n) \times \ap_\inr(p) = q,
  \end{equation*}
  i.\,e. a section $s$ of $\ap_\inr$ (a function such that $\ap_\inr \circ s = \mathsf{id}$).
  To show that $s \circ \ap_\inr : (n_0 = n) \to (n_0 = n)$ is the identity,
@@ -815,7 +816,8 @@ which does not quotient or truncate.
 In homotopy theory, different versions have been proved by \cite{lurie18derived}
 and \cite{brown2011nonabelian}.
 In homotopy type theory, it is an open problem how this could be done.
-Our results of the current paper suggest one possible such higher Seifert-van Kampen theorem,
+The results of this chapter suggest one possible such higher Seifert-van Kampen theorem
+(\Cref{thm:paths-svk}),
 which we present in this section.
 Note that the precise formulation of a theorem is part of the open question how
 to generalize the Seifert-van Kampen theorem in homotopy type theory,
@@ -859,7 +861,8 @@ To simplify things further, let us fix $n_0 : N$ and consider lists starting at 
 Let us now look at the following \emph{indexed} inductive type $C_0 : (M+N) \to \UU$
 with three constructors,
 where $C_0(x)$ should be understood as a type of lists from $n_0$ to $x$.
-Recall that we keep the embeddings $i_1 : M \to (M+N)$ and $i_2 : N \to (M+N)$ implicit.
+Recall that we keep the embeddings $i_1 : M \to (M+N)$ and $i_2 : N \to (M+N)$ implicit,
+and that the data we are given are maps $f : L \to M$ and $ g : L \to N$.
 \begin{equation*}
 \begin{gathered}
 \inferrule*[left=$C_0$-Intro1]{ }{\nil : C_0(n_0)} \\[.7em]
@@ -924,7 +927,7 @@ Then, the corresponding type $G$ in the ``folded'' form looks as follows:
  \begin{alignedat}{1}
   & \mathsf{data} \; G : A \to \UU \\
    & \quad \nil : G(a_0) \\
-   & \quad \cons : \Pi \{b,c:A\}. (b \sim c) \to G(b) \simeq G(c)
+   & \quad \cons : \{b,c:A\} \to (b \sim c) \to G(b) \simeq G(c)
  \end{alignedat}
 \end{equation}
 Let us write $\mathfrak G(a_0, \_)$ instead of $G(\_)$, in order to explicitly
@@ -997,7 +1000,7 @@ Our definition of $C$ would be covered by any potential implementation of
 indexed higher inductive types.
 We think it would be desirable to also allow a direct syntactical representation as
 in
-\textsc{$C$-Intro7}, even if only as syntactic sugar
+\textsc{$C$-Intro2-6}, even if only as syntactic sugar
 for the rules it replaces.
 Note that Kaposi and Kov{\'a}cs allow equalities between types,
 which is very similar to allowing this family of equivalences.
@@ -1006,10 +1009,10 @@ The critical step in the above proof of \Cref{thm:paths-higher-SvK} is to establ
 $C$ as the initial object of the
 category $\CatP$.
 With the specification suggested by Kaposi and Kov{\'a}cs allowing
-\textsc{$C$-Intro7}, with equalities instead of
+\textsc{$C$-Intro2-6}, with equalities instead of
 equivalences, this part is easy.
 However, we want to emphasize that the initiality of
-$C$ using \textsc{$C$-Intro7}
+$C$ using \textsc{$C$-Intro2-6}
 is not immediate at all if we use what we could call the
 \emph{direct induction principle}
 \footnote{The terminology was suggested by Anders M\"ortberg.}.
@@ -1019,7 +1022,7 @@ and by current proof assistants such as cubical Agda.
 Unfortunately, due to the type dependency in the direct induction principle,
 it becomes very hard to ``fold'' the components for the type
 $C$ in order to achieve the principle one
-would expect from the constructor \textsc{$C$-Intro7}.
+would expect from the constructor \textsc{$C$-Intro2-6}.
 We expect that implementing \Cref{thm:paths-higher-SvK} in cubical Agda would be
 extremely tedious for this reason.
 % (note that \Cref{thm:higher-SvK} is also not part of our Lean formalization).
