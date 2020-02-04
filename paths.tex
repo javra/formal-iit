@@ -42,7 +42,7 @@ P : (b : A) \to [a_0] = [b] \to \UU \text{.}
 \end{equation}
 Like for the two versions of the J-rule, a principle answering the based version
 of the question also answers the unbased one, which is why we will focus
-exclusively on the former.
+exclusively on the former, and we will be able to easily derive the latter from it.
 
 In order to get some intuition for the subtleties of the equality types,
 let us first look at a hypothetical principle which turns out to be wrong.
@@ -101,7 +101,7 @@ together with terms
 r &: P(\refl_{[a_0]}) \text{ and} \\
 e &: \{b, c : A\}(q : [a_0] = [b])(s : b \sim c) \to P(q) \simeq P(q \ct \glue(s)) \text{.}
 \end{align*}
-The we can counstruct a dependent function
+The we can construct a dependent function
 \begin{equation*}
 \ind_{r, e} : \{b : A\}(q : [a_0] = [b]) \to P(q)
 \end{equation*}
@@ -175,7 +175,7 @@ Most importantly,
 we can talk about the concept of homotopy initiality without ever referring
 to higher morphisms.
 Technically, we do not even need associativity -- it could be excluded from the
-following definition without consequences for the rest of the paper.
+following definition without consequences for the rest of the section.
 
 \begin{defn}[Wild Categories]
 A \textbf{wild category} $\CatA$, for simplicity henceforth simply
@@ -199,7 +199,7 @@ Initiality is one of the few notions which are still well-behaved
 in wild categories:
 We can define it in terms of contractability.
 \begin{defn}[Initiality]
-An object $X$ of a category $\CatA$ is called \textbf{initial} if for every other
+An object $X$ of a category $\CatA$ is called \textbf{initial} if for every
 object $Y$ the type of morphisms $\CatA(X, Y)$ is contractible.
 \end{defn}
 
@@ -331,7 +331,7 @@ category $\CatD$:
  \end{align*}
  and morphisms in $\CatD((L,p), (L',p'))$ are pairs $(g,\epsilon)$ of types 
  \begin{align}
-  & g : \Pi(x : \quot). L(x) \to L'(x) \label{eq:D0-morph-g}  \\
+  & g : (x : \quot) \to L(x) \to L'(x) \label{eq:D0-morph-g}  \\
   & \epsilon : g(p) = p' \label{eq:D0-morph-e}
  \end{align}
  Again, the remaining components of the category are defined in the straightforward way.
@@ -414,10 +414,10 @@ equation \eqref{eq:paths-Phi0-compute}.
 This gives us the following type which we want to inhabit:
  \begin{equation} \label{eq:paths-Phi1}
   \begin{alignedat}{2}
-   &&& \left(g : \Pi(x : \quot). L(x) \to L'(x)\right) \times \left(g(p) = p'\right) \\
-   \simeq &&& \phantom{\times} \left(f : \Pi(b : A). L([b]) \to L'([b])  \right) \\
+   &&& \left(g : (x : \quot) \to L(x) \to L'(x)\right) \times \left(g(p) = p'\right) \\
+   \simeq &&& \phantom{\times} \left(f : (b : A) \to L([b]) \to L'([b])  \right) \\
            &&& \times (\delta: f(p) = p') \\
-           &&& \times \Bigl( \Pi\{b,c : A\},(s : b \sim c). \\
+           &&& \times \Bigl( \{b,c : A\} (s : b \sim c) \to \\
            &&& \phantom{=========} \idtoeqv(\ap_L(\glue(s))) \circ f(b)  \\
            &&& \phantom{=======} = f(c) \circ \idtoeqv(\ap_{L'}(\glue(s)) \Bigr)
   \end{alignedat}
@@ -501,8 +501,8 @@ Since $\Phi_1$, as constructed in \Cref{lem:paths-cats-are-iso}, preserves
 morphism spaces, $\Phi_0$ preserves the initial object.
 Thus, all we need to do is to use the object found in \Cref{lem:paths-D0-init}
 and compute using \eqref{eq:paths-Phi0-compute}.
- This gives us $K_0^i$ and $r_0^i$ immediately.
- The last component $e_0^i$ is correct by a standard ``path induction''-argument.
+ This gives us $K^i$ and $r^i$ immediately.
+ We obtain the last component $e^i$ by a standard ``path induction''-argument.
 \end{proof}
 
 As a last step we can now derive the dependent eliminator from the non-dependent one.
@@ -516,7 +516,7 @@ we use a small trick to ``strictify'' equations.
 
 \begin{proof}[Proof of \Cref{thm:paths-main-thm}]
 Assume that $P$, $r$ and $e$ are given.
-The ``total space'' versions of these three components from an object
+The ``total space'' versions of these three components of an object
 $(\overline P, \overline r, \overline e)$ of the category $\CatC$, and they
 are defined as follows:
 \begin{align*}
@@ -533,7 +533,7 @@ equivalences for the first and second component.
 Explicitely, the function part of $\overline e (s)$ maps a given pair
 $(q, x)$ with $q : [a_0] = [b]$ and $x : P(q)$
 to the pair $(q \ct \glue(s), e(q,s,x))$.
-We have a morphism from initial object of $\CatC$ to this newly constructed object
+We have a morphism from the initial object of $\CatC$ to this newly constructed object
 which from now on we will call $(f, \gamma, \delta)$,
 but we also have the ``first projection'' in the other direction:
  \begin{align}
@@ -562,7 +562,7 @@ The equality $\psi$ in \eqref{eq:section-retraction} consists of three parts,
 one for each component;
 let us write $(\psi^1, \psi^2, \psi^3)$ for them.
 The general idea is that, just as $\psi^1$ has allowed us to construct
-the inuction principle \eqref{eq:derived-ind-principle},
+the induction principle \eqref{eq:derived-ind-principle},
 $\psi^2$ allows us to show the first $\beta$-equation and $\psi^3$ gives us the
 second one.
 The main difficulty here are the many \emph{transports} or \emph{pathovers}
@@ -588,7 +588,7 @@ Using this, and calculating the left side of \eqref{eq:section-retraction}, we g
  We need to show that the second components are equal.
  From $\delta$, we get that the second components are equal when one is
  transported along the $\delta^1$,
- and from $\psi^1$, we get that this is a transport along $\refl$.
+ and from $\psi^2$, we get that this is a transport along $\refl$.
 
 
  The procedure for the second $\beta$-equation is similar. 
