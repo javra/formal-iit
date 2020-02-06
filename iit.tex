@@ -19,7 +19,7 @@ Inductive-inductive types are a feature of type theories which comes naturally
 in provers like Agda, which are based on dependent pattern matching.
 A formal treatment of their syntax and semantics is still interesting for
 several reasons:
-We to give
+We like to give
 grounds to their soundness, we might want to implement them in theorem provers
 which are not based on dependent pattern matching but on a derivation of elimination rules,
 or we might use them as a tool to prove the consistency of concepts like
@@ -82,6 +82,10 @@ constructors to only allow for inductive-inductive types.
 In contrast to their presentation we will leave the context of the ambient type
 theory implicit and, instead of highlighting syntax of the ambient type theory,
 mark elements of the source type theory in \gr{green}.
+The only technical difference between our type theory and this proposed source
+type theory is that we want an explicit separation of sort and point constructors,
+which prohibit some of the possible types which are possible in \cite{ambrussyntax}.
+This separation is achieved by introducing \emph{kinds} (see below).
 
 We assume that the source type theory makes use of the standard syntax of type
 theory, using contexts, types, terms, and variables.
@@ -117,7 +121,7 @@ So we have the usual two rules for context formation:
 \end{equation*}
 
 We need one atomic building block for sort types:
-For plain types we and the codomain of function types we need a type \grm{\UU} which serves as a
+For plain types and the codomain of function types we need a type \grm{\UU} which serves as a
 token for the \emph{universe}.
 We will call terms of this universe ``small types''.
 Positiviy requires that these are the only (internal) types which are allowed in
@@ -133,12 +137,15 @@ of universe what is commonly referred to as ``Tarski-style universe'' (cf. ~\cit
 For sorts which are type families over other sorts that we seek to define, and for
 constructors which recursively refer to other constructors, we need $\Pi$-types
 which have a small type as their codomain.
-To distinguish them from other type formers we will refer to them as
+To distinguish them from the other function types, which we will introduce below,
+we will often refer to them as
 \emph{recursive $\Pi$-types}.
 Note that whether we want to build a sort or a point type only depends on the
 kind of the \emph{codomain} of such a $\Pi$-type.
 To eliminate from $\Pi$-types we want a rule for its \emph{application} which
-turns a term of a $\Pi$-type into a term of its codomain:
+turns a term of a $\Pi$-type into a term of its codomain.
+Note that there is no introduction rule in the form of $\lambda$ terms for these
+functions, since they are not needed in the description of inductive-inductive types.
 \begin{equation*}
 \inferrule{\grm{\Gamma \vdash a : \UU} \\
   \grm{\Gamma, \El(a) \vdash B :: k}}
@@ -148,12 +155,12 @@ turns a term of a $\Pi$-type into a term of its codomain:
   {\grm{\Gamma, \El(a) \vdash \IIapp(f) : B}}
 \end{equation*}
 
-Additionally, we want sorts to be able to be parameterized by previously defined
+Additionally, we want sorts to be able to be parametrised by previously defined
 types which are not part of the signature itself.
 The same goes for point constructors.
 Since this cannot be captured using the previous $\Pi$-type, we will do the obvious
 and just introduce another type former for this occasion.
-We will usuall call it \emph{external} or \emph{non-recursive} function type.
+We will usually call it \emph{external} or \emph{non-recursive} function type.
 Note that external functions must have a fixed kind.
 This is to prevent a function which, depending on the input returns sometimes
 a sort and sometimes a point constructor.
@@ -323,7 +330,7 @@ The encoding of the natural numbers as would correspond to the
 following source type theory context using the first :
 \begin{equation*}
 \grm{
-\cdot,\, \UU,\, \El(\vz),\, \ExtPi{\vs(\vz)}{\El(\vs(\vs(\vz)))}
+\cdot,\, \UU,\, \El(\vz),\, \Pi(\vs(\vz), \El(\vs(\vs(\vz))))
 }\text{.}
 \end{equation*}
 Often, we will, instead of denoting variables using de~Bruijn indices, use names
@@ -333,7 +340,7 @@ Assuming we always use fresh names, this is not any more imprecise than restrict
 ourselves to use \grm{\vz} and \grm{\vz} instead:
 \begin{equation*}
 \grm{
-\cdot,\, \N : \UU,\, 0 : \El(\N),\, \mathop{S} : \ExtPi{n : \N}{\El(\N)}
+\cdot,\, \N : \UU,\, 0 : \El(\N),\, \mathop{S} : \Pi(n : \N, \El(\N))
 }\text{.}
 \end{equation*}
 \end{example}
@@ -479,7 +486,7 @@ functions forming a \emph{strict} category. %TODO more explanation here
 
 \begin{example}[Natural numbers]\label{ex:iit-nat-alg}
 Strictly speaking, the algebra interpretation of the
-context from our example of natrual numbers (Example~\ref{ex:ii-syntax-nat})
+context from our example of natural numbers (Example~\ref{ex:ii-syntax-nat})
 would compute to the following iterated $\Sigma$-type:
 \begin{equation*}
 \grm{\left(N' : (N : \top \times \UU) \times \pr_2(N)\right)
@@ -515,7 +522,7 @@ that turns them into a category.
 The fact that the type is equipped with a non-dependent eliminator will then
 correspond to the fact that we can find a morphism from its
 realization to any other algebra -- the type is weakly initial.
-The fact that it also comes with $\beta$-rules is expressed by the fact
+The fact that it also comes with $\eta$-rules is expressed by the fact
 that this morphism is unique, making the realization the \emph{initial algebra}.
 In this section we first give the definition of morphisms and then define
 initiality.
@@ -570,8 +577,8 @@ obtain an algebra of the term in the codomain of the morphism match:
 \end{defn}
 
 Recursive $\Pi$-types are mapped to dependent function spaces on the
-set which is the algebra ofer the universe term.
-For the application we can perform on the equality proof and
+set which is the algebra of the universe term.
+For the application we can perform induction on the equality proof and
 thus we can assume it to be $\refl$.
 \begin{align*}
 \grm{\Pi(a, B)}^\MM(\mu, \pi, \phi)
@@ -615,10 +622,10 @@ Substitution laws hold strictly again.
 
 The definition of morphisms doesn't yet make the algebras over a given
 signature \grm{\Gamma} a category: For this we would still need to define
-identity and composition and prove the cateogory laws.
-But these constructions are trivial on the one hand -- in last consequence
-they are identity and composition of functions in the outer type theory --
-and they are not necessary to state the most important categorical attribute
+identity and composition and prove the category laws.
+But these constructions are trivial: In last consequence
+they are identity and composition of functions in the outer type theory.
+Besides this, they are not necessary to state the most important categorical attribute
 is definable without identity and composition:
 Initiality.
 
@@ -630,6 +637,9 @@ for every other algebra $\delta : \grm{\Gamma}^\CC$ we can find a morphism
 \end{equation*}
 It is (strongly) \textbf{initial}, if this morphism is unique for every $\delta$.
 \end{defn}
+
+The existence of initial algebras for every possible context
+will be the main topic of \Cref{chp:red}.
 
 \begin{remark}
 We now defined what it means for an algebra to admit a non-dependent eliminator
