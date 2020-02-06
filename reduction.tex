@@ -25,7 +25,7 @@
 {
   \color{Blue}
   \begin{tabular}{l}
-  \textbf{Inductive-Inductive Syntax} \\
+  \textbf{Inductive Family Syntax} \\
   \hline
   Sorts $\hat{\Pi}_\Sc$, $\UU$ \\
   \hdashline
@@ -59,8 +59,8 @@
 \end{sidewaysfigure}
 
 We have now learned how we can express all inductive-inductive types
-and all inductive families by the means of signature consisting of the contexts
-of type theories which are made specifically for this purpose.
+and all inductive families by signatures consisting of a context
+in a type theory which is made specifically for this purpose.
 Now we want to pursue the question of whether every inductive-inductive type
 can be represented in a type theory that only supports (indexed) W-types, and thus
 inductive families.
@@ -153,7 +153,7 @@ w_{pi} &: \{\Gamma : Con'\} \{A, B : Ty'\} \to
 \end{align*}
 
 Now we can use the predicates to cut out the correct subset of $Con'$ and
-$Ty'$ which we deem correct:
+$Ty'$:
 A context is a precontext together with a proof of its wellformedness just
 as a type is a pretype together with a welltypedness witness:
 \begin{align*}
@@ -333,7 +333,7 @@ index of the only sort under consideration:
 Note that the erasure of the vectors does not coincide with the vectors represented
 as an inductive family (Example~\ref{ex:if-natvec}), because its sort lacks the
 indexing over the natural numbers.
-In fact, it's easy to see that the algebras of this signature would not be isomorphic
+In fact, it's easy to see that the algebras of this signature would be isomorphic
 to the type of lists over the type \blm{A \times \N}.
 \end{example}
 
@@ -367,7 +367,7 @@ Using this we will be able to define the operation creating sort contexts by
 \tqm{\grm{\cdot}^\EE_\Sc}
   &:\equiv\tqm{\cdot_\Sc} \text{,} \\
 \tqm{\grm{(\Gamma,\, B)}^\EE_\Sc}
-  &:\equiv \tqm{\left(\grm{\Gamma}^\EE_\Sc,\, \grm{\UU}^\EE_\Sc\right)} \text{ for \grm{B :: \Sc}, and} \\
+  &:\equiv \tqm{\left(\grm{\Gamma}^\EE_\Sc,\, \UU\right)} \text{ for \grm{B :: \Sc}, and} \\
 \tqm{\grm{(\Gamma,\, A)}^\EE_\Sc}
   &:\equiv \tqm{\grm{\Gamma}^\EE_\Sc} \text{ for \grm{A :: \Pc}.}
 \end{align*}
@@ -532,7 +532,7 @@ respective algebra:
 
 To remove the ambiguity created by the type erasure we will now have to find
 a way to select those instances of the types which are ``wellformed'' in the
-sense that the lie in the correct fibers of dependent sorts.
+sense that they lie in the correct fibers of dependent sorts.
 This predicate will be a proposition dependent on a realization of the erased
 signature, i.\,e. on contexts, it will be a function on the type of algebras
 of the erasure.
@@ -558,8 +558,8 @@ The code for its sort and point constructors looks as follows:
   &= \tqm{\left( \cdot,\,  \El(\var(\vz)(\blm{z})),\,
     \ExtPiP{n : N}{\var(\vz)(\blm{n}) \Rightarrow_\Pc \El(\var(\vz)(\blm{s(n)}))} \right)}
 \end{align*} %TODO
-It's easy to see that the initial algebra of this signature is nothing more than
-the trivial (final) type family on $N$.
+%It's easy to see that the initial algebra of this signature is nothing more than
+%the trivial (final) type family on $N$. that's just plain wrong
 \end{example}
 
 \begin{example}[Vectors]\label{ex:red-w-vec}
@@ -631,7 +631,7 @@ Also, we need to know the interpretation of the erasure of the context the type 
   {\tqm{\grm{\Gamma}^\WW_\Sc(\blm{\gamma}) \SCon \grm{A}^\WW(\blgamma, \blalpha) :: \Pc}}
 \end{gathered}
 \end{equation*}
-The recursion of the context then looks very much like the on in the definition
+The recursion of the context then looks very much like the one in the definition
 of type erasure:
 Extending the sort context whenever we encounter a sort type in the 
 inductive-inductive signature and extending the point case for each point type.
@@ -665,7 +665,7 @@ So we will also give an operation producing the following data:
 \end{equation*}
 
 Let us now proceed to give the definition on all type formers.
-The each sort of the input signature should become a predicate.
+Then each sort of the input signature should become a predicate.
 Since a predicate is the same as a type family with propositional values,
 we set the wellformedness on the universe to be a type family, the domain of which
 is given by the set we obtain from the algebra of the erased context.
@@ -685,7 +685,7 @@ definition of type erasure, we turned them into instances of \tqm{\UU}, so to
 add the information back which we erased, the wellformedness has to turn them into
 non-recursive $\Pi$-types over the erasure of sort term which is the domain of the
 $\Pi$-type we started with.
-The iterpretation of application terms has to follow this step accordingly:
+The interpretation of application terms has to follow this step accordingly:
 \begin{align*}
 \tqm{\grm{\Pi(a, B :: \Sc)}^\WW\{\blm{\gamma_\Sc}\}(\blgamma, \blphi)}
   &:\equiv \tqm{\ExtPiS{\blalpha : \tqm{\grm{a}^\EE}^\CC(\gamma_\Sc)}
@@ -852,7 +852,7 @@ of sort terms:
 \section{The Initial Object}\label{sec:red-sg}
 
 Since we now have a way to ``carve out'' the wellformed elements from the types
-we created via type erasure, can now define our desired inductive-inductive types
+we created via type erasure, we can now define our desired inductive-inductive types
 itself.
 In this section, this will amount to defining just one specific algebra over the
 given inductive-inductive signature.
@@ -1017,11 +1017,11 @@ inductive family syntax instead of syntax itself:
 \end{gathered}
 \end{equation*}
 
-We will now go all the type formers in order, starting with the universe.
+We will now go through all the type formers in order, starting with the universe.
 It justifies the name of the construction, producing a sigma type of the erasure and
 its wellformedness.
-For the element operator, we need the above equation for terms to be able to
-give to populate these sigma types accordingly:
+For the element operator, we need the above equation for terms to be able
+to populate these sigma types accordingly:
 \begin{align*}
 \grm{\UU}^\Sg(\gamma, \delta, \omega)
   &:\equiv (x : \alpha) \times \omega(x) \text{ and} \\
@@ -1041,7 +1041,7 @@ we can set
   &:\equiv p^*\left(\grm{B}^\Sg((\gamma, \alpha), (\delta, \omega), \phi(\alpha, \omega))\right)
     \text{,}
 \end{align*}
-where $p$ is an equation providing proof for
+where $p$ is a proof for
 \begin{equation*}
 \grm{B}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta), \left(\grm{a}^\Sg(\gamma, \delta)\inv\right)^*(\alpha, \omega) \right)
   = \grm{B}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta), \xi \right) \text{.}
@@ -1089,7 +1089,7 @@ equalities similar to the ones that we already saw for terms:
     \grm{\sigma}^\CC\left(\grm{\Gamma}^\Sg(\gamma, \delta)\right)
     = \grm{\Delta}^\Sg\left(\grm{\sigma}^\EE(\gamma), \grm{\sigma}^\WW(\delta) \right) }
 \end{equation*}
-With this rule we can set the provide the correct operations on pulled back types
+With this rule we can provide the correct operations on pulled back types
 and terms:
 \begin{align*}
 \grm{B[\sigma]}^\Sg(\gamma, \delta, \omega)
@@ -1313,7 +1313,7 @@ definition on types, ignoring extensions by types of the respective other kind:
 
 Before giving the definition on type formers, we need again care about how to handle
 at least sort terms.
-For those, we introduce the a construction of the following type:
+For those, we introduce a construction of the following type:
 \begin{equation*}
 \inferrule{\grm{\Gamma \vdash t : B :: \Sc} \\
   \gamma_\Sc : \tqm{\grm{\Gamma}^\EE_\Sc }^\CC \\
@@ -1415,7 +1415,7 @@ Definition~\ref{def:if-sort-subs}:
 \tqm{\grm{\pi_2(\sigma)}^\RR_\Sc(\blgamma, \blgammaCC)}
   &:\equiv \tqm{\pi_2(\grm{\sigma}^\RR_\Sc(\blgamma, \blgammaCC))} \text{ for \grm{\IISub{\sigma}{\Gamma}{(\Delta ,\, B :: \Sc)}} .}
 \end{align*}
-This concludes our definition of the eliminator relation.
+This concludes our construction of the eliminator relation.
 \end{defn}
 
 \section{Formalization in Agda}
@@ -1522,7 +1522,7 @@ module TestVec (A : Set) (N : Set) (z : N) (s : N → N) where
 \section{Conclusions and Future Work}
 
 It is obvious that the work presented in this chapter is incomplete.
-This chapter shall serve to address what is missing to obtain a complete
+This section shall serve to address what is missing to obtain a complete
 reduction of inductive-inductive types to inductive families,
 and to discuss how the constructions can be applied to implement inductive-inductive
 types.
@@ -1625,8 +1625,8 @@ the use input of an inductive-inductive type as follows:
 \begin{enumerate}
 \item Reflect the input from Lean's own expression type \leani{expr} into
 a representation of the syntax of inductive-inductive types minus the
-substitutional equlities
-This is where we implicitely check the input for positivity.
+substitutional equalities.
+This is where we implicitly check the input for positivity.
 \item Add inductive families corresponding to type erasure, wellformedness
 predicate and eliminator relation to the environment.
 \item Define the constructors using the $\Sigma$-construction.
