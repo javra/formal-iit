@@ -636,7 +636,8 @@ passing on the K-rule also gives rise to a further interpretation:
 We can use types to model the homotopy types of topological spaces.
 This principle, together with the univalence axiom which we will introduce
 in the next chapter, is the underlying insight of the field of \emph{homotopy type theory}.
-This correspondence was first made precise by \cite{kapulkinlumsdaine},
+This correspondence was first explored by \cite{awodey2009homotopy}
+and made precise by \cite{kapulkinlumsdaine},
 who, after an idea by Vladimir Voevodsky,
 modelled homotopy type theory using simplicial sets.
 In this correspondence -- a succinct list of which can be found in Table~\ref{tbl:tt-hott} --
@@ -933,14 +934,15 @@ $B(a)$ is an $n$-type, then $(a : A) \times B(a)$ is an $n$-type as well.
 $a : A$, then $(a : A) \to B(a)$ is an $n$-type as well.
 \item Let $n \geq -1$. Then, $A : \UU$ is an $(n+1)$-type if and only if for all $a : A$,
 the equality type $a =_A a$ is an $n$-type.
+\newpage
 \item Let $n \geq 0$. Then, $A : \UU$ is an $n$-type, if and only if for all $a : A$,
-the \emph{$n$-fold iterated loop space} $\Omega^{n+1}(A, a)$, which is defined using
-recursion on $n$ by
+the \emph{$n$-fold iterated loop space} $\Omega^{n+1}(A, a)$ is contractible.
+The $n$-fold iterated loop space is defined by recursion on $n$ by
 \begin{align*}
 \Omega^1(A, a) &:\equiv (a =_A a) \text{ and}\\
-\Omega^{n+1}(A, a) &:\equiv (\refl_{\ddots_a} =_{\Omega^n(A,a)} \refl_{\ddots_a}) \text{,}
+\Omega^{n+1}(A, a) &:\equiv (\refl_{\ddots_a} =_{\Omega^n(A,a)} \refl_{\ddots_a}) \text{.}
 \end{align*}
-is contractible. \hfill $\square$
+\hfill $\square$
 \end{itemize}
 \end{lemma}
 
@@ -1117,6 +1119,7 @@ It is not recommended to use Lean without using Mathlib.
 Another big formalization effort it Lean's homotopy type theory library,
 the development of which has been described by \citet{leanhott}.
 It was originally written in Lean 2 and then ported to Lean 3.
+A good introduction to the language can be found online \citep{avigad2015theorem}.
 
 \subsection{Agda}
 

@@ -350,6 +350,9 @@ The connection between $\CatC$ and $\CatD$ is as follows:
  \end{equation}
  such that each $\Phi_1(X,Y)$ is an equivalence.
  Moreover, identities and compositions are preserved by the equivalence.
+ This corresponds to the two wild categories being isomorphic objects in the
+ \emph{category of wild category} which as morphisms contains the obvious notion
+ of ``wild functors''.
 \end{lemma}
 
 \begin{proof}
@@ -1077,6 +1080,9 @@ We will now give a few code snippets as examples for how the contents
 are represented in Lean.
 The formalization makes heavy use of Lean's homotopy type theory library
 \citep{leanhott}.
+The snippets contain more syntax than what we introduced in \Cref{sec:tt-lean},
+but we chose not to ``sanitize'' the actual formalization and refer the reader
+to Lean's complete introduction \citep{avigad2015theorem}.
 
 The wild categories $\CatC$ and $\CatD$ are encoded as structures, the definition
 of objects and morphisms in the latter looking as follows:
