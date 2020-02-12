@@ -301,7 +301,7 @@ of $\Sigma$-types:
 \end{align*}
 \end{defn}
 
-\begin{example}[Natural numbers]
+\begin{example}[Natural numbers]\label{ex:if-nat}
 Looking at the signature of the natural numbers from Example~\ref{ex:if-natvec},
 we see that the algebra interpretation of its sort context evaluates to
 \begin{equation*}
@@ -1002,19 +1002,19 @@ Tm_\Sc(\Gamma_\Sc)
   & \makecell[cl]{ - \\ \inr(T, B, \tau)(\star) \mapsto \tqm{\ExtPiS{T}{B}} } \\
 Sub_\Sc(\Gamma_\Sc)
   & \unit
-  & \makecell[cl]{\unit \\ + (B : {Ty_\Sc}) \times W_{Tm_\Sc}(\Gamma_\Sc, B) }
+  & \makecell[cl]{\unit \\ + (B : {Ty_\Sc}) \times {Tm_\Sc}(\Gamma_\Sc, B) }
   & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(B, t) \mapsto \unit }
   & \_ \mapsto \star
   & \_ \mapsto \star \\
 Ty_\Pc(\Gamma_\Sc)
   & \unit
-  & \makecell[cl]{W_{Tm_\Sc}(\Gamma, \tqm{\UU}) \\ + \UU \\ + W_{Tm_\Sc}(\Gamma, \tqm{\UU})}
+  & \makecell[cl]{{Tm_\Sc}(\Gamma, \tqm{\UU}) \\ + \UU \\ + W_{Tm_\Sc}(\Gamma, \tqm{\UU})}
   & \makecell[cl]{\inl(a) \mapsto \emptytype \\ \inr(\inl(\tau)) \mapsto T \\ \inr(\inr(a)) \mapsto \unit }
   & \_ \mapsto \star
   & \_ \mapsto \star \\
 Con_\Pc(\Gamma_\Sc)
   & \unit
-  & \makecell[cl]{\unit \\ + W_{Ty_{\Pc}(\Gamma_\Sc)} }
+  & \makecell[cl]{\unit \\ + {Ty_{\Pc}(\Gamma_\Sc)} }
   & \makecell[cl]{\inl(\star) \mapsto \emptytype \\ \inr(A) \mapsto \unit}
   & \_ \mapsto \star
   & \_ \mapsto \star \\
@@ -1336,6 +1336,31 @@ setting
 completes the existence proofs for our specification of inductive families.
 \end{proof}
 
-
+\begin{example}[Natural numbers]
+To give insight on how this construction works for a concrete example,
+let us look at the type of natural numbers, which we have represented by
+a signature in \Cref{ex:if-natvec}:
+Let us look at the construction at the following sort and point context:
+\begin{align*}
+\tqm{\Omega_\Sc} &\equiv \tqm{(\cdot_\Sc,\, \UU)} \\
+\tqm{\Omega} &\equiv \tqm{\El(\var(\vz)), \var(\vz) \Rightarrow_\Pc \El(\var(\vz))} \text{.}
+\end{align*}
+The sort constructor computes as follows
+\begin{align*}
+\IFconS{\Omega}
+ &\equiv \IFconS{\epsilon,\, \var(\vz)} \\
+ &\equiv (\star, \IFconS{\var(\vz)}) \\
+ &\equiv (\star, Tm_\Pc(\tqm{\cdot}, \tqm{\El(\var(\vz))})) \\
+ &\equiv (\star, \{ \tqm{\var_\Pc(\vs(\vz))},
+                    \tqm{\var_\Pc(\vz)(\var_\Pc(\vs(\vz)))}, \ldots \}) \\
+ &= (\star, \left\{ \tqm{\var_\Pc(\vz)^\blm{n}(\var_\Pc(\vs(\vz)))} \,\middle|\, n : \N \right\}) \text{,}
+\end{align*}
+while the point constructor gives the following:
+\begin{align*}
+\IFcon{\Omega}
+  &\equiv \IFcon{\epsilon, \var(\vz), \var(\vs(\vz))} \\
+  &\equiv (\star, \tqm{\var_\Pc(\vs(\vz))}, \lambda \tqm{n}.\, \tqm{\var_\Pc(\vz)(n)}) \text{.}
+\end{align*}
+\end{example}
 
 
