@@ -994,6 +994,10 @@ on terms as well.
 The treatment for sort and point terms differs because type erasure and
 wellformedness predicate are defined as maps between algebras of
 inductive family syntax instead of syntax itself:
+We do not need to give data, but instead we have to make sure that, when given a term,
+the two ways of getting an element of the interpretation of its type --
+via the $\Sigma$-construction on contexts and via the $\Sigma$-construction on types --
+coincide:
 \begin{equation*}
 \begin{gathered}
 \inferrule{\grm{\Gamma \vdash t : B :: \Sc} \\
