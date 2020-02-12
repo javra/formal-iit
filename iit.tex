@@ -33,8 +33,11 @@ In the following, we will take a look at a few examples which we are going to
 revisit at various steps throughout this presentation:
 
 \begin{example}[Type Theory Syntax]\label{ex:ttintt}
+Internalising type theory in itself has been a useful tool for many insights
+about type theory.
+\cite{danielsson2006formalisation} used induction to achieve this, while later
 \cite{ttintt} showed how to internalise the syntax of type theory inside type
-theory itself, using a quotient inductive-inductive type.
+theory itself using a quotient inductive-inductive type.
 Leaving out terms and substitutions, we arrive at a fragment of type theoretical
 syntax specifying a type of contexts and a type of types over a certain contexts,
 together with type formers for a unit type and a $\Pi$-type:
@@ -137,6 +140,8 @@ of universe what is commonly referred to as ``Tarski-style universe'' (cf. ~\cit
 For sorts which are type families over other sorts that we seek to define, and for
 constructors which recursively refer to other constructors, we need $\Pi$-types
 which have a small type as their codomain.
+One example for this is the successor constructor of the natural number, which we
+will see in \Cref{ex:ii-syntax-nat}.
 To distinguish them from the other function types, which we will introduce below,
 we will often refer to them as
 \emph{recursive $\Pi$-types}.
@@ -164,6 +169,8 @@ We will usually call it \emph{external} or \emph{non-recursive} function type.
 Note that external functions must have a fixed kind.
 This is to prevent a function which, depending on the input returns sometimes
 a sort and sometimes a point constructor.
+An example for an external $\Pi$-type can be seen when considering the inductive family
+of vectors, depending on an external type of natural numbers (see \Cref{ex:ii-syntax-vec}).
 \begin{equation*}
 \inferrule{T : \UU \\
   (\bltau : T) \to \grm{\Gamma \vdash B(\bltau) :: k}}
@@ -289,7 +296,7 @@ of \grm{\Gamma} by \grm{t}, via
 \end{equation*}
 \end{defn}
 
-\begin{defn}[Application]
+\begin{defn}[Application]\label{def:iit-at}
 Most often, we want to use the application of the inductive function type in the
 form where we give the function term and its input separately, as in the following
 rule:
@@ -312,7 +319,7 @@ The syntax with its postulated equations itself on the one hand shows features
 of induction-induction itself
 -- types are dependent on contexts, etc. --
 but the equations turn it what is called a \emph{quotient inductive-inductive type},
-as \citet{constructingqiits} define it.
+as \citet{altenkirch2018quotient} and \citet{constructingqiits} define it.
 Quotient inductive-inductive types are a very useful generalization of
 inductive-inductive types,
 featuring \emph{path constructors} beside sort and point constructors.
@@ -385,10 +392,11 @@ following signature \grm{\Gamma_{ConTy}}:
 \grm{\mathop{ext} : \Pi(\Gamma : \mathop{Con},\, \Pi(A : \mathop{Ty} ,\, \El(\mathop{Con}))),} \\
 \grm{\mathop{unit} : \Pi(\Gamma : \mathop{Con},\, \El(\IIapp(\mathop{Ty}))),} \\
 \grm{\mathop{pi} : \Pi(\Gamma : \mathop{Con},\, \Pi(A : \IIapp(\mathop{Ty}),\,
-   \Pi(B : ?,\, ?)))} %TODO complete this after doing it in agda
+   \Pi(B : \mathop{Ty}(\mathop{ext}(\Gamma,A)),\, \mathop{Ty}(\Gamma))))}
 \end{gathered}
 \end{equation*}
-
+This is where the more general form of application, which we have defined in
+\Cref{def:iit-at} comes handy to make the notation of signatures lighter.
 \end{example}
 
 \section{Algebras of Inductive-Inductive Types}
