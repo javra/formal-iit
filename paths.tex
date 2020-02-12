@@ -118,6 +118,10 @@ This is what we have done in our formalization, but we will refrain from checkin
 whether equalities hold strictly in this chapter.
 \end{remark}
 
+\begin{remark}[Incorrect Principle]
+foo
+\end{remark}
+
 In the following sections we will first prove this main result (Chapter~\ref{sec:paths-main}),
 then modify it to obtain a version for pushouts (Chapter~\ref{sec:paths-pushout}),
 and present a few smaller applications (Chapter~\ref{sec:paths-applications})
@@ -948,7 +952,10 @@ This example is discussed further in \Cref{rmk:paths-generalized-squid} below.
 The type family $C$ depends on the chosen point $n_0$.
 To remove this dependency, let us consider a version of $C$ which is indexed
 twice over $(M+N)$:
-we write $\mathfrak C(n_0, y)$ for $C(y)$.
+we write $\mathfrak C(x, y)$ for the type which is defined by induction on $x$ to
+be $\mathfrak C(n_0, y) \equiv C(y)$ for $n_0 : N$ or the obvious modification of
+the first introduction rule of $C$ for
+$\mathfrak C(m_0, y)$ for $m_0 : M$.
 This expression plays the role of $\code$ in our higher analogue of
 the Favonia-Shulman result, \Cref{thm:paths-svk}.
 While it can be extended to a family $P \to P \to \UU$ in a straightforward way,
