@@ -449,7 +449,7 @@ sorts:
 \tqm{\ExtPiP{T}{A}}^\DD(\gamma_\Sc^\DD, \pi)
   &:\equiv (\tau : T) \to \tqm{A(\bltau)}^\DD(\gamma_\Sc^\DD, \pi(\tau)) \\
 \tqm{(a \Rightarrow_\Pc A)}^\DD(\gamma_\Sc^\DD, \pi)
-  &:\equiv \{\alpha : \tqm{a}^\CC(\_) \} \to \tqm{a}^\DD(\gamma_\Sc^\DD, \alpha)
+  &:\equiv \{\alpha : \tqm{a}^\CC(\gamma_\Sc) \} \to \tqm{a}^\DD(\gamma_\Sc^\DD, \alpha)
     \to \tqm{A}^\DD(\gamma_\Sc^\DD, \pi(\alpha))
 \end{align*}
 Finally, point contexts are interpreted as iterated products again:
@@ -479,7 +479,7 @@ Both follow the structure of the underlying displayed algebra -- fibrewise for
 sort functions and by iterated products on sort contexts:
 \begin{align*}
 \tqm{\UU}^\SS(\alpha^\DD)
-  &:\equiv (x : \_) \to \alpha^\DD(x) \\
+  &:\equiv (x : \alpha) \to \alpha^\DD(x) \\
 \tqm{\ExtPiS{T}{B}}^\SS(\pi^\DD)
   &:\equiv (\tau : T) \to \tqm{B(\bltau)}^\SS(\pi^\DD(\tau)) \\
 \tqm{\cdot_\Sc}(\gamma_\Sc^\DD)
@@ -525,11 +525,11 @@ The element which we get out of the interpretation of the section must coincide
 with the one we provided by giving the displayed algebra:
 \begin{align*}
 \tqm{\El(a)}^\SS(\gamma_\Sc^\SS, \alpha^\DD)
-  &:\equiv \left(\tqm{a}^\SS(\gamma_\Sc^\SS, \_) = \alpha^\DD  \right) \\
+  &:\equiv \left(\tqm{a}^\SS(\gamma_\Sc^\SS, \alpha) = \alpha^\DD  \right) \\
 \tqm{\ExtPiP{T}{A}}^\SS(\gamma_\Sc^\SS, \pi^\DD)
   &:\equiv (\tau : T) \to \tqm{A(\bltau)}^\SS(\gamma_\Sc^\SS, \pi^\DD(\tau)) \\
 \tqm{(a \Rightarrow_\Pc A)}^\SS(\gamma_\Sc^\SS, \pi^\DD)
-  &:\equiv (\alpha : \tqm{a}^\CC(\_))
+  &:\equiv (\alpha : \tqm{a}^\CC(\gamma_\Sc))
     \to \tqm{A}^\SS\left(\gamma_\Sc^\SS, \pi^\DD(\tqm{a}^\SS(a, \gamma_\Sc^\SS)(\alpha))\right)
 \end{align*}
 The definition of sections of point contexts is easier as it is, again,
